@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico de Pasajeros</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="styles/admin_pasajeros.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+    <link rel="stylesheet" href="styles/styleIndex.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <!-- Agrega la librería Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div style="background-color: #8FBCEA"></div>
+    <img src="assets\logoavion.png" alt="Menu Icon" style="width:7%;height:7%;margin-left:10px;margin-top: 10px; margin-bottom: 20px;">
+    </div>
+    <header class="header" id="inicio">
+        <img src="assets/indexAssets/bx-menu-alt-right.svg" alt="" class="hamburger">
+        <nav class="menu-navegacion">
+            <a href="indexAdmi.html">Inicio</a>
+            <a href="infoVuelo.html">Vuelos</a>
+            <a href="verificarCheckin.html">Check-In</a>
+            <a href="generarBoleto.html">Generar Boleto</a>
+            <a href="catalogoMillasAdmi.html">Catalogo Premios millas</a>
+            <a href="opinionesAdmin.html">Opiniones</a>
+            <a href="registroAdmi.html">Registrar administrador</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="index.html">Cerrar Sesion</a>
+        </nav>
+        <div class="contenedor head">
+            <h1 class="titulo">Dashboard</h1>
+        </div>
+    </header>
+    <div class="container mt-4">
+        <h2 style="text-align: center; font-weight: bold;">Dashboard</h2><br>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <h2 style="text-align: center; font-weight: bold;">Cantidad de vuelos por ciudad</h2><br>
+                    <canvas id="vuelosPorCiudadChart" width="90" height="35"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h2 style="text-align: center; font-weight: bold;">Cantidad de millas por usuario</h2><br>
+                    <canvas id="personasConMasMillasChart" width="80" height="70"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <h2 style="text-align: center; font-weight: bold;">Reservas por estado</h2><br>
+                    <canvas id="reservasPorEstadoChart" width="90" height="35"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h2 style="text-align: center; font-weight: bold;">Distribución de personas por sexo</h2><br>
+                    <canvas id="distribucionPorSexoChart" width="40" height="20"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script src="scripts/script.js"></script>
+    <script src="scripts/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+/* Contenedor de la tabla para hacerla scrollable en dispositivos pequeños */
+.estado-checkin-dropdown {
+    background-color: rgba(8, 86, 167, 1);
+    color: white;
+    cursor: pointer;
+}
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Para un mejor scroll en dispositivos iOS */
+}
+
+/* Estilos básicos para la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+/* Estilos para hacer la tabla más legible en dispositivos pequeños */
+@media screen and (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        margin: 0 0 1rem 0;
+    }
+
+    tr:nth-child(odd) {
+        background: #f2f2f2;
+    }
+
+    td {
+        border: none;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    td:before {
+        position: absolute;
+        top: 0;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        content: attr(data-label);
+    }
+}
+h2 {
+    color: rgb(5, 58, 112);
+}
+table thead th {
+    color: rgb(5, 58, 112);
+}

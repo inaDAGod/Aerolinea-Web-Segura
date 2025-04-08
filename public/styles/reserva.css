@@ -1,0 +1,30 @@
+.datos {
+    text-align: center; /* Center the <div> horizontally */
+    margin-top: 1%;
+    margin-left: -15%;
+    color: black;
+}
+
+.pdatos {
+    display: inline-block; /* Ensure <p> takes only the necessary width */
+    text-align: left; /* Align text inside <p> to the left */
+    font-size: 25px;
+    color: black;
+    
+}
+.h1rese{
+    font-family: 'Inter', sans-serif;
+    font-size: 50px;
+    text-align: center;
+    margin-top: 1%;
+    color: rgba(8, 86, 167, 1);
+}
+.h1rese2{
+    font-family: 'Inter', sans-serif;
+    font-size: 50px;
+    text-align: center;
+    margin-top: -1%;
+    color: rgba(8, 86, 167, 1);
+}
+
+

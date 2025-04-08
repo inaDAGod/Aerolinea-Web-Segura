@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aerolinea Web - Editar Premio</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/styleD2.css">
+</head>
+
+<body>
+    <div style="background-color: #8FBCEA"></div>
+    <img src="assets\logoavion.png" alt="Menu Icon" style="width:10%;height:10%;margin-left:10px;margin-top: 10px; margin-bottom: 20px;">
+    <header class="header" id="inicio">
+        <div class="contenedor head">
+            <h1 class="titulo">Editar Premio</h1>
+        </div>
+    </header>
+    <div class="container">
+        <h1 style="text-align: center; color: #053A70;">Editar Premio</h1>
+        <div class="input-group">
+            <label for="edit_premio" class="label1">Premio:</label>
+            <input type="text" id="edit_premio" class="form-control" placeholder="Premio nombre" required>
+            <div class="invalid-feedback">Por favor ingresa un premio válido.</div>
+        </div>
+        <div class="input-group">
+            <label for="edit_millas" class="label1">Millas:</label>
+            <input type="number" id="edit_millas" class="form-control" placeholder="Precio en millas" required min="20">
+            <div class="invalid-feedback">Por favor ingresa un número de millas válido (mínimo 20).</div>
+        </div>
+        <div class="input-group">
+            <label for="edit_destacado" class="label1">Producto Destacado:</label>
+            <div class="radio-group">
+                <label for="edit_destacado">Destacado</label>
+                <input type="radio" id="edit_destacado" name="edit_destacadosOption" value="destacado" required>
+                <label for="edit_no-destacado">No Destacado</label>
+                <input type="radio" id="edit_no-destacado" name="edit_destacadosOption" value="no-destacado">
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="edit_tipo" class="label1">Tipo Producto</label>
+            <select id="edit_tipo" name="edit_tipo" class="form-control" required>
+                <option value="" disabled selected>Seleccione un tipo...</option>
+                <option value="Electrodomestico">Electrodomestico</option>
+                <option value="Viaje">Viaje</option>
+                <option value="Cuidado Personal">Cuidado Personal</option>
+                <option value="Comida">Comida</option>
+                <option value="Producto">Producto</option>
+                <option value="Experiencia">Experiencia</option>
+                <option value="Otro">Otro</option>
+            </select>
+            <div class="invalid-feedback">Por favor selecciona un tipo de producto.</div>
+        </div>
+        <div class="input-group">
+            <label for="edit_foto" class="label1">Subir foto</label>
+            <input type="file" id="edit_foto" class="form-control">
+            <div class="invalid-feedback">Por favor selecciona una foto.</div>
+        </div>
+        <div align="center">
+            <button class="btn btn-primary" id="guardarEdicion">Guardar</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="scripts/editPremio.js"></script>
+</body>
+
+</html>

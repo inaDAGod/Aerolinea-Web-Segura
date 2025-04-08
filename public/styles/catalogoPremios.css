@@ -1,0 +1,130 @@
+.badge-orange {
+    background-color: #FFA500; /* Naranja */
+    color: white; /* Texto blanco */
+    padding: 0.5em;
+    border-radius: 0.25em;
+    margin-bottom: 0.5em;
+    display: inline-block;
+}
+.card {
+  flex: 1 1 calc(25% - 20px); /* Fórmula para calcular el ancho, dejando espacio para el margen entre tarjetas */
+  min-width: 200px; /* Ancho mínimo de la tarjeta */
+  margin-bottom: 20px; /* Espacio entre las tarjetas */
+  padding-bottom: 2%;
+  height: 450px;
+}
+
+.cardBody{
+  display: flex;
+  flex-direction: column;
+}
+.star {
+    color: gold; /* Color de la estrella */
+    font-size: 1.5em;
+    margin-left: 0.5em;
+    vertical-align: middle;
+}
+.col1{
+    flex:0 0 80%;
+   
+}
+.col2{
+    flex:0 0 20%;
+    padding-left: 1%;
+ 
+}
+.col2 button{
+    margin-bottom : 2%;
+}
+
+/* Estilos adicionales personalizados */
+label {
+    margin-bottom: 0.5rem;
+  }
+  input[type="text"],
+  select {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  input[type="number"],
+  select {
+    margin-bottom: 1rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  input[type="text"]:focus,
+  select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+ input[type="number"]:focus,
+  select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  button[type="submit"] {
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  button[type="submit"]:hover {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+  
+  .container {
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: #0668ca;
+  }
+.inputgroup{
+    display: flex;
+    padding: 2%;
+}
+
+
+.card button {
+  width: 60%; 
+  padding: 0.25rem 0.5rem; 
+  margin: 1% auto; 
+}
+.card img{
+  height: 230px;
+  object-fit: cover;
+}
+
+
+@media (max-width: 768px) {
+  .card {
+      flex: 1 1 100%;
+      min-width: 100%; 
+      height: auto; 
+  }
+
+  .container {
+      flex-direction: column;
+      padding: 10px; 
+  }
+}

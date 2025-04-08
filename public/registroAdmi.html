@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles/styleD.css">
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+  <script src="scripts/login.js"></script>
+  <script src="scripts/registro.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+  <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script> 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+    <link rel="stylesheet" href="styles/styleIndex.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+</head>
+<body>
+
+  
+<img src="assets\logoavion.png" alt="Menu Icon" style="width:7%;height:7%;margin-left:10px;">
+</div>
+
+<header class="header" id="inicio">
+    <img src="assets/indexAssets/bx-menu-alt-right.svg" alt="" class="hamburger">
+    <nav class="menu-navegacion">
+        <a href="indexAdmi.html">Inicio</a>
+        <a href="infoVuelo.html">Vuelos</a>
+        <a href="verificarCheckinAdmi.html">Check-In</a>
+        <a href="generarBoleto.html">Generar Boleto</a>
+        <a href="catalogoMillasAdmi.html">Catalogo Premios millas</a>
+        <a href="opinionesAdmin.html">Opiniones</a>
+        <a href="registroAdmi.html">Registrar administrador</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="index.html">Cerrar Sesion</a>
+    </nav>
+</header>
+
+  <div class="login-container" id="registro" >
+    <h2>Registrar Administrador</h2>
+    <div class="input-container">
+      <input type="text" id="nombre" placeholder="NOMBRES">
+      <br>
+      <input type="text" id="apellido" placeholder="APELLIDOS">
+      <br>
+      <input type="text" id="email" placeholder="CORREO">
+      <br>
+      <input type="password" id="contra" placeholder="CONTRASEÑA">
+      <br>
+      <button class="boton" onclick="registrarAdministrador()">Registrar</button>
+    </div>
+  </div>
+
+  <script src="scripts/script.js"></script>
+</body>
+</html>

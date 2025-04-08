@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proyecto_NAV</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+<link rel="stylesheet" href="styles/styleIndex.css">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+<link rel="stylesheet" href="styles/reservas.css">
+</head>
+
+<body style="color:white">
+
+    <div style="background-color: #8FBCEA"></div>
+    <img src="assets\logoavion.png" alt="Menu Icon" style="width:7%;height:7%;margin-left:10px;">
+        </div>
+    
+        <header class="header" id="inicio">
+            <img src="assets/indexAssets/bx-menu-alt-right.svg" alt="" class="hamburger">
+            <nav class="menu-navegacion">
+                <a href="indexCliente.html">Inicio</a>
+                <a href="catalogoVueloCliente.html">Vuelos</a>
+                <a href="verificarCheckinCliente.html">Check-In</a>
+                <a href="catalogoMillasCliente.html">Catalogo Premios Millas</a>
+                <a href="perfil.html">Perfil</a>
+                <a href="index.html">Cerrar Sesion</a>
+                
+            </nav>
+            <div class="contenedor head">
+                <h1 class="titulo">Reserva</h1>
+            </div>
+        </header>
+
+<div class="eliminar-reserva">
+    <button id="eliminar-reserva-btn" class="btn btn-primary" >
+        < Cancelar
+    </button>
+</div>
+
+<div style="color: black;text-align:left; margin-left:30%;font-size:150%" id="contenido"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="scripts/scriptre.js"></script>
+
+<div class="centerre">
+    <table class="table table-striped" id="reservas-table" style="width:80%;margin-left:10%;margin-top:2%;" >
+        <thead>
+            <tr class="trre">
+                <th class="thre" style='padding: 8px;'>Tipo Persona</th>
+                <th class="thre" style='padding: 8px;'>Nombre</th>
+                <th class="thre" style='padding: 8px;'>Apellido</th>
+                <th class="thre" style='padding: 8px;'>CI</th>
+                <th class="thre" style='padding: 8px;'>Fecha de Nacimiento</th>
+                <th class="thre" style='padding: 8px;'>Asiento</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</div>
+
+
+
+<center>
+    <form method="post" action="http://localhost/SistemaWeb-Aerolinea/backend/confirmar_reserva.php" id="confirmar-reserva-form">
+        <button type="submit" class="btn btn-primary" id="confirmar-reserva-btn" style=" width:20%;margin-top:2%;" name="confirmar_reserva">Confirmar</button>
+    </form>
+</center>
+<br><br>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Agregado para usar Swal.fire -->
+
+
+                                <script src="scripts/programaMillas.js"></script>
+                                <script src="scripts/scriptresfin.js"></script>
+                                <script src="scripts/script.js"></script>
+                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="scripts/script.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+                                </body>
+                                </html>
+                                

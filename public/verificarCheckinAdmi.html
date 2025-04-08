@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check-in Aerolínea</title>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+    <link rel="stylesheet" href="styles/styleIndex.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/agregarVuelo.css">
+  
+</head>
+
+<body>
+    <img src="assets\logoavion.png" alt="Menu Icon" style="width:7%;height:7%;margin-left:10px;margin-top: 10px; margin-bottom: 20px;">
+        </div>
+    
+        <header class="header" id="inicio">
+            <img src="assets/indexAssets/bx-menu-alt-right.svg" alt="" class="hamburger">
+            <nav class="menu-navegacion">
+                <a href="indexAdmi.html">Inicio</a>
+                <a href="infoVuelo.html">Vuelos</a>
+                <a href="verificarCheckinAdmi.html">Check-In</a>
+                <a href="generarBoleto.html">Generar Boleto</a>
+                <a href="catalogoMillasAdmi.html">Catalogo Premios millas</a>
+                <a href="opinionesAdmin.html">Opiniones</a>
+                <a href="registroAdmi.html">Registrar administrador</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="index.html">Cerrar Sesion</a>
+            </nav>
+            <div class="contenedor head">
+                <h1 class="titulo">Check-in</h1>
+            </div>
+        </header>
+    <div class="container">
+        <h2 class="mt-4 mb-3" style="text-align: center; color: #0856A7;">Check-in</h2>
+        <form id="formCheckin">
+            <div class="form-row">
+                <div class="col-md-4">
+                    <label for="carnet">Carnet</label>
+                    <input type="text" class="form-control" id="carnet" placeholder="Ingrese su carnet">
+                </div>
+                <div class="col-md-4">
+                    <label for="numeroVuelo">Número de vuelo</label>
+                    <input type="text" class="form-control" id="numeroVuelo" placeholder="Número de vuelo">
+                </div>
+                <div class="col-md-4">
+                    <button type="button" id="buscarBoletoBtn" class="btn btn-primary mt-4">Buscar boleto</button>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="nombre" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label for="apellido" class="form-label">Apellido</label>
+                    <input type="text" class="form-control" id="apellido" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label for="numeroDocumento" class="form-label">Número de documento</label>
+                    <input type="text" class="form-control" id="numeroDocumento" readonly>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label for="fechaVuelo" class="form-label">Fecha de vuelo</label>
+                    <input type="date" class="form-control" id="fechaVuelo" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label for="horaVuelo" class="form-label">Hora vuelo</label>
+                    <input type="time" class="form-control" id="horaVuelo" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label for="origen" class="form-label">Origen</label>
+                    <input type="text" class="form-control" id="origen" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label for="destino" class="form-label">Destino</label>
+                    <input type="text" class="form-control" id="destino" readonly>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <h4 class="mb-3">Equipaje</h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="equipajeMano">
+                        <label class="form-check-label" for="equipajeMano">
+                            Equipaje de mano
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="maleta">
+                        <label class="form-check-label" for="maleta">
+                            Maleta
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="equipajeExtra">
+                        <label class="form-check-label" for="equipajeExtra">
+                            Equipaje extra
+                        </label>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="form-group col-md-8">
+                <button type="submit" class="btn btn-success">Check-in</button>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <strong>90 minutos</strong><br>
+                    Deja tus maletas<br>
+                    Si factura maletas, déjelas en los mostradores de facturación a más tardar 90 minutos antes de su vuelo.
+                </div>
+                <div class="form-group col-md-4">
+                    <strong>60 minutos</strong><br>
+                    Control de seguridad<br>
+                    Pase por seguridad a más tardar 60 minutos antes de la salida.
+                </div>
+                <div class="form-group col-md-4">
+                    <strong>45 minutos</strong><br>
+                    Embarque<br>
+                    El embarque comienza 45 minutos antes de su vuelo y las puertas cierran 20 minutos antes de la salida.
+                </div>
+            </div>
+        </form>
+    </div>
+     <!-- Modal para ingresar correo electrónico -->
+     <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="emailModalLabel">Confirmar Check-in</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="emailForm">
+                        <div class="form-group">
+                            <label for="emailInput">Ingrese su correo electrónico:</label>
+                            <input type="email" class="form-control" id="emailInput" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="scripts/verificarCheckin.js"></script>
+    <script src="scripts/script.js"></script>
+</body>
+</html>
