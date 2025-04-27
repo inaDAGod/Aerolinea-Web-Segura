@@ -1,13 +1,3 @@
-CREATE TABLE opiniones (
-    copinion SERIAL PRIMARY KEY,
-    fecha_opinion timestamp  NOT NULL,
-    correo_usuario varchar(100)  NOT NULL,
-    nombres_usuario varchar(100)  NOT NULL,
-    apellidos_usuario varchar(100)  NOT NULL,
-    comentario varchar(500)  NOT NULL,
-    estrellas integer  NOT NULL
-);
-
 INSERT INTO opiniones (fecha_opinion, correo_usuario, nombres_usuario, apellidos_usuario, comentario, estrellas) VALUES
 ('2024-05-01 10:15:00', 'jose.perez@example.com', 'Jose', 'Perez', 'Excelente servicio, el vuelo salió a tiempo y la tripulación fue muy amable.', 5),
 ('2024-05-02 14:30:00', 'maria.lopez@example.com', 'Maria', 'Lopez', 'Muy buena experiencia, volvería a volar con ustedes.', 4),

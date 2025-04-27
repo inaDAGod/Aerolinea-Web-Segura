@@ -164,6 +164,19 @@ CREATE TABLE vuelos (
     CONSTRAINT vuelos_pk PRIMARY KEY (cvuelo)
 );
 
+
+CREATE TABLE opiniones (
+    copinion SERIAL PRIMARY KEY,
+    fecha_opinion timestamp  NOT NULL,
+    correo_usuario varchar(100)  NOT NULL,
+    nombres_usuario varchar(100)  NOT NULL,
+    apellidos_usuario varchar(100)  NOT NULL,
+    comentario varchar(500)  NOT NULL,
+    estrellas integer  NOT NULL
+);
+
+
+
 -- foreign keys
 -- Reference: Boletos_check_in (table: boletos)
 ALTER TABLE boletos ADD CONSTRAINT Boletos_check_in
