@@ -1,5 +1,5 @@
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2025-04-27 18:42:21.126
+-- Last modification date: 2025-04-27 18:55:22.575
 
 -- tables
 -- Table: asientos
@@ -46,6 +46,7 @@ CREATE TABLE check_in (
     equipaje_mano boolean  NOT NULL,
     maleta boolean  NOT NULL,
     equipaje_extra boolean  NOT NULL,
+    estado_checkin varchar(20)  NOT NULL,
     CONSTRAINT check-in_pk PRIMARY KEY (ccheck_in)
 );
 
