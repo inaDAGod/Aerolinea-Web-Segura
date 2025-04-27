@@ -1,7 +1,7 @@
 function audi(){
     let correo = 'ayana.siegle@ucb.edu.bo';
     const ahora = new Date().toString();
-    fetch("http://localhost/SistemaWeb-Aerolinea/backend/audi.php", {
+    fetch("http://localhost/Aerolinea-Web-Segura/backend/audi.php", {
                 method: "POST",
                 body: JSON.stringify({ correo: correo, fecha:ahora}),
             })
@@ -39,7 +39,7 @@ $(document).ready(function() {
   
         // Realizar una solicitud AJAX para buscar el pasajero por documento
         $.ajax({
-            url: 'http://localhost/SistemaWeb-Aerolinea/backend/listar_pasajeros.php',
+            url: 'http://localhost/Aerolinea-Web-Segura/backend/listar_pasajeros.php',
             type: 'POST',
             data: { documento: documento }, // Enviar el documento directamente en el formulario POST
             success: function(response) {
@@ -60,7 +60,7 @@ $(document).ready(function() {
     // Función para cargar todos los pasajeros
     function loadAllPassengers() {
         $.ajax({
-            url: 'http://localhost/SistemaWeb-Aerolinea/backend/listar_usuarios.php',
+            url: 'http://localhost/Aerolinea-Web-Segura/backend/listar_usuarios.php',
             type: 'POST',
             success: function(response) {
                 if (response.error) {
@@ -109,7 +109,7 @@ $(document).ready(function() {
 
     function updateCheckInStatus(documento, newStatus) {
         $.ajax({
-            url: 'http://localhost/SistemaWeb-Aerolinea/backend/estado_checkin.php',
+            url: 'http://localhost/Aerolinea-Web-Segura/backend/estado_checkin.php',
             type: 'POST',
             data: { documento: documento, estado: newStatus },
             success: function(response) {

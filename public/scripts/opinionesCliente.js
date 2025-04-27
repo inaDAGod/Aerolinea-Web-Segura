@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function fetchOpiniones() {
-    fetch('http://localhost/SistemaWeb-Aerolinea/backend/fetch_opiniones.php')
+    fetch('http://localhost/Aerolinea-Web-Segura/backend/fetch_opiniones.php')
         .then(response => response.json())
         .then(data => {
             renderOpiniones(data);
@@ -132,7 +132,7 @@ function handleFormSubmit(event) {
         estrellas: estrellas
     };
 
-    fetch('http://localhost/SistemaWeb-Aerolinea/backend/insert_opinion.php', {
+    fetch('http://localhost/Aerolinea-Web-Segura/backend/insert_opinion.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -12,7 +12,7 @@ function fetchAwards() {
     const destacado = document.querySelector('input[name="destacadosOption"]:checked')?.value || '';
     const tipo = document.getElementById('tipo').value;
 
-    fetch('http://localhost/SistemaWeb-Aerolinea/backend/fetch_awards.php')
+    fetch('http://localhost/Aerolinea-Web-Segura/backend/fetch_awards.php')
         .then(response => response.json())
         .then(data => {
             const filteredData = data.filter(award => {

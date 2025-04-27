@@ -7,7 +7,7 @@ $(document).ready(function() {
             return;
         }
         $.ajax({
-            url: 'http://localhost/SistemaWeb-Aerolinea/backend/verificarCheckin.php',
+            url: 'http://localhost/Aerolinea-Web-Segura/backend/verificarCheckin.php',
             type: 'POST',
             dataType: 'json',
             data: { carnet: carnet, numeroVuelo: numeroVuelo },
@@ -55,7 +55,7 @@ $(document).ready(function() {
         var email = $("#emailInput").val();
         if (email) {
             $.ajax({
-                url: 'http://localhost/SistemaWeb-Aerolinea/backend/actualizarCheckin.php',
+                url: 'http://localhost/Aerolinea-Web-Segura/backend/actualizarCheckin.php',
                 type: 'POST',
                 data: {
                     email: email,

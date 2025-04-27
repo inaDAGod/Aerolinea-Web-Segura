@@ -12,7 +12,7 @@ if ($_FILES['foto']) {
         $nombre_archivo = $_FILES['foto']['name'];
         $ruta_temporal = $_FILES['foto']['tmp_name'];
         $ruta_destino = "../public/assets/" . $nombre_archivo;
-        $src_foto = "/SistemaWeb-Aerolinea/public/assets/".$nombre_archivo;
+        $src_foto = "/Aerolinea-Web-Segura/public/assets/".$nombre_archivo;
         // Mover el archivo a su ubicación final
         if (move_uploaded_file($ruta_temporal, $ruta_destino)) {
             // Conectar a la base de datos

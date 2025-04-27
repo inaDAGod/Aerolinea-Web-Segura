@@ -1,6 +1,6 @@
 $(document).ready(function() {
     $.ajax({
-        url: 'http://localhost/SistemaWeb-Aerolinea/backend/cargar_vuelo.php', // Reemplaza 'ruta_al_archivo_php.php' con la ruta correcta a tu archivo PHP
+        url: 'http://localhost/Aerolinea-Web-Segura/backend/cargar_vuelo.php', // Reemplaza 'ruta_al_archivo_php.php' con la ruta correcta a tu archivo PHP
         type: 'GET', // Puedes usar 'GET' o 'POST' según la configuración de tu servidor
         success: function(response) {
             // Inserta el contenido recibido en el elemento con id 'contenido'

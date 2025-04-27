@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function fetchOpiniones() {
-    fetch('http://localhost/SistemaWeb-Aerolinea/backend/fetch_opiniones.php')
+    fetch('http://localhost/Aerolinea-Web-Segura/backend/fetch_opiniones.php')
         .then(response => response.json())
         .then(data => {
             renderOpiniones(data);

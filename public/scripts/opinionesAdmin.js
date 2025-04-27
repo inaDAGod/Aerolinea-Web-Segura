@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function fetchOpiniones() {
-    fetch('http://localhost/SistemaWeb-Aerolinea/backend/fetch_opiniones.php')
+    fetch('http://localhost/Aerolinea-Web-Segura/backend/fetch_opiniones.php')
         .then(response => response.json())
         .then(data => {
             renderOpiniones(data);
@@ -116,7 +116,7 @@ function eliminarOpinion(idOpinion) {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`http://localhost/SistemaWeb-Aerolinea/backend/eliminar_opinion.php?copinion=${idOpinion}`, {
+            fetch(`http://localhost/Aerolinea-Web-Segura/backend/eliminar_opinion.php?copinion=${idOpinion}`, {
                 method: 'DELETE'
             })
             .then(response => response.json())

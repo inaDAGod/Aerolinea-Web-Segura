@@ -6,7 +6,7 @@ function loginEncript() {
     var hash = CryptoJS.MD5(contrasenia);
     if (correo && contrasenia) {
         if (intentos < 4) {
-            fetch("http://localhost/SistemaWeb-Aerolinea/backend/login.php", {
+            fetch("http://localhost/Aerolinea-Web-Segura/backend/login.php", {
                     method: "POST",
                     body: JSON.stringify({ username: correo, password: hash.toString() }),
                 })
@@ -20,10 +20,10 @@ function loginEncript() {
                     if (data.estado === 'contraseña_correcta') {
                         audi(correo);
                         if(data.tipo_usuario === 'cliente'){
-                            window.location.href = 'http://localhost/SistemaWeb-Aerolinea/public/indexCliente.html';
+                            window.location.href = 'http://localhost/Aerolinea-Web-Segura/public/indexCliente.html';
                         }
                         else if(data.tipo_usuario === 'administrador'){
-                            window.location.href = 'http://localhost/SistemaWeb-Aerolinea/public/indexAdmi.html';
+                            window.location.href = 'http://localhost/Aerolinea-Web-Segura/public/indexAdmi.html';
                         }
                        
                     } else if (data.estado === 'contraseña_incorrecta') {
@@ -62,7 +62,7 @@ function registrarUsuario() {
     let correo = document.getElementById("email").value;
     let contrasenia = document.getElementById("contra").value;
             var hash = CryptoJS.MD5(contrasenia);
-            fetch("http://localhost/SistemaWeb-Aerolinea/backend/registro.php", {
+            fetch("http://localhost/Aerolinea-Web-Segura/backend/registro.php", {
                 method: "POST",
                 body: JSON.stringify({ nombres: nombres, apellidos: apellidos, username: correo, password: hash.toString() }),
             })
@@ -74,7 +74,7 @@ function registrarUsuario() {
             })
             .then(data => {
                 if (data.estado === "registro_exitoso") {
-                    window.location.href= 'http://localhost/SistemaWeb-Aerolinea/public/indexCliente.html';
+                    window.location.href= 'http://localhost/Aerolinea-Web-Segura/public/indexCliente.html';
                 } else if (data.estado === "error_registro") {
                     Swal.fire('Error', 'Ya existe un usuario con ese correo electrónico', 'error');
                 }
@@ -132,7 +132,7 @@ function verificarCampos(){
     let contrasenia = document.getElementById("contra").value;
 
     if(nombres && apellidos && correo && contrasenia){
-        fetch("http://localhost/SistemaWeb-Aerolinea/backend/verificarExistencia.php", {
+        fetch("http://localhost/Aerolinea-Web-Segura/backend/verificarExistencia.php", {
             method: "POST",
             body: JSON.stringify({username: correo }),
         })
@@ -166,7 +166,7 @@ function verificarCampos(){
 function mandarCorreoRestauracion() {
     let correoDestinatario = document.getElementById("correoRestaurar").value;
     if(correoDestinatario){
-        fetch("http://localhost/SistemaWeb-Aerolinea/backend/verificarCuenta.php", {
+        fetch("http://localhost/Aerolinea-Web-Segura/backend/verificarCuenta.php", {
             method: "POST",
             body: JSON.stringify({username: correoDestinatario }),
         })
@@ -231,7 +231,7 @@ function newContra(){
     if(contra1 && contra2){
         if(contra1 == contra2){
             var hash = CryptoJS.MD5(contra1);
-            fetch("http://localhost/SistemaWeb-Aerolinea/backend/updatePassword.php", {
+            fetch("http://localhost/Aerolinea-Web-Segura/backend/updatePassword.php", {
                 method: "POST",
                 body: JSON.stringify({username: correo, newPassword:  hash.toString() }),
             })
@@ -244,7 +244,7 @@ function newContra(){
             .then(data => {
                 if (data.estado === "contraseña_cambiada") {
                     alert('Se restauro tu contraseña');
-                    window.location.href= 'http://localhost/SistemaWeb-Aerolinea/public/registro.html';
+                    window.location.href= 'http://localhost/Aerolinea-Web-Segura/public/registro.html';
                 } else if (data.estado === "error_actualizacion") {
                     Swal.fire('Error', 'Parece que hubo un error', 'error');
                 }
@@ -270,7 +270,7 @@ function registrarAdministrador() {
     let contrasenia = document.getElementById("contra").value;
     if(nombres && apellidos && correo && contrasenia){
             var hash = CryptoJS.MD5(contrasenia);
-            fetch("http://localhost/SistemaWeb-Aerolinea/backend/registroAdmi.php", {
+            fetch("http://localhost/Aerolinea-Web-Segura/backend/registroAdmi.php", {
                 method: "POST",
                 body: JSON.stringify({ nombres: nombres, apellidos: apellidos, username: correo, password: hash.toString() }),
             })
@@ -282,7 +282,7 @@ function registrarAdministrador() {
             })
             .then(data => {
                 if (data.estado === "registro_exitoso") {
-                    window.location.href= 'http://localhost/SistemaWeb-Aerolinea/public/index.html';
+                    window.location.href= 'http://localhost/Aerolinea-Web-Segura/public/index.html';
                 } else if (data.estado === "error_registro") {
                     Swal.fire('Error', 'Ya existe un usuario con ese correo electrónico', 'error');
                 }
@@ -301,7 +301,7 @@ function registrarAdministrador() {
 
 function audi(correo){
     const ahora = new Date().toString();
-    fetch("http://localhost/SistemaWeb-Aerolinea/backend/audi.php", {
+    fetch("http://localhost/Aerolinea-Web-Segura/backend/audi.php", {
                 method: "POST",
                 body: JSON.stringify({ correo: correo, fecha:ahora}),
             })
