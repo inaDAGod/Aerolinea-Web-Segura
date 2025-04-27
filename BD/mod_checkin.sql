@@ -84,8 +84,8 @@ INSERT INTO reservas_personas (creserva, ci_persona, estado_reserva, cvuelo, cas
 --añadir una coluna a la tabla check_in sobre el estado del mismo
 
 --está con varchar pero los datos que debe tener son solo PENDIENTE Y REALIZADO
-alter table check_in
-add column estado_checkin varchar (20);
+--alter table check_in
+--add column estado_checkin varchar (20);
 
 
 --si tienen datos previos en sus bds y quieren añadir el estado del check-in para probarlo
@@ -193,5 +193,5 @@ INSERT INTO reservas_personas (creserva, ci_persona, estado_reserva, cvuelo, cas
 (14, '4567890', 'Confirmada', 1, 'A2'),
 (15, '5678901', 'Pendiente', 2, 'B2');
 
-alter table check_in
-add column estado_checkin varchar (20);
+--alter table check_in
+--add column estado_checkin varchar (20);

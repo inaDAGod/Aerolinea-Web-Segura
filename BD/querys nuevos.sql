@@ -1,9 +1,9 @@
 --Modifico la tabla vuelos
-ALTER TABLE vuelos
-RENAME COLUMN costo TO costoVip;
-ALTER TABLE vuelos
-ADD COLUMN costoBusiness money,
-ADD COLUMN costoEco money;
+--ALTER TABLE vuelos
+--RENAME COLUMN costo TO costoVip;
+--ALTER TABLE vuelos
+--ADD COLUMN costoBusiness money,
+--ADD COLUMN costoEco money;
 
 -Agrego las ciudades
 INSERT INTO ciudad (ciudad) VALUES ('La Paz');
@@ -93,8 +93,8 @@ INSERT INTO check_in (correo_usuario, fecha_check_in, numero_documento, tipodoc,
 ('joshnisth@gmail.com', '2024-06-11', '8002003', 'Pasaporte', true, true, false),
 ('ellie13@gmail.com', '2024-06-14', '8002001', 'Carnet de Identidad', false, true, false);
 --Y ESTO MAS
-alter table check_in
-add column estado_checkin varchar (20);
+--alter table check_in
+--add column estado_checkin varchar (20);
 
 --Agrego un boleto 
 INSERT INTO boletos (ci_persona,cvuelo,casiento,total) VALUES
