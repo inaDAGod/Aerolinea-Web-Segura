@@ -65,6 +65,7 @@ function verificarPermisos() {
         "addProducto.html" :  "ABM catalogo millas",
         "agregarRole.html" :  "ABM Roles",
         "agregarVuelo.html" :  "Agregar vuelos",
+        "editarRole.html" :  "ABM Roles",
     };
 
     if (!rol) {
