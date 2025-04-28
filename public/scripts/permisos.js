@@ -3,9 +3,9 @@
 function verificarPermisos() {
     const rol = localStorage.getItem('rol');
     const accesos = localStorage.getItem('accesos') ? JSON.parse(localStorage.getItem('accesos')) : {};  // Asegúrate de que accesos sea un objeto
+    const tipo_usuario = localStorage.getItem('tipo_usuario'); // "administrador" o "cliente"
     console.log('accesos:', accesos);  // Verifica que los accesos estén correctamente cargados
-    
-    const tipoUsuario = localStorage.getItem('tipoUsuario'); // "administrador" o "cliente"
+    console.log('tipo_usuario:', tipo_usuario);  // Verifica el tipo de usuario
 
     const paginaActual = window.location.pathname.split("/").pop(); // Ejemplo: "dashboard.html"
 
@@ -50,12 +50,12 @@ function verificarPermisos() {
         if (!paginasPublicas.includes(paginaActual)) {
             mostrar404();
         }
-    } else if (rol === "cliente") {
+    } else if (tipo_usuario === "cliente") {
         // Usuario cliente
         if (!paginasCliente.includes(paginaActual)) {
             window.location.href = "indexCliente.html";
         }
-    } else if (rol !== "cliente") {
+    } else if (tipo_usuario === "administrador") {
         // Usuario administrador
         const paginasBaseAdmin = ["indexAdmi.html", "index.html"]; // Siempre Inicio y Cerrar sesión
         const paginasPermitidas = [...paginasBaseAdmin];
@@ -117,15 +117,10 @@ function construirMenuAdmin(accesos, mapaAccesos) {
 
 
 function mostrar404() {
-    document.body.innerHTML = `
-        <div style="text-align: center; padding: 100px;">
-            <h1 style="font-size: 80px;">404</h1>
-            <p style="font-size: 24px;">Página no encontrada o acceso no autorizado</p>
-            <a href="index.html" style="font-size: 20px; color: blue;">Volver al inicio</a>
-        </div>
-    `;
-    document.title = "404 No Encontrado";
+    window.location.href = "/404";
 }
+
+
 
 function cerrarSesion() {
     localStorage.clear();

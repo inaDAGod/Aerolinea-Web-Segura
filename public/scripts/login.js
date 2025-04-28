@@ -23,7 +23,8 @@ function loginEncript() {
                         // 🌟 Aquí guardas en localStorage:
                     localStorage.setItem('rol', data.rol); // Guardas el rol
                     localStorage.setItem('accesos', JSON.stringify(data.accesos)); // Guardas los accesos (convertido en string)
-
+                    localStorage.setItem('tipo_usuario', data.tipo_usuario); // Guardas el tipo de usuario
+                    console.log(data.tipo_usuario);
                         // Verificar si la contraseña ha expirado
                     if(data.password_expired) {
                         Swal.fire({
