@@ -2,12 +2,13 @@
 
 function verificarPermisos() {
     const rol = localStorage.getItem('rol');
-    const accesos = localStorage.getItem('accesos') ? JSON.parse(localStorage.getItem('accesos')) : {};  // Asegúrate de que accesos sea un objeto
-    const tipo_usuario = localStorage.getItem('tipo_usuario'); // "administrador" o "cliente"
-    console.log('accesos:', accesos);  // Verifica que los accesos estén correctamente cargados
-    console.log('tipo_usuario:', tipo_usuario);  // Verifica el tipo de usuario
+    const accesos = localStorage.getItem('accesos') ? JSON.parse(localStorage.getItem('accesos')) : {};
+    const tipo_usuario = localStorage.getItem('tipo_usuario');
 
-    const paginaActual = window.location.pathname.split("/").pop(); // Ejemplo: "dashboard.html"
+    console.log('accesos:', accesos);
+    console.log('tipo_usuario:', tipo_usuario);
+
+    const paginaActual = window.location.pathname.split("/").pop();
 
     const paginasPublicas = [
         "index.html",
@@ -18,14 +19,20 @@ function verificarPermisos() {
         "registro.html"
     ];
 
-    const paginasCliente = [
+    const paginasClienteNavbar = [
         "indexCliente.html",
         "catalogoVueloCliente.html",
         "verificarCheckinCliente.html",
         "catalogoMillasCliente.html",
         "opinionesCliente.html",
-        "perfil.html",
-        "index.html" // Cerrar sesión
+        "perfil.html"
+    ];
+
+    // <<< NUEVO >>> Páginas a las que cliente tiene permiso si está logueado
+    const paginasClienteAccesibles = [
+        ...paginasClienteNavbar,
+        "reservar.html",
+        // agrega aquí todas las páginas internas a las que puede entrar el cliente logueado
     ];
 
     const mapaAccesos = {
@@ -39,53 +46,88 @@ function verificarPermisos() {
         "Ver Dashboard": { href: "dashboard.html", texto: "Dashboard" },
         "ABM Roles": { href: "roles.html", texto: "Roles" },
         "Auditoria de usuarios": { href: "admin_usuarios.html", texto: "Auditoría de Usuarios" },
-        "Ver pasajeros": { href: "admin_pasajeros.html", texto: "Ver Pasajeros" },
-        "Ver Reservas": { href: "reservasAdmin.html", texto: "Ver Reservas" },
-        "Modificar estado reservas": { href: "reservasAdmin.html", texto: "Modificar Estado Reservas" },
         "Cerrar Sesion": { href: "index.html", texto: "Cerrar Sesión" }
     };
 
+    const mapaPaginasPermisos = {
+        "indexAdmi.html": "Inicio",
+        "infoVuelo.html": "Agregar vuelos",
+        "verificarCheckinAdmi.html": "Modificar estado checkin",
+        "generarBoleto.html": "Generar boleto",
+        "catalogoMillasAdmi.html": "ABM catalogo millas",
+        "opinionesAdmin.html": "Borrar opiniones",
+        "registroAdmi.html": "ABM empleados",
+        "dashboard.html": "Ver Dashboard",
+        "roles.html": "ABM Roles",
+        "admin_usuarios.html": "Auditoria de usuarios",
+        "admin_pasajeros.html": "Ver pasajeros",
+        "reservasAdmin.html": "Ver Reservas",
+        "addProducto.html" :  "ABM catalogo millas",
+        "agregarRole.html" :  "ABM Roles",
+        "agregarVuelo.html" :  "Agregar vuelos",
+    };
+
     if (!rol) {
-        // Usuario no logueado
+        // No logueado
         if (!paginasPublicas.includes(paginaActual)) {
             mostrar404();
+        } else {
+            construirMenu('publico');
         }
     } else if (tipo_usuario === "cliente") {
-        // Usuario cliente
-        if (!paginasCliente.includes(paginaActual)) {
+        // Logueado como cliente
+        if (!paginasClienteAccesibles.includes(paginaActual)) {
             window.location.href = "indexCliente.html";
+        } else {
+            construirMenu('cliente');
         }
-        construirMenu('cliente');  // Llamada para construir el menú cliente
     } else if (tipo_usuario === "administrador") {
-        // Usuario administrador
-        const paginasBaseAdmin = ["indexAdmi.html", "index.html"]; // Siempre Inicio y Cerrar sesión
-        const paginasPermitidas = [...paginasBaseAdmin];
+        // Logueado como admin
+        if (paginaActual === "indexAdmi.html" || paginaActual === "index.html") {
+            construirMenu('administrador', accesos, mapaAccesos);
+            return;
+        }
 
-        Object.entries(accesos).forEach(([acceso, permitido]) => {
-            if (permitido && mapaAccesos[acceso]) {
-                paginasPermitidas.push(mapaAccesos[acceso].href);
+        const permisoNecesario = mapaPaginasPermisos[paginaActual];
+
+        if (permisoNecesario) {
+            if (accesos[permisoNecesario]) {
+                construirMenu('administrador', accesos, mapaAccesos);
+            } else {
+                window.location.href = "indexAdmi.html";
             }
-        });
-
-        if (!paginasPermitidas.includes(paginaActual)) {
+        } else {
             window.location.href = "indexAdmi.html";
         }
-
-        // Construir el menú
-        construirMenu('administrador', accesos, mapaAccesos);
     } else {
-        // Rol desconocido
         mostrar404();
     }
 }
 
-function construirMenu(tipo_usuario, accesos, mapaAccesos) {
+function construirMenu(tipo_usuario, accesos = {}, mapaAccesos = {}) {
     const nav = document.querySelector('.menu-navegacion');
     if (!nav) return;
 
     nav.innerHTML = '';
 
-    if (tipo_usuario === 'cliente') {
+    if (tipo_usuario === 'publico') {
+        const paginasPublicasMenu = [
+            { href: "index.html", texto: "Inicio" },
+            { href: "catalogoVuelo.html", texto: "Vuelos" },
+            { href: "verificarCheckin.html", texto: "Check-In" },
+            { href: "catalogoMillas.html", texto: "Catálogo Millas" },
+            { href: "opiniones.html", texto: "Opiniones" },
+            { href: "registro.html", texto: "Registro" }
+        ];
+
+        paginasPublicasMenu.forEach(pagina => {
+            const link = document.createElement('a');
+            link.href = pagina.href;
+            link.textContent = pagina.texto;
+            nav.appendChild(link);
+        });
+
+    } else if (tipo_usuario === 'cliente') {
         const paginasClienteMenu = [
             { href: "indexCliente.html", texto: "Inicio" },
             { href: "catalogoVueloCliente.html", texto: "Vuelos" },
@@ -101,7 +143,7 @@ function construirMenu(tipo_usuario, accesos, mapaAccesos) {
             link.href = pagina.href;
             link.textContent = pagina.texto;
             if (pagina.onClick) {
-                link.addEventListener('click', function(event) {
+                link.addEventListener('click', function (event) {
                     event.preventDefault();
                     pagina.onClick();
                 });
@@ -110,7 +152,6 @@ function construirMenu(tipo_usuario, accesos, mapaAccesos) {
         });
 
     } else if (tipo_usuario === 'administrador') {
-        // Inicio
         if (mapaAccesos["Inicio"]) {
             const linkInicio = document.createElement('a');
             linkInicio.href = mapaAccesos["Inicio"].href;
@@ -131,7 +172,7 @@ function construirMenu(tipo_usuario, accesos, mapaAccesos) {
             const linkCerrar = document.createElement('a');
             linkCerrar.href = "#";
             linkCerrar.textContent = mapaAccesos["Cerrar Sesion"].texto;
-            linkCerrar.addEventListener('click', function(event) {
+            linkCerrar.addEventListener('click', function (event) {
                 event.preventDefault();
                 cerrarSesion();
             });
@@ -149,5 +190,4 @@ function cerrarSesion() {
     window.location.href = "index.html";
 }
 
-// Ejecutar verificación automáticamente
 document.addEventListener('DOMContentLoaded', verificarPermisos);
