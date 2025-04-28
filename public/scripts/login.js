@@ -20,6 +20,11 @@ function loginEncript() {
                     if (data.estado === 'contraseña_correcta') {
                         audi(correo);
 
+                        // 🌟 Aquí guardas en localStorage:
+                    localStorage.setItem('rol', data.rol); // Guardas el rol
+                    localStorage.setItem('accesos', JSON.stringify(data.accesos)); // Guardas los accesos (convertido en string)
+                    localStorage.setItem('tipo_usuario', data.tipo_usuario); // Guardas el tipo de usuario
+                    console.log(data.tipo_usuario);
                         // Verificar si la contraseña ha expirado
                     if(data.password_expired) {
                         Swal.fire({
@@ -34,7 +39,7 @@ function loginEncript() {
                         });
                         return;
                     }
-
+                        //cambiarDirecto deberia ir a Index y el navvar seria los que cambia 
                         if(data.tipo_usuario === 'cliente'){
                             window.location.href = 'http://localhost/Aerolinea-Web-Segura/public/indexCliente.html';
                         }
@@ -90,6 +95,7 @@ function registrarUsuario() {
             })
             .then(data => {
                 if (data.estado === "registro_exitoso") {
+                    localStorage.setItem('tipo_usuario', 'cliente'); // Guarda el tipo de usuario en el localStorage
                     window.location.href= 'http://localhost/Aerolinea-Web-Segura/public/indexCliente.html';
                 } else if (data.estado === "error_registro") {
                     Swal.fire('Error', 'Ya existe un usuario con ese correo electrónico', 'error');

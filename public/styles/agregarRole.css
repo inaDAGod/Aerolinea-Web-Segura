@@ -1,0 +1,28 @@
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+  }
+  .container {
+    max-width: 600px;
+    margin-top: 50px;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .btn-primary {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  /* Position the "Ir a Roles" button */
+  .btn-secondary {
+    top: 10px;
+    left: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
