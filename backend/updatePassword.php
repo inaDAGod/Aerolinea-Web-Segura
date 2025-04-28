@@ -11,8 +11,12 @@ if (!$conexion) {
     die("Error al conectar a la base de datos: " . pg_last_error());
 }
 
+$sql_historial = "INSERT INTO historial_passwords (password, fecha_uso, correo_usuario) 
+                 SELECT contraseña, NOW(), correo_usuario FROM usuarios WHERE correo_usuario = '$username'";
+pg_query($conexion, $sql_historial);
+
 // Actualizar la contraseña del usuario
-$sql = "UPDATE usuarios SET contraseña = '$newPassword' WHERE correo_usuario = '$username'";
+$sql = "UPDATE usuarios SET contraseña = '$newPassword', password_last_date = NOW() WHERE correo_usuario = '$username'";
 $resultado = pg_query($conexion, $sql);
 
 if ($resultado) {
