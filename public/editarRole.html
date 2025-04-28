@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Rol</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+  <h1>Editar Rol</h1>
+
+  <div class="container mt-5">
+    <h2 class="mb-4">Editar Rol</h2>
+
+    <form id="formEditarRol">
+      <div class="form-group">
+        <label for="nombreRol">Nombre del Rol</label>
+        <input type="text" class="form-control" id="nombreRol" required>
+      </div>
+
+      <h4>Accesos</h4>
+      <div id="permisosContainer"></div>
+
+      <button type="submit" class="btn btn-primary mt-3">Guardar Cambios</button>
+    </form>
+  </div>
+
+  <script src="scripts/editarRol.js"></script>
+</body>
+</html>

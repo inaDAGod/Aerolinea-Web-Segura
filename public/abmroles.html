@@ -9,15 +9,23 @@
 
   <h1>Administrar Roles</h1>
   
-
-  
   <div class="container mt-5">
     <h2 class="mb-4">Roles y Accesos</h2>
     <button class="btn btn-primary mb-3" onclick="location.href='agregarRole.html'">Agregar Rol</button>
-    <div id="rolesContainer"></div>
-</div>
+    
+    <table class="table table-bordered" id="rolesTable">
+      <thead>
+        <tr>
+          <th>Rol</th>
+          <th>Accesos</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
-<!-- Aquí enlazamos el JavaScript -->
-<script src="scripts/roles.js"></script>
+  <script src="scripts/roles.js"></script>
+  <script src="scripts/admmain.js"></script>
 </body>
 </html>
