@@ -95,6 +95,7 @@ function registrarUsuario() {
             })
             .then(data => {
                 if (data.estado === "registro_exitoso") {
+                    localStorage.setItem('tipo_usuario', 'cliente'); // Guarda el tipo de usuario en el localStorage
                     window.location.href= 'http://localhost/Aerolinea-Web-Segura/public/indexCliente.html';
                 } else if (data.estado === "error_registro") {
                     Swal.fire('Error', 'Ya existe un usuario con ese correo electrónico', 'error');
