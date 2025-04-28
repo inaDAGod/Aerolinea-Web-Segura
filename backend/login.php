@@ -15,7 +15,7 @@ if (session_status() == PHP_SESSION_NONE) {
     }
     
     // Consulta SQL para obtener la contraseña y el tipo de usuario del usuario
-    $sql = "SELECT contraseña, tipo_usuario, nombres_usuario, apellidos_usuario, millas, 
+    $sql = "SELECT contraseña, tipo_usuario, nombres_usuario, apellidos_usuario, millas, rol,
         password_last_date, EXTRACT(DAY FROM (NOW() - password_last_date)) as dias_desde_cambio 
         FROM usuarios WHERE correo_usuario = '$username'";
     $resultado = pg_query($conexion, $sql);
@@ -30,17 +30,37 @@ if (session_status() == PHP_SESSION_NONE) {
             $nombres_usuario = $fila['nombres_usuario'];
             $apellidos_usuario = $fila['apellidos_usuario'];
             $millas = $fila['millas'];
+            $rol = $fila['rol'];
             $dias_desde_cambio = $fila['dias_desde_cambio'];
             
             // Verificar si la contraseña coincide
             if ($password === $contraseñaBD) {
-                // La contraseña coincide, enviar el estado y el tipo de usuario
-                echo json_encode(["estado" => "contraseña_correcta", "tipo_usuario" => $tipoUsuario, "password_expired" => ($dias_desde_cambio > 90)]);
+                // Aquí hacemos una segunda consulta: traer accesos del rol
+                $sqlAccesos = "SELECT accesos FROM roles WHERE rol = '$rol'";
+                $resultadoAccesos = pg_query($conexion, $sqlAccesos);
+
+                $accesos = [];
+                if ($resultadoAccesos && pg_num_rows($resultadoAccesos) > 0) {
+                    $filaAccesos = pg_fetch_assoc($resultadoAccesos);
+                    $accesos = json_decode($filaAccesos['accesos']); // convertir el JSON a objeto PHP
+                }
+                
                 $_SESSION['correo_usuario'] =$username;
                 $_SESSION['tipo_usuario'] = $tipoUsuario;
                 $_SESSION['nombres_usuario'] =$nombres_usuario;
                 $_SESSION['apellidos_usuario'] = $apellidos_usuario;
                 $_SESSION['millas'] =$millas;
+                $_SESSION['rol'] = $rol;
+                $_SESSION['accesos'] = $accesos;
+
+                // Devolvemos el estado, tipo, rol y accesos
+                echo json_encode([
+                    "estado" => "contraseña_correcta",
+                    "tipo_usuario" => $tipoUsuario,
+                    "rol" => $rol,
+                    "accesos" => $accesos,
+                    "password_expired" => ($dias_desde_cambio > 90)
+                ]);
             } else {
                 // La contraseña no coincide
                 echo json_encode(["estado" => "contraseña_incorrecta"]);
