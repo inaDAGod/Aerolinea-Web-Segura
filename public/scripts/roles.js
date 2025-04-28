@@ -24,6 +24,7 @@ function renderRoles(roles) {
         <tr>
             <th>Rol</th>
             <th>Accesos</th>
+            <th>Acciones</th> <!-- Nueva columna Acciones -->
         </tr>
     `;
     table.appendChild(thead);
@@ -41,6 +42,10 @@ function renderRoles(roles) {
         row.innerHTML = `
             <td>${role.rol}</td>
             <td>${accesosHtml}</td>
+            <td>
+                <button class="btn btn-warning btn-sm mr-1" onclick="editarRol('${role.rol}')">Editar</button>
+                <button class="btn btn-danger btn-sm" onclick="borrarRol('${role.rol}')">Borrar</button>
+            </td>
         `;
         tbody.appendChild(row);
     });
@@ -50,9 +55,20 @@ function renderRoles(roles) {
 }
 
 function agregarRol() {
-    // Aquí puedes abrir un modal o redirigir a un formulario de creación de roles
     alert('Función para agregar un nuevo rol (pendiente de implementar)');
 }
 
-// Ejecutamos fetchRoles apenas se cargue la página
+// Aquí pones la lógica que quieras para editar y borrar
+function editarRol(rol) {
+    alert('Editar rol: ' + rol);
+    // Aquí podrías abrir un modal de edición o redirigir a otra página
+}
+
+function borrarRol(rol) {
+    if (confirm('¿Seguro que deseas borrar el rol "' + rol + '"?')) {
+        // Aquí harías un fetch para borrar en el backend
+        alert('Rol "' + rol + '" eliminado (simulación)');
+    }
+}
+
 window.onload = fetchRoles;
