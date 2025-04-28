@@ -24,7 +24,7 @@ function loginEncript() {
                     if(data.password_expired) {
                         Swal.fire({
                             title: 'Contraseña expirada',
-                            text: 'Tu contraseña tiene más de 90 días sin cambio. Por seguridad, debes actualizarla.',
+                            text: 'Tu contraseña tiene más de 60 días sin cambio. Por seguridad, debes actualizarla.',
                             icon: 'warning',
                             confirmButtonText: 'Cambiar ahora'
                         }).then((result) => {
@@ -273,6 +273,7 @@ function newContra(){
     let contra1 = document.getElementById("passwordRes").value;
     let contra2 = document.getElementById("passwordRes2").value;
     let correo = document.getElementById("correoRestaurar").value;
+    
     if(contra1 && contra2){
         if(contra1 == contra2){
             // Verificar complejidad
@@ -281,39 +282,58 @@ function newContra(){
                 Swal.fire('Error', "Modifica a una contraseña segura", 'error');
                 return;
             }
+            
             var hash = CryptoJS.MD5(contra1);
-            fetch("http://localhost/Aerolinea-Web-Segura/backend/updatePassword.php", {
+            
+            // Primero verificar el historial
+            fetch("http://localhost/Aerolinea-Web-Segura/backend/checkPasswordHistory.php", {
                 method: "POST",
-                body: JSON.stringify({username: correo, newPassword:  hash.toString() }),
+                body: JSON.stringify({username: correo, password: hash.toString()}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.estado === 'password_recently_used') {
+                    Swal.fire({
+                        title: 'Contraseña reciente',
+                        text: 'No puedes usar una contraseña que ya utilizaste en los últimos 3 meses.',
+                        icon: 'error'
+                    });
+                } else {
+                    // Si pasa la validación, proceder con el cambio
+                    return fetch("http://localhost/Aerolinea-Web-Segura/backend/updatePassword.php", {
+                        method: "POST",
+                        body: JSON.stringify({username: correo, newPassword: hash.toString()}),
+                    });
+                }
             })
             .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Error en la solicitud');
+                if(response && response.ok) return response.json();
+                return null;
             })
             .then(data => {
-                if (data.estado === "contraseña_cambiada") {
-                    alert('Se restauro tu contraseña');
-                    window.location.href= 'http://localhost/Aerolinea-Web-Segura/public/registro.html';
-                } else if (data.estado === "error_actualizacion") {
-                    Swal.fire('Error', 'Parece que hubo un error', 'error');
+                if(data && data.estado === "contraseña_cambiada") {
+                    Swal.fire({
+                        title: 'Éxito',
+                        text: 'Contraseña actualizada correctamente',
+                        icon: 'success'
+                    }).then(() => {
+                        window.location.href = 'http://localhost/Aerolinea-Web-Segura/public/registro.html';
+                    });
+                } else if(data && data.estado === "error_actualizacion") {
+                    Swal.fire('Error', 'Hubo un problema al actualizar la contraseña', 'error');
                 }
             })
             .catch(error => {
-                console.error('Error en la solicitud:', error);
-                Swal.fire('Error', 'Parece que hubo un error', 'error');
+                console.error('Error:', error);
+                Swal.fire('Error', 'Ocurrió un error inesperado', 'error');
             });
+        } else {
+            Swal.fire('Error', 'Las contraseñas no coinciden', 'error');
         }
-        else{
-            Swal.fire('Error', 'Las contraseña no coinciden', 'error');
-        }
-    }
-    else{
-        Swal.fire('Error', 'Llena los campos', 'error');
+    } else {
+        Swal.fire('Error', 'Llena ambos campos', 'error');
     }
 }
-
 
 function audi(correo){
     const ahora = new Date().toString();

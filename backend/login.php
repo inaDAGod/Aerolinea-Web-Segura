@@ -35,7 +35,7 @@ if (session_status() == PHP_SESSION_NONE) {
             // Verificar si la contraseña coincide
             if ($password === $contraseñaBD) {
                 // La contraseña coincide, enviar el estado y el tipo de usuario
-                echo json_encode(["estado" => "contraseña_correcta", "tipo_usuario" => $tipoUsuario, "password_expired" => ($dias_desde_cambio > 90)]);
+                echo json_encode(["estado" => "contraseña_correcta", "tipo_usuario" => $tipoUsuario, "password_expired" => ($dias_desde_cambio > 60)]);
                 $_SESSION['correo_usuario'] =$username;
                 $_SESSION['tipo_usuario'] = $tipoUsuario;
                 $_SESSION['nombres_usuario'] =$nombres_usuario;
