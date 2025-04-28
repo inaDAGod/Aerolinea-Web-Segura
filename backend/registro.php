@@ -17,10 +17,15 @@ if (!$conexion) {
     die("Error al conectar a la base de datos: " . pg_last_error());
 }
 
-$sql = "INSERT INTO usuarios (correo_usuario, contraseña, nombres_usuario, apellidos_usuario, tipo_usuario, millas) VALUES ('$username', '$password', '$nombres', '$apellidos', 'cliente', 0)";
+$sql = "INSERT INTO usuarios (correo_usuario, contraseña, nombres_usuario, apellidos_usuario, tipo_usuario, millas, password_last_date) VALUES ('$username', '$password', '$nombres', '$apellidos', 'cliente', 0, NOW())";
 $resultado = pg_query($conexion, $sql);
 
 if ($resultado) {
+    // Guardar en el historial de contraseñas
+    $sql_historial = "INSERT INTO historial_passwords (password, fecha_uso, correo_usuario) 
+                      VALUES ('$password', NOW(), '$username')";
+    pg_query($conexion, $sql_historial);
+    
     $response = array('estado' => 'registro_exitoso');
     $_SESSION['correo_usuario'] =$username;
     $_SESSION['tipo_usuario'] = 'cliente';

@@ -19,6 +19,22 @@ function loginEncript() {
                 .then(data => {
                     if (data.estado === 'contraseña_correcta') {
                         audi(correo);
+
+                        // Verificar si la contraseña ha expirado
+                    if(data.password_expired) {
+                        Swal.fire({
+                            title: 'Contraseña expirada',
+                            text: 'Tu contraseña tiene más de 90 días sin cambio. Por seguridad, debes actualizarla.',
+                            icon: 'warning',
+                            confirmButtonText: 'Cambiar ahora'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                toggleFormRes();
+                            }
+                        });
+                        return;
+                    }
+
                         if(data.tipo_usuario === 'cliente'){
                             window.location.href = 'http://localhost/Aerolinea-Web-Segura/public/indexCliente.html';
                         }
@@ -124,7 +140,34 @@ function verificar(){
         Swal.fire('Error', 'Revisa el codigo no coincide con el que se mando a tu correo', 'error');
     }
 }
-
+function esContraseniaCompleja(contrasenia) {
+    // Verificar longitud mínima
+    if (contrasenia.length < 10) {
+        return { valido: false, mensaje: 'La contraseña debe tener al menos 10 caracteres' };
+    }
+    
+    // Verificar mayúsculas
+    if (!/[A-Z]/.test(contrasenia)) {
+        return { valido: false, mensaje: 'La contraseña debe contener al menos una letra mayúscula' };
+    }
+    
+    // Verificar minúsculas
+    if (!/[a-z]/.test(contrasenia)) {
+        return { valido: false, mensaje: 'La contraseña debe contener al menos una letra minúscula' };
+    }
+    
+    // Verificar números
+    if (!/[0-9]/.test(contrasenia)) {
+        return { valido: false, mensaje: 'La contraseña debe contener al menos un número' };
+    }
+    
+    // Verificar caracteres especiales
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(contrasenia)) {
+        return { valido: false, mensaje: 'La contraseña debe contener al menos un carácter especial' };
+    }
+    
+    return { valido: true, mensaje: 'Contraseña válida' };
+}
 function verificarCampos(){
     let nombres = document.getElementById("nombre").value;
     let apellidos = document.getElementById("apellido").value;
@@ -144,8 +187,10 @@ function verificarCampos(){
         })
         .then(data => {
             if (data.estado === "cuenta_nueva") {
-                if(contrasenia.length < 6){
-                    alert('Contraseña muy corta, mínimo 6 caracteres');
+                const resultado = esContraseniaCompleja(contrasenia);
+                if(!resultado.valido){
+                    //Swal.fire('Error', resultado.mensaje, 'error');
+                    Swal.fire('Error', "Ingrese contraseña segura", 'error');
                 }
                 else{
                     mandarCorreoVerificacion();
@@ -230,6 +275,12 @@ function newContra(){
     let correo = document.getElementById("correoRestaurar").value;
     if(contra1 && contra2){
         if(contra1 == contra2){
+            // Verificar complejidad
+            const resultado = esContraseniaCompleja(contra1);
+            if(!resultado.valido) {
+                Swal.fire('Error', "Modifica a una contraseña segura", 'error');
+                return;
+            }
             var hash = CryptoJS.MD5(contra1);
             fetch("http://localhost/Aerolinea-Web-Segura/backend/updatePassword.php", {
                 method: "POST",

@@ -15,7 +15,9 @@ if (session_status() == PHP_SESSION_NONE) {
     }
     
     // Consulta SQL para obtener la contraseña y el tipo de usuario del usuario
-    $sql = "SELECT contraseña, tipo_usuario,nombres_usuario,apellidos_usuario,millas FROM usuarios WHERE correo_usuario = '$username'";
+    $sql = "SELECT contraseña, tipo_usuario, nombres_usuario, apellidos_usuario, millas, 
+        password_last_date, EXTRACT(DAY FROM (NOW() - password_last_date)) as dias_desde_cambio 
+        FROM usuarios WHERE correo_usuario = '$username'";
     $resultado = pg_query($conexion, $sql);
     
     if ($resultado) {
@@ -28,11 +30,12 @@ if (session_status() == PHP_SESSION_NONE) {
             $nombres_usuario = $fila['nombres_usuario'];
             $apellidos_usuario = $fila['apellidos_usuario'];
             $millas = $fila['millas'];
+            $dias_desde_cambio = $fila['dias_desde_cambio'];
             
             // Verificar si la contraseña coincide
             if ($password === $contraseñaBD) {
                 // La contraseña coincide, enviar el estado y el tipo de usuario
-                echo json_encode(["estado" => "contraseña_correcta", "tipo_usuario" => $tipoUsuario]);
+                echo json_encode(["estado" => "contraseña_correcta", "tipo_usuario" => $tipoUsuario, "password_expired" => ($dias_desde_cambio > 90)]);
                 $_SESSION['correo_usuario'] =$username;
                 $_SESSION['tipo_usuario'] = $tipoUsuario;
                 $_SESSION['nombres_usuario'] =$nombres_usuario;
