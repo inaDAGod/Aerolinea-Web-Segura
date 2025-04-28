@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agregar Rol</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 600px;
+      margin-top: 50px;
+    }
+    h1 {
+      color: #007bff;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    /* Position the "Ir a Roles" button */
+    .btn-secondary {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <button onclick="window.location.href='roles.html'" class="btn btn-secondary">Ir a Roles</button>
+
+  <div class="container">
+    <h1>Agregar Rol</h1>
+
+    <form id="addRoleForm">
+      <div class="form-group">
+        <label for="roleName">Nombre del Rol:</label>
+        <input type="text" id="roleName" class="form-control" required>
+      </div>
+
+      <h3>Permisos:</h3>
+      <div id="permissionsContainer" class="form-group">
+        <!-- JS va a generar los checkboxes aquí -->
+      </div>
+
+      <button type="submit" class="btn btn-primary">Guardar Rol</button>
+    </form>
+  </div>
+
+  <script src="scripts/agregarRole.js"></script>
+</body>
+</html>
