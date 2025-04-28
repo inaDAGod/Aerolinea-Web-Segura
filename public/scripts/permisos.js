@@ -55,6 +55,7 @@ function verificarPermisos() {
         if (!paginasCliente.includes(paginaActual)) {
             window.location.href = "indexCliente.html";
         }
+        construirMenu('cliente');  // Llamada para construir el menú cliente
     } else if (tipo_usuario === "administrador") {
         // Usuario administrador
         const paginasBaseAdmin = ["indexAdmi.html", "index.html"]; // Siempre Inicio y Cerrar sesión
@@ -71,56 +72,77 @@ function verificarPermisos() {
         }
 
         // Construir el menú
-        construirMenuAdmin(accesos, mapaAccesos);
+        construirMenu('administrador', accesos, mapaAccesos);
     } else {
         // Rol desconocido
         mostrar404();
     }
 }
 
-function construirMenuAdmin(accesos, mapaAccesos) {
+function construirMenu(tipo_usuario, accesos, mapaAccesos) {
     const nav = document.querySelector('.menu-navegacion');
+    if (!nav) return;
 
-    if (!nav) return; // Si no existe el menú en la página, salir.
+    nav.innerHTML = '';
 
-    nav.innerHTML = ''; // Limpiar menú actual.
+    if (tipo_usuario === 'cliente') {
+        const paginasClienteMenu = [
+            { href: "indexCliente.html", texto: "Inicio" },
+            { href: "catalogoVueloCliente.html", texto: "Vuelos" },
+            { href: "verificarCheckinCliente.html", texto: "Check-In" },
+            { href: "catalogoMillasCliente.html", texto: "Catálogo Millas" },
+            { href: "opinionesCliente.html", texto: "Opiniones" },
+            { href: "perfil.html", texto: "Perfil" },
+            { href: "#", texto: "Cerrar Sesión", onClick: cerrarSesion }
+        ];
 
-    // Siempre agregar "Inicio"
-    if (mapaAccesos["Inicio"]) {
-        const linkInicio = document.createElement('a');
-        linkInicio.href = mapaAccesos["Inicio"].href;
-        linkInicio.textContent = mapaAccesos["Inicio"].texto;
-        nav.appendChild(linkInicio);
-    }
-
-    Object.entries(accesos).forEach(([acceso, permitido]) => {
-        if (permitido && mapaAccesos[acceso]) {
-            console.log(`Acceso permitido: ${acceso}`); // Ver qué accesos están siendo agregados
+        paginasClienteMenu.forEach(pagina => {
             const link = document.createElement('a');
-            link.href = mapaAccesos[acceso].href;
-            link.textContent = mapaAccesos[acceso].texto;
+            link.href = pagina.href;
+            link.textContent = pagina.texto;
+            if (pagina.onClick) {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    pagina.onClick();
+                });
+            }
             nav.appendChild(link);
-        }
-    });
-    
-    
+        });
 
-    // Siempre agregar "Cerrar Sesión"
-    if (mapaAccesos["Cerrar Sesion"]) {
-        const linkCerrar = document.createElement('a');
-        linkCerrar.href = mapaAccesos["Cerrar Sesion"].href;
-        linkCerrar.textContent = mapaAccesos["Cerrar Sesion"].texto;
-        nav.appendChild(linkCerrar);
+    } else if (tipo_usuario === 'administrador') {
+        // Inicio
+        if (mapaAccesos["Inicio"]) {
+            const linkInicio = document.createElement('a');
+            linkInicio.href = mapaAccesos["Inicio"].href;
+            linkInicio.textContent = mapaAccesos["Inicio"].texto;
+            nav.appendChild(linkInicio);
+        }
+
+        Object.entries(accesos).forEach(([acceso, permitido]) => {
+            if (permitido && mapaAccesos[acceso]) {
+                const link = document.createElement('a');
+                link.href = mapaAccesos[acceso].href;
+                link.textContent = mapaAccesos[acceso].texto;
+                nav.appendChild(link);
+            }
+        });
+
+        if (mapaAccesos["Cerrar Sesion"]) {
+            const linkCerrar = document.createElement('a');
+            linkCerrar.href = "#";
+            linkCerrar.textContent = mapaAccesos["Cerrar Sesion"].texto;
+            linkCerrar.addEventListener('click', function(event) {
+                event.preventDefault();
+                cerrarSesion();
+            });
+            nav.appendChild(linkCerrar);
+        }
     }
 }
-
-
 
 function mostrar404() {
     window.location.href = "/404";
 }
-
-
 
 function cerrarSesion() {
     localStorage.clear();
