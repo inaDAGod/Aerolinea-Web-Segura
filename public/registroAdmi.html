@@ -9,6 +9,7 @@
   <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
   <script src="scripts/login.js"></script>
+  <script src="scripts/registrarPersonal.js"></script>
   <script src="scripts/registro.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
   <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script> 
@@ -52,7 +53,13 @@
       <br>
       <input type="password" id="contra" placeholder="CONTRASEÑA">
       <br>
+              <!-- ComboBox de Roles -->
+      <select id="selectRol" class="form-select mb-3">
+        <option value="">Seleccionar Rol</option>
+      </select>
+    <br >
       <button class="boton" onclick="registrarAdministrador()">Registrar</button>
+
     </div>
   </div>
 

@@ -140,14 +140,14 @@ CREATE TABLE tipo_doc (
 -- Table: usuarios
 CREATE TABLE usuarios (
     correo_usuario varchar(100)  NOT NULL,
-    password varchar(100)  NOT NULL,
+    contraseña varchar(100)  NOT NULL,
     nombres_usuario varchar(100)  NOT NULL,
     apellidos_usuario varchar(100)  NOT NULL,
     tipo_usuario varchar(100)  NOT NULL,
     millas int  NOT NULL,
-    rol varchar(50)  NOT NULL,
-    activo int  NOT NULL,
-    password_last_date date  NOT NULL,
+    rol varchar(50),
+    activo int ,
+    password_last_date date,
     CONSTRAINT usuario_pk PRIMARY KEY (correo_usuario)
 );
 
