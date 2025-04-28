@@ -77,7 +77,7 @@ function verificarPermisos() {
     } else if (tipo_usuario === "cliente") {
         // Logueado como cliente
         if (!paginasClienteAccesibles.includes(paginaActual)) {
-            window.location.href = "indexCliente.html";
+            mostrar404();
         } else {
             construirMenu('cliente');
         }
@@ -94,10 +94,10 @@ function verificarPermisos() {
             if (accesos[permisoNecesario]) {
                 construirMenu('administrador', accesos, mapaAccesos);
             } else {
-                window.location.href = "indexAdmi.html";
+                mostrar404();
             }
         } else {
-            window.location.href = "indexAdmi.html";
+           mostrar404();
         }
     } else {
         mostrar404();
