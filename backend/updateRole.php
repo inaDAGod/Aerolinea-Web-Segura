@@ -1,21 +1,28 @@
 <?php
-$conexion = pg_connect("dbname=aerolinea user=postgres password=admin");
+$dbname = "aerolinea";
+$user = "postgres";
+$password = "admin";
 
-if (!$conexion) {
-  die('Error de conexión.');
+$conn = pg_connect("dbname=$dbname user=$user password=$password");
+
+if (!$conn) {
+    die("Conexión fallida: " . pg_last_error());
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-$rolActual = pg_escape_string($data['rolActual']);
-$rolNuevo = pg_escape_string($data['rolNuevo']);
-$accesos = pg_escape_string($data['accesos']);
+$rol = $data['rol'];
+$rolNuevo = $data['rolNuevo'];
+$accesos = json_encode($data['accesos']);
 
-$sql = "UPDATE roles SET rol = '$rolNuevo', accesos = '$accesos' WHERE rol = '$rolActual'";
+$sql = "UPDATE roles SET rol = $1, accesos = $2 WHERE rol = $3";
+$result = pg_query_params($conn, $sql, array($rolNuevo, $accesos, $rol));
 
-if (pg_query($conexion, $sql)) {
-  echo "Rol actualizado exitosamente.";
-} else {
-  echo "Error al actualizar rol.";
+if (!$result) {
+    die("Error en la consulta: " . pg_last_error());
 }
+
+pg_close($conn);
+
+echo "Rol actualizado con éxito.";
 ?>

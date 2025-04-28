@@ -1,16 +1,32 @@
 <?php
-$conexion = pg_connect("dbname=aerolinea user=postgres password=admin");
+$dbname = "aerolinea";
+$user = "postgres";
+$password = "admin";
 
-if (!$conexion) {
-  die('Error de conexión.');
+$conn = pg_connect("dbname=$dbname user=$user password=$password");
+
+if (!$conn) {
+    die("Conexión fallida: " . pg_last_error());
 }
 
-$resultado = pg_query($conexion, "SELECT rol, accesos FROM roles");
-$roles = [];
+$rol = $_GET['rol'];
 
-while ($row = pg_fetch_assoc($resultado)) {
-  $roles[] = $row;
+$sql = "SELECT rol, accesos FROM roles WHERE rol = $1";
+$result = pg_query_params($conn, $sql, array($rol));
+
+if (!$result) {
+    die("Error en la consulta: " . pg_last_error());
 }
+
+$roles = array();
+
+while ($row = pg_fetch_assoc($result)) {
+    $row['accesos'] = json_decode($row['accesos'], true);
+    $roles[] = $row;
+}
+
+pg_free_result($result);
+pg_close($conn);
 
 echo json_encode($roles);
 ?>

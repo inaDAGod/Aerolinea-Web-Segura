@@ -1,49 +1,63 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const roleName = urlParams.get('rol');
-  
-    document.getElementById('currentRoleName').value = roleName;
-  
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/getPermisos.php')
-      .then(response => response.json())
-      .then(permisosDisponibles => {
-        fetch('http://localhost/Aerolinea-Web-Segura/backend/getRoleById.php?nombre=' + encodeURIComponent(roleName))
-          .then(response => response.json())
-          .then(roleData => {
-            const container = document.getElementById('editPermissionsContainer');
-            const permisosActuales = roleData.permisos.split(',').map(p => p.trim());
-  
-            permisosDisponibles.forEach(permiso => {
-              container.innerHTML += `
-                <label>
-                  <input type="checkbox" value="${permiso}" ${permisosActuales.includes(permiso) ? 'checked' : ''}> ${permiso}
-                </label><br>
-              `;
-            });
-  
-            document.getElementById('newRoleName').value = roleData.nombre;
+  // Obtener el rol de la URL (parametro "rol")
+  const urlParams = new URLSearchParams(window.location.search);
+  const rol = urlParams.get('rol');
+
+  // Fetch de permisos y del rol a editar
+  fetch('http://localhost/Aerolinea-Web-Segura/backend/getPermisos.php')
+    .then(response => response.json())
+    .then(permisos => {
+      const permisosContainer = document.getElementById('permisosContainer');
+      permisos.forEach(acceso => {
+        permisosContainer.innerHTML += `
+          <label>
+            <input type="checkbox" value="${acceso}"> ${acceso}
+          </label><br>
+        `;
+      });
+
+      // Fetch del rol para editar
+      fetch(`http://localhost/Aerolinea-Web-Segura/backend/getRoles.php?rol=${rol}`)
+        .then(response => response.json())
+        .then(data => {
+          const roleData = data[0]; // Suponiendo que el rol existe y es un arreglo de un solo objeto
+          
+          // Rellenar los campos con los datos del rol
+          document.getElementById('nombreRol').value = roleData.rol;
+          
+          // Marcar los checkboxes correspondientes
+          const checkboxes = document.querySelectorAll('#permisosContainer input[type="checkbox"]');
+          checkboxes.forEach(checkbox => {
+            if (roleData.accesos[checkbox.value]) {
+              checkbox.checked = true;
+            }
           });
-      });
-  
-    document.getElementById('editRoleForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-  
-      const nombreActual = document.getElementById('currentRoleName').value;
-      const nombreNuevo = document.getElementById('newRoleName').value.trim();
-      const permisosSeleccionados = Array.from(document.querySelectorAll('#editPermissionsContainer input:checked'))
-        .map(checkbox => checkbox.value)
-        .join(', ');
-  
-      fetch('http://localhost/Aerolinea-Web-Segura/backend/updateRole.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombreActual, nombreNuevo, permisos: permisosSeleccionados })
-      })
-      .then(response => response.text())
-      .then(result => {
-        alert(result);
-        window.location.href = 'admmain.html';
-      });
+        });
+    });
+
+  // Guardar cambios
+  document.getElementById('formEditarRol').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const rolNuevo = document.getElementById('nombreRol').value.trim();
+    
+    const permisos = document.querySelectorAll('#permisosContainer input[type="checkbox"]');
+    const accesosSeleccionados = {};
+    
+    permisos.forEach(checkbox => {
+      accesosSeleccionados[checkbox.value] = checkbox.checked;
+    });
+
+    // Enviar los cambios al backend
+    fetch('http://localhost/Aerolinea-Web-Segura/backend/updateRole.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rol: rol, rolNuevo: rolNuevo, accesos: accesosSeleccionados })
+    })
+    .then(response => response.text())
+    .then(result => {
+      alert(result);
+      window.location.href = 'roles.html'; // Redirigir después de guardar cambios
     });
   });
-  
+});
