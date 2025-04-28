@@ -1,116 +1,136 @@
-document.addEventListener('DOMContentLoaded', function() {
-    validarPermisosYNavbar();
-    protegerPagina();
-});
+// permissions.js
 
-function validarPermisosYNavbar() {
+function verificarPermisos() {
     const rol = localStorage.getItem('rol');
+    const accesos = localStorage.getItem('accesos') ? JSON.parse(localStorage.getItem('accesos')) : {};  // Asegúrate de que accesos sea un objeto
+    console.log('accesos:', accesos);  // Verifica que los accesos estén correctamente cargados
+    
+    const tipoUsuario = localStorage.getItem('tipoUsuario'); // "administrador" o "cliente"
 
-    // No cargues el navbar si no hay rol (visitante público)
-    if (!rol) return; 
+    const paginaActual = window.location.pathname.split("/").pop(); // Ejemplo: "dashboard.html"
 
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/fetch_roles.php')
-        .then(response => response.json())
-        .then(data => {
-            const rolInfo = data.find(r => r.rol === rol);
+    const paginasPublicas = [
+        "index.html",
+        "catalogoVuelo.html",
+        "verificarCheckin.html",
+        "catalogoMillas.html",
+        "opiniones.html",
+        "registro.html"
+    ];
 
-            if (!rolInfo) {
-                Swal.fire('Error', 'No tienes permisos válidos', 'error')
-                    .then(() => {
-                        window.location.href = 'index.html';
-                    });
-                return;
-            }
+    const paginasCliente = [
+        "indexCliente.html",
+        "catalogoVueloCliente.html",
+        "verificarCheckinCliente.html",
+        "catalogoMillasCliente.html",
+        "opinionesCliente.html",
+        "perfil.html",
+        "index.html" // Cerrar sesión
+    ];
 
-            const accesos = rolInfo.accesos;
-            localStorage.setItem('accesos', JSON.stringify(accesos));
-            cargarNavbar(accesos);
-        })
-        .catch(error => {
-            console.error('Error al cargar permisos:', error);
-            Swal.fire('Error', 'Problema de permisos', 'error');
-        });
-}
-
-function cargarNavbar(accesos) {
-    const menu = document.querySelector('.menu-navegacion');
-    if (!menu) return;
-
-    menu.innerHTML = '';
-
-    if (accesos.inicio) {
-        menu.innerHTML += '<a href="indexAdmi.html">Inicio</a>';
-    }
-    if (accesos.vuelos) {
-        menu.innerHTML += '<a href="infoVuelo.html">Vuelos</a>';
-    }
-    if (accesos.checkin) {
-        menu.innerHTML += '<a href="verificarCheckinAdmi.html">Check-In</a>';
-    }
-    if (accesos.generarBoleto) {
-        menu.innerHTML += '<a href="generarBoleto.html">Generar Boleto</a>';
-    }
-    if (accesos.catalogoMillas) {
-        menu.innerHTML += '<a href="catalogoMillasAdmi.html">Catálogo Premios millas</a>';
-    }
-    if (accesos.opiniones) {
-        menu.innerHTML += '<a href="opinionesAdmin.html">Opiniones</a>';
-    }
-    if (accesos.registrarAdministrador) {
-        menu.innerHTML += '<a href="registroAdmi.html">Registrar administrador</a>';
-    }
-    if (accesos.dashboard) {
-        menu.innerHTML += '<a href="dashboard.html">Dashboard</a>';
-    }
-
-    menu.innerHTML += '<a href="#" onclick="cerrarSesion()">Cerrar Sesión</a>';
-}
-
-function protegerPagina() {
-    const paginasLibres = ['index.html', 'registroCliente.html', 'otraPaginaPublica.html']; 
-    // Agrega aquí las páginas públicas
-
-    const paginaActual = window.location.pathname.split('/').pop();
-
-    // Si la página es pública, no hay que protegerla
-    if (paginasLibres.includes(paginaActual)) {
-        return;
-    }
-
-    const rol = localStorage.getItem('rol');
-    const accesosGuardados = localStorage.getItem('accesos');
-
-    if (!rol || !accesosGuardados) {
-        Swal.fire('Acceso denegado', 'Debes iniciar sesión para entrar aquí.', 'error')
-            .then(() => {
-                window.location.href = 'index.html';
-            });
-        return;
-    }
-
-    const accesos = JSON.parse(accesosGuardados);
-
-    const mapaPaginas = {
-        'infoVuelo.html': 'vuelos',
-        'verificarCheckinAdmi.html': 'checkin',
-        'generarBoleto.html': 'generarBoleto',
-        'catalogoMillasAdmi.html': 'catalogoMillas',
-        'opinionesAdmin.html': 'opiniones',
-        'registroAdmi.html': 'registrarAdministrador',
-        'dashboard.html': 'dashboard'
+    const mapaAccesos = {
+        "Inicio": { href: "indexAdmi.html", texto: "Inicio" },
+        "Agregar vuelos": { href: "infoVuelo.html", texto: "Vuelos" },
+        "Modificar estado checkin": { href: "verificarCheckinAdmi.html", texto: "Check-In" },
+        "Generar boleto": { href: "generarBoleto.html", texto: "Generar Boleto" },
+        "ABM catalogo millas": { href: "catalogoMillasAdmi.html", texto: "Catálogo Premios Millas" },
+        "Borrar opiniones": { href: "opinionesAdmin.html", texto: "Opiniones" },
+        "ABM empleados": { href: "registroAdmi.html", texto: "Registrar Administrador" },
+        "Ver Dashboard": { href: "dashboard.html", texto: "Dashboard" },
+        "ABM Roles": { href: "roles.html", texto: "Roles" },
+        "Auditoria de usuarios": { href: "admin_usuarios.html", texto: "Auditoría de Usuarios" },
+        "Ver pasajeros": { href: "admin_pasajeros.html", texto: "Ver Pasajeros" },
+        "Ver Reservas": { href: "reservasAdmin.html", texto: "Ver Reservas" },
+        "Modificar estado reservas": { href: "reservasAdmin.html", texto: "Modificar Estado Reservas" },
+        "Cerrar Sesion": { href: "index.html", texto: "Cerrar Sesión" }
     };
 
-    const permisoNecesario = mapaPaginas[paginaActual];
+    if (!rol) {
+        // Usuario no logueado
+        if (!paginasPublicas.includes(paginaActual)) {
+            mostrar404();
+        }
+    } else if (rol === "cliente") {
+        // Usuario cliente
+        if (!paginasCliente.includes(paginaActual)) {
+            window.location.href = "indexCliente.html";
+        }
+    } else if (rol !== "cliente") {
+        // Usuario administrador
+        const paginasBaseAdmin = ["indexAdmi.html", "index.html"]; // Siempre Inicio y Cerrar sesión
+        const paginasPermitidas = [...paginasBaseAdmin];
 
-    if (permisoNecesario && !accesos[permisoNecesario]) {
-        Swal.fire('Acceso denegado', 'No tienes permiso para entrar aquí.', 'error') //cmabiarlo que use el error 404 de not found
-            .then(() => {
-                window.location.href = 'index.html';
-            });
+        Object.entries(accesos).forEach(([acceso, permitido]) => {
+            if (permitido && mapaAccesos[acceso]) {
+                paginasPermitidas.push(mapaAccesos[acceso].href);
+            }
+        });
+
+        if (!paginasPermitidas.includes(paginaActual)) {
+            window.location.href = "indexAdmi.html";
+        }
+
+        // Construir el menú
+        construirMenuAdmin(accesos, mapaAccesos);
+    } else {
+        // Rol desconocido
+        mostrar404();
     }
+}
+
+function construirMenuAdmin(accesos, mapaAccesos) {
+    const nav = document.querySelector('.menu-navegacion');
+
+    if (!nav) return; // Si no existe el menú en la página, salir.
+
+    nav.innerHTML = ''; // Limpiar menú actual.
+
+    // Siempre agregar "Inicio"
+    if (mapaAccesos["Inicio"]) {
+        const linkInicio = document.createElement('a');
+        linkInicio.href = mapaAccesos["Inicio"].href;
+        linkInicio.textContent = mapaAccesos["Inicio"].texto;
+        nav.appendChild(linkInicio);
+    }
+
+    Object.entries(accesos).forEach(([acceso, permitido]) => {
+        if (permitido && mapaAccesos[acceso]) {
+            console.log(`Acceso permitido: ${acceso}`); // Ver qué accesos están siendo agregados
+            const link = document.createElement('a');
+            link.href = mapaAccesos[acceso].href;
+            link.textContent = mapaAccesos[acceso].texto;
+            nav.appendChild(link);
+        }
+    });
+    
+    
+
+    // Siempre agregar "Cerrar Sesión"
+    if (mapaAccesos["Cerrar Sesion"]) {
+        const linkCerrar = document.createElement('a');
+        linkCerrar.href = mapaAccesos["Cerrar Sesion"].href;
+        linkCerrar.textContent = mapaAccesos["Cerrar Sesion"].texto;
+        nav.appendChild(linkCerrar);
+    }
+}
+
+
+
+function mostrar404() {
+    document.body.innerHTML = `
+        <div style="text-align: center; padding: 100px;">
+            <h1 style="font-size: 80px;">404</h1>
+            <p style="font-size: 24px;">Página no encontrada o acceso no autorizado</p>
+            <a href="index.html" style="font-size: 20px; color: blue;">Volver al inicio</a>
+        </div>
+    `;
+    document.title = "404 No Encontrado";
 }
 
 function cerrarSesion() {
     localStorage.clear();
-    window.location.href = 'index.html';
+    window.location.href = "index.html";
 }
+
+// Ejecutar verificación automáticamente
+document.addEventListener('DOMContentLoaded', verificarPermisos);
