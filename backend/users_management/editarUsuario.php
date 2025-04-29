@@ -1,5 +1,6 @@
 <?php
-include "../conexion.php";
+include "conexion.php";
+//include "../conexion.php";
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
@@ -12,7 +13,7 @@ if ($data) {
         $query = "UPDATE usuarios SET
                     nombres_usuario = :nombres,
                     apellidos_usuario = :apellidos,
-                    tipousuario = :tipousuario,
+                    tipo_usuario = :tipo_usuario,
                     millas = :millas,
                     rol = :rol,
                     activo = :activo,
@@ -23,7 +24,7 @@ if ($data) {
 
         $stmt->bindParam(':nombres', $data['nombres_usuario']);
         $stmt->bindParam(':apellidos', $data['apellidos_usuario']);
-        $stmt->bindParam(':tipousuario', $data['tipousuario']);
+        $stmt->bindParam(':tipo_usuario', $data['tipo_usuario']);
         $stmt->bindParam(':millas', $data['millas']);
         $stmt->bindParam(':rol', $data['rol']);
         $stmt->bindParam(':activo', $data['activo']);

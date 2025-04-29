@@ -1,5 +1,6 @@
 <?php
-include "../conexion.php";
+include "conexion.php";
+//include "../conexion.php";
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");

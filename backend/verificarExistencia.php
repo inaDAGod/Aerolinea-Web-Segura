@@ -1,4 +1,7 @@
 <?php
+header("Access-Control-Allow-Origin: *");  // Permite que cualquier dominio acceda a la API
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");  // Permite métodos HTTP específicos
+header("Access-Control-Allow-Headers: Content-Type");  // Permite los encabezados específicos
 // Obtener los datos enviados desde JavaScript
 $json = file_get_contents('php://input');
 $data = json_decode($json);
