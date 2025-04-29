@@ -35,8 +35,6 @@ if (session_status() == PHP_SESSION_NONE) {
             
             // Verificar si la contraseña coincide
             if ($password === $contraseñaBD) {
-                // La contraseña coincide, enviar el estado y el tipo de usuario
-                echo json_encode(["estado" => "contraseña_correcta", "tipo_usuario" => $tipoUsuario, "password_expired" => ($dias_desde_cambio > 90)]);
                 // Aquí hacemos una segunda consulta: traer accesos del rol
                 $sqlAccesos = "SELECT accesos FROM roles WHERE rol = '$rol'";
                 $resultadoAccesos = pg_query($conexion, $sqlAccesos);
