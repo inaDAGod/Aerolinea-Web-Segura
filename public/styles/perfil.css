@@ -108,3 +108,206 @@
     background-color: rgba(8, 86, 167, 1);
     color: #fff;
 }
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border: none;
+    position: relative;
+    transform: translateY(-20px);
+    opacity: 0;
+    animation: modalOpen 0.4s ease forwards;
+}
+
+@keyframes modalOpen {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-content h2 {
+    color: #0856A7;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    font-weight: 600;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #333;
+    transform: rotate(90deg);
+}
+
+.password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.password-form input {
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.password-form input:focus {
+    border-color: #8FBCEA;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(143, 188, 234, 0.3);
+}
+
+.password-form button {
+    padding: 12px;
+    background-color: #0856A7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.password-form button:hover {
+    background-color: #074b8f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#passwordRequirements {
+    color: #666;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    margin-bottom: 5px;
+}
+
+#passwordMessage {
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+}
+
+/* Efectos para mensajes de error/éxito */
+#passwordMessage.error {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+#passwordMessage.success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+/* Responsive para móviles */
+@media (max-width: 600px) {
+    .modal-content {
+        width: 90%;
+        margin: 20% auto;
+        padding: 20px;
+    }
+    
+    .modal-content h2 {
+        font-size: 1.5em;
+    }
+    
+    .password-form input {
+        padding: 10px 12px;
+    }
+}
+/* Estilos para el botón de Cambiar Contraseña */
+.password-form button {
+    background-color: #8FBCEA; /* Azul principal */
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Efecto hover - Azul más intenso */
+.password-form button:hover {
+    background-color: #1E88E5; /* Azul más vibrante */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(30, 136, 229, 0.3);
+}
+
+/* Efecto al hacer click - Azul más oscuro */
+.password-form button:active {
+    background-color: #0D47A1; /* Azul oscuro */
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(13, 71, 161, 0.3);
+}
+
+/* Efecto de onda al hacer click */
+.password-form button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.password-form button:focus:not(:active)::after {
+    animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
