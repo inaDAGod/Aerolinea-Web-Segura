@@ -48,7 +48,6 @@ if (session_status() == PHP_SESSION_NONE) {
                     $filaAccesos = pg_fetch_assoc($resultadoAccesos);
                     $accesos = json_decode($filaAccesos['accesos']); // convertir el JSON a objeto PHP
                 }
-                
                 $_SESSION['correo_usuario'] =$username;
                 $_SESSION['tipo_usuario'] = $tipoUsuario;
                 $_SESSION['nombres_usuario'] =$nombres_usuario;

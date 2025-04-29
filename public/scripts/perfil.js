@@ -1,6 +1,5 @@
-
 // Fetch user statistics from PHP script
-fetch('user_statistics.php')
+fetch('http://localhost/Aerolinea-Web-Segura/backend/user_statistics.php')
     .then(response => response.json())
     .then(data => {
         // Update HTML with user statistics
@@ -34,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadWeekFlights();
     loadUserReservations();
     loadPastUserFlights();
+    initPasswordChangeModal();
 });
 
 function loadUserInfo() {
@@ -107,4 +107,147 @@ function loadPastUserFlights() {
         .catch(error => {
             console.error('Error fetching past user flights:', error);
         });
+}
+// Función para inicializar el modal de cambio de contraseña
+function initPasswordChangeModal() {
+    const changePasswordBtn = document.getElementById('change-password-btn');
+    const modal = document.getElementById('passwordModal');
+    const closeBtn = document.querySelector('.close');
+    const passwordForm = document.getElementById('passwordForm');
+    const passwordMessage = document.getElementById('passwordMessage');
+
+    // Mostrar modal al hacer clic en el botón
+    if (changePasswordBtn) {
+        changePasswordBtn.addEventListener('click', function() {
+            modal.style.display = 'block';
+        });
+    }
+
+    // Cerrar modal al hacer clic en la X
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+            passwordMessage.textContent = '';
+            passwordForm.reset();
+        });
+    }
+
+    // Cerrar modal al hacer clic fuera del contenido
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+            passwordMessage.textContent = '';
+            passwordForm.reset();
+        }
+    });
+
+    // Función para verificar complejidad de contraseña
+    function esContraseniaCompleja(contrasenia) {
+        if (contrasenia.length < 10) return false;
+        if (!/[A-Z]/.test(contrasenia)) return false;
+        if (!/[a-z]/.test(contrasenia)) return false;
+        if (!/[0-9]/.test(contrasenia)) return false;
+        if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(contrasenia)) return false;
+        return true;
+    }
+
+    // Manejar el envío del formulario
+    if (passwordForm) {
+        passwordForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Resetear mensajes
+            passwordMessage.textContent = '';
+            passwordMessage.style.color = 'red';
+
+            // Validaciones básicas
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                passwordMessage.textContent = 'Todos los campos son obligatorios';
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                passwordMessage.textContent = 'Las nuevas contraseñas no coinciden';
+                return;
+            }
+
+            if (!esContraseniaCompleja(newPassword)) {
+                passwordMessage.textContent = 'La contraseña no cumple con los requisitos de seguridad';
+                return;
+            }
+
+            // Obtener el correo del usuario de la sesión
+            const userEmail = document.querySelector('#user-details div:nth-child(3)').textContent.split(': ')[1].trim();
+            
+            try {
+                // 1. Verificar contraseña actual
+                const verifyResponse = await fetch('http://localhost/Aerolinea-Web-Segura/backend/login.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: userEmail,
+                        password: CryptoJS.MD5(currentPassword).toString()
+                    })
+                });
+                
+                const verifyData = await verifyResponse.json();
+                
+                if (verifyData.estado !== 'contraseña_correcta') {
+                    passwordMessage.textContent = 'La contraseña actual es incorrecta';
+                    return;
+                }
+
+                // 2. Verificar historial de contraseñas
+                const historyResponse = await fetch('http://localhost/Aerolinea-Web-Segura/backend/checkPasswordHistory.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: userEmail,
+                        password: CryptoJS.MD5(newPassword).toString()
+                    })
+                });
+                
+                const historyData = await historyResponse.json();
+                
+                if (historyData.estado === 'password_recently_used') {
+                    passwordMessage.textContent = 'No puedes usar una contraseña utilizada en los últimos 3 meses';
+                    return;
+                }
+
+                // 3. Actualizar contraseña
+                const updateResponse = await fetch('http://localhost/Aerolinea-Web-Segura/backend/updatePassword.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: userEmail,
+                        currentPassword: CryptoJS.MD5(currentPassword).toString(),
+                        newPassword: CryptoJS.MD5(newPassword).toString()
+                    })
+                });
+                
+                const updateData = await updateResponse.json();
+                
+                if (updateData.estado === 'contraseña_cambiada') {
+                    passwordMessage.textContent = 'Contraseña cambiada con éxito';
+                    passwordMessage.style.color = 'green';
+                    
+                    // Cerrar el modal después de 2 segundos
+                    setTimeout(() => {
+                        modal.style.display = 'none';
+                        passwordMessage.textContent = '';
+                        passwordForm.reset();
+                    }, 2000);
+                } else {
+                    passwordMessage.textContent = updateData.mensaje || 'Error al cambiar la contraseña';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                passwordMessage.textContent = 'Error al conectar con el servidor';
+            }
+        });
+    }
 }
