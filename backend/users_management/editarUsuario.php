@@ -1,16 +1,14 @@
 <?php
 include "conexion.php";
-//include "../conexion.php";
-
 header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json");
-
-// Espera recibir un JSON en el body de la petición
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
 $data = json_decode(file_get_contents("php://input"), true);
 
 if ($data) {
     try {
         $query = "UPDATE usuarios SET
+                    correo_usuario = :nuevo_correo,
                     nombres_usuario = :nombres,
                     apellidos_usuario = :apellidos,
                     tipo_usuario = :tipo_usuario,
@@ -22,6 +20,7 @@ if ($data) {
 
         $stmt = $conexion->prepare($query);
 
+        $stmt->bindParam(':nuevo_correo', $data['nuevo_correo']);
         $stmt->bindParam(':nombres', $data['nombres_usuario']);
         $stmt->bindParam(':apellidos', $data['apellidos_usuario']);
         $stmt->bindParam(':tipo_usuario', $data['tipo_usuario']);

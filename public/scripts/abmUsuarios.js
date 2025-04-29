@@ -52,54 +52,63 @@ function crearUsuario() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
   })
-  .then(res => res.json())
-  .then(resp => {
-    Swal.fire("Éxito", resp.mensaje || "Usuario registrado", "success");
-    cargarUsuarios();
-    limpiarFormulario();
-  })
-  .catch(() => Swal.fire("Error", "No se pudo registrar", "error"));
+    .then(res => res.json())
+    .then(resp => {
+      Swal.fire("Éxito", resp.mensaje || "Usuario registrado", "success");
+      cargarUsuarios();
+      limpiarFormulario();
+    })
+    .catch(() => Swal.fire("Error", "No se pudo registrar", "error"));
 }
 
 function editarUsuario(correo) {
   fetch(`${URL_API}obtenerUsuario.php?correo_usuario=${correo}`)
     .then(res => res.json())
     .then(data => {
-      document.getElementById("nombre").value = data.nombres_usuario;
-      document.getElementById("apellido").value = data.apellidos_usuario;
-      document.getElementById("email").value = data.correo_usuario;
-      document.getElementById("selectRol").value = data.rol;
-      document.getElementById("contra").value = data.contraseña;
-
       Swal.fire({
         title: "Editar Usuario",
-        text: "Al guardar se actualizarán los datos.",
-        icon: "info",
+        html: `
+          <input id="swal-nombre" class="swal2-input" placeholder="Nombres" value="${data.nombres_usuario}">
+          <input id="swal-apellido" class="swal2-input" placeholder="Apellidos" value="${data.apellidos_usuario}">
+          <input id="swal-correo" class="swal2-input" placeholder="Correo" value="${data.correo_usuario}">
+          <input id="swal-contra" type="password" class="swal2-input" placeholder="Contraseña" value="${data.contraseña}">
+          <select id="swal-rol" class="swal2-input">
+            <option value="admin" ${data.rol === 'admin' ? 'selected' : ''}>Administrador</option>
+            <option value="usuario" ${data.rol === 'usuario' ? 'selected' : ''}>Usuario</option>
+          </select>
+        `,
+        focusConfirm: false,
         showCancelButton: true,
-        confirmButtonText: "Guardar cambios"
-      }).then(result => {
-        if (result.isConfirmed) {
+        confirmButtonText: "Guardar cambios",
+        preConfirm: () => {
           const updateData = {
-            correo_usuario: data.correo_usuario,
-            nombres_usuario: document.getElementById("nombre").value,
-            apellidos_usuario: document.getElementById("apellido").value,
-            contraseña: document.getElementById("contra").value,
-            rol: document.getElementById("selectRol").value,
+            correo_usuario: correo, // original
+            nuevo_correo: document.getElementById("swal-correo").value,
+            nombres_usuario: document.getElementById("swal-nombre").value,
+            apellidos_usuario: document.getElementById("swal-apellido").value,
+            contraseña: document.getElementById("swal-contra").value,
+            rol: document.getElementById("swal-rol").value,
             tipo_usuario: data.tipo_usuario,
+            millas: data.millas,
             activo: data.activo,
             password_last_date: new Date().toISOString().split('T')[0]
           };
 
-          fetch(`${URL_API}editarUsuario.php`, {
+          return fetch(`${URL_API}editarUsuario.php`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updateData)
           })
-          .then(res => res.json())
-          .then(resp => {
-            Swal.fire("Actualizado", resp.mensaje || "Usuario modificado", "success");
-            cargarUsuarios();
-          });
+            .then(res => res.json())
+            .catch(err => {
+              Swal.showValidationMessage("Error al actualizar el usuario");
+              console.error(err);
+            });
+        }
+      }).then(result => {
+        if (result.isConfirmed) {
+          Swal.fire("¡Actualizado!", "Usuario modificado correctamente", "success");
+          cargarUsuarios();
         }
       });
     });
@@ -130,5 +139,5 @@ function limpiarFormulario() {
   document.getElementById("email").value = "";
   document.getElementById("contra").value = "";
   document.getElementById("selectRol").value = "";
+  document.getElementById("correoOriginal").value = "";
 }
-

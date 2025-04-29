@@ -3,7 +3,8 @@ include "conexion.php";
 //include "../conexion.php";
 
 header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
 
 if (isset($_GET['correo_usuario'])) {
     $correo = $_GET['correo_usuario'];
@@ -14,7 +15,7 @@ if (isset($_GET['correo_usuario'])) {
         $stmt->bindParam(':correo', $correo);
         $stmt->execute();
 
-        echo json_encode(["mensaje" => "Usuario eliminado lógicamente"]);
+        echo json_encode(["mensaje" => "Usuario eliminado"]);
     } catch (PDOException $e) {
         echo json_encode(["error" => $e->getMessage()]);
     }
