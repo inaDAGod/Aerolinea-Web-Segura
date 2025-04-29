@@ -71,7 +71,6 @@ function editarUsuario(correo) {
           <input id="swal-nombre" class="swal2-input" placeholder="Nombres" value="${data.nombres_usuario}">
           <input id="swal-apellido" class="swal2-input" placeholder="Apellidos" value="${data.apellidos_usuario}">
           <input id="swal-correo" class="swal2-input" placeholder="Correo" value="${data.correo_usuario}">
-          <input id="swal-contra" type="password" class="swal2-input" placeholder="Contraseña" value="${data.contraseña}">
           <select id="swal-rol" class="swal2-input">
             <option value="admin" ${data.rol === 'admin' ? 'selected' : ''}>Administrador</option>
             <option value="usuario" ${data.rol === 'usuario' ? 'selected' : ''}>Usuario</option>
@@ -86,12 +85,11 @@ function editarUsuario(correo) {
             nuevo_correo: document.getElementById("swal-correo").value,
             nombres_usuario: document.getElementById("swal-nombre").value,
             apellidos_usuario: document.getElementById("swal-apellido").value,
-            contraseña: document.getElementById("swal-contra").value,
             rol: document.getElementById("swal-rol").value,
             tipo_usuario: data.tipo_usuario,
             millas: data.millas,
             activo: data.activo,
-            password_last_date: new Date().toISOString().split('T')[0]
+            password_last_date: data.password_last_date // conservar fecha actual
           };
 
           return fetch(`${URL_API}editarUsuario.php`, {
