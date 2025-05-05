@@ -1,0 +1,148 @@
+/* Estilo para el header */
+header.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    height: 60px; /* o el valor que prefieras */
+    background-color: rgba(255, 255, 255, 0.9); /* opcional si quieres que se vea claro */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 10;
+}
+
+/* Estilo para los íconos dentro del header */
+.header img {
+    height: 40px;
+    width: auto;
+}
+
+/* Ajuste del contenedor principal */
+.users-container {
+    margin-top: -20px; /* Margen negativo para subir el contenedor */
+}
+
+/* Fondo general */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: url('../assets/login.png') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor del ABM */
+.users-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    max-width: 1000px;
+    margin: 60px auto;
+}
+
+/* Títulos */
+h2, h3 {
+    color: #053A70;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Inputs y selects */
+.input-container input,
+.input-container select {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px #ddd;
+}
+
+/* Botones */
+.boton {
+    background-color: #053A70;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    margin: 10px 5px;
+    border-radius: 30px;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+.boton:hover {
+    background-color: #8FBCEA;
+    color: #053A70;
+}
+
+/* Tabla de usuarios */
+table {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+table thead {
+    background-color: #053A70;
+    color: white;
+}
+
+table td, table th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Botones de acción */
+.btn-warning {
+    background-color: #f0ad4e;
+    border: none;
+    font-weight: bold;
+}
+
+.btn-danger {
+    background-color: #d9534f;
+    border: none;
+    font-weight: bold;
+}
+
+.btn-warning:hover {
+    background-color: #ec971f;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c9302c;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .users-container {
+        padding: 20px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    .boton {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+.swal2-input, #swal-rol {
+    font-size: 1em;
+    padding: 0.75em;
+    height: 2.5em;
+    width: 80%;
+    box-sizing: border-box;
+    border: 1px solid #ccc; /* gris claro */
+    color: #363636;
+    border-radius: 4px;  
+    margin-top: 10px;
+  }
+  
+  

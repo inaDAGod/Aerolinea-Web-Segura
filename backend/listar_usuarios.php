@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/config/cors.php');
 // Establecer la conexión con la base de datos
 $conexion = pg_connect("dbname=aerolinea user=postgres password=admin");
 if (!$conexion) {

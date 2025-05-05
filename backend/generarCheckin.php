@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/config/cors.php');
 header('Content-Type: application/json');
 $conexion = pg_connect("host=localhost dbname=aerolinea user=postgres password=admin");
 

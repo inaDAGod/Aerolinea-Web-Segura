@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/config/cors.php');
 session_start();
 
 // Retrieve the creservanum from the session and subtract 1

@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/config/cors.php');
 session_start();
 
 // Check if the session variable 'correo_usuario' is set

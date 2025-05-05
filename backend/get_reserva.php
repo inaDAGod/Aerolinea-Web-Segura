@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/config/cors.php');
 session_start();
 
 $creservanum = isset($_SESSION['creservanum']) ? $_SESSION['creservanum'] : 0;

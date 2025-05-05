@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/config/cors.php');
 // Obtener los datos enviados desde JavaScript
 $json = file_get_contents('php://input');
 $data = json_decode($json);

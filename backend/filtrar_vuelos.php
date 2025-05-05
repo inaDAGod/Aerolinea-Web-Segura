@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/config/cors.php');
 if (isset($_GET['origen']) || isset($_GET['destino']) || isset($_GET['fecha_vuelo'])) {
     $origen = $_GET['origen'] ?? '';
     $destino = $_GET['destino'] ?? '';

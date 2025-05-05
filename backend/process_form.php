@@ -1,5 +1,5 @@
 <?php
-
+include_once(__DIR__ . '/config/cors.php');
 session_start();
 include 'conexion.php';
 include 'functions.php';

@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/config/cors.php');
 include 'conexion.php';
 
 if (session_status() == PHP_SESSION_NONE) {

@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/config/cors.php');
 $host = 'localhost';
 $port = '5432';
 $dbname = 'aerolinea';

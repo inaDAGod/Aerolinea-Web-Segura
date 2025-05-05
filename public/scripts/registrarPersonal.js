@@ -24,11 +24,12 @@ function registrarAdministrador() {
     let correo = document.getElementById("email").value.trim();
     let contrasenia = document.getElementById("contra").value.trim();
     let rol = document.getElementById("selectRol").value;
+    console.log("registrarAdministrador", nombres, apellidos, correo, contrasenia, rol);
 
     if (nombres && apellidos && correo && contrasenia && rol) {
         var hash = CryptoJS.MD5(contrasenia).toString();
 
-        fetch("http://localhost/Aerolinea-Web-Segura/backend/registroAdmi.php", {
+        fetch("http://localhost/Aerolinea-Web-Segura/backend/users_management/crearUsuarioEmpleado.php", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -51,7 +52,7 @@ function registrarAdministrador() {
             if (data.estado === "registro_exitoso") {
                 Swal.fire('Éxito', 'Administrador registrado exitosamente', 'success')
                     .then(() => {
-                        window.location.href = 'http://localhost/Aerolinea-Web-Segura/public/index.html';
+                        window.location.href = window.location.origin + '/public/index.html';
                     });
             } else if (data.estado === "error_registro") {
                 Swal.fire('Error', 'Ya existe un usuario con ese correo electrónico', 'error');

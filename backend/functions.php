@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/config/cors.php');
 function obtener_cvuelo_del_asiento($conn, $casiento_seleccionado) {
     try {
         $query = "SELECT cvuelo FROM asientos_vuelo WHERE casiento = :casiento";
