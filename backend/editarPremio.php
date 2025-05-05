@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/config/cors.php');
 // Verificar si se han enviado archivos y el resto de los datos necesarios
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['foto'])) {
     // Obtener los datos del formulario

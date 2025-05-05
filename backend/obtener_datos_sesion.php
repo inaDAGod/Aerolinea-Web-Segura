@@ -1,6 +1,5 @@
-
-
 <?php
+include_once(__DIR__ . '/config/cors.php');
 session_start();
 
 // Retrieve session variables

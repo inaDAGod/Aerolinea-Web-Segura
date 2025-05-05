@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/config/cors.php');
 //include 'registrores.php';
 //include 'generar_reserva.php';
 //include 'login.php';

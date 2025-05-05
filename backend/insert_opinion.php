@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/config/cors.php');
 session_start();
 header('Content-Type: application/json');
 

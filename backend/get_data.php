@@ -1,8 +1,6 @@
 <?php
+include_once(__DIR__ . '/config/cors.php');
 header('Content-Type: application/json');
-header("Access-Control-Allow-Origin: *");  // Permite todos los orígenes
-header("Access-Control-Allow-Methods: POST, GET");  // Permite solo métodos POST y GET
-header("Access-Control-Allow-Headers: Content-Type");  // Permite solo cabeceras de tipo Content-Type
 
 // Habilitar la visualización de errores (para desarrollo, deshabilitar en producción)
 ini_set('display_errors', 1);
