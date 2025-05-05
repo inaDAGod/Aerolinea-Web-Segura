@@ -13,6 +13,7 @@ function cargarUsuarios() {
       data.forEach(user => {
         const fila = `
           <tr>
+            <td>${user.user_id}</td>
             <td>${user.correo_usuario}</td>
             <td>${user.nombres_usuario}</td>
             <td>${user.apellidos_usuario}</td>
@@ -28,39 +29,6 @@ function cargarUsuarios() {
     });
 }
 
-function crearUsuario() {
-  const nombres = document.getElementById("nombre").value;
-  const apellidos = document.getElementById("apellido").value;
-  const correo = document.getElementById("email").value;
-  const password = document.getElementById("contra").value;
-  const rol = document.getElementById("selectRol").value;
-
-  const data = {
-    correo_usuario: correo,
-    contraseña: password,
-    nombres_usuario: nombres,
-    apellidos_usuario: apellidos,
-    tipo_usuario: "normal",
-    millas: 0,
-    rol: rol,
-    activo: 1,
-    password_last_date: new Date().toISOString().split('T')[0]
-  };
-
-  fetch(`${URL_API}crearUsuario.php`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  })
-    .then(res => res.json())
-    .then(resp => {
-      Swal.fire("Éxito", resp.mensaje || "Usuario registrado", "success");
-      cargarUsuarios();
-      limpiarFormulario();
-    })
-    .catch(() => Swal.fire("Error", "No se pudo registrar", "error"));
-}
-
 function editarUsuario(correo) {
   fetch(`${URL_API}obtenerUsuario.php?correo_usuario=${correo}`)
     .then(res => res.json())
@@ -71,17 +39,32 @@ function editarUsuario(correo) {
           <input id="swal-nombre" class="swal2-input" placeholder="Nombres" value="${data.nombres_usuario}">
           <input id="swal-apellido" class="swal2-input" placeholder="Apellidos" value="${data.apellidos_usuario}">
           <input id="swal-correo" class="swal2-input" placeholder="Correo" value="${data.correo_usuario}">
-          <select id="swal-rol" class="swal2-input">
-            <option value="admin" ${data.rol === 'admin' ? 'selected' : ''}>Administrador</option>
-            <option value="usuario" ${data.rol === 'usuario' ? 'selected' : ''}>Usuario</option>
-          </select>
+          <select id="swal-rol" class="swal2-input"></select>
         `,
+        didOpen: () => {
+          // Cargar roles una vez que el modal esté abierto
+          fetch('http://localhost/Aerolinea-Web-Segura/backend/fetch_roles.php')
+            .then(response => response.json())
+            .then(roles => {
+              const selectRol = document.getElementById('swal-rol');
+              roles.forEach(rol => {
+                const option = document.createElement('option');
+                option.value = rol.rol;
+                option.textContent = rol.rol;
+                if (rol.rol === data.rol) {
+                  option.selected = true;
+                }
+                selectRol.appendChild(option);
+              });
+            })
+            .catch(error => console.error('Error al cargar roles:', error));
+        },
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: "Guardar cambios",
         preConfirm: () => {
           const updateData = {
-            correo_usuario: correo, // original
+            correo_usuario: correo,
             nuevo_correo: document.getElementById("swal-correo").value,
             nombres_usuario: document.getElementById("swal-nombre").value,
             apellidos_usuario: document.getElementById("swal-apellido").value,
@@ -89,7 +72,7 @@ function editarUsuario(correo) {
             tipo_usuario: data.tipo_usuario,
             millas: data.millas,
             activo: data.activo,
-            password_last_date: data.password_last_date // conservar fecha actual
+            password_last_date: data.password_last_date
           };
 
           return fetch(`${URL_API}editarUsuario.php`, {

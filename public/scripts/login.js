@@ -41,10 +41,10 @@ function loginEncript() {
                     }
                         //cambiarDirecto deberia ir a Index y el navvar seria los que cambia 
                         if(data.tipo_usuario === 'cliente'){
-                            window.location.href = 'http://localhost/Aerolinea-Web-Segura/public/indexCliente.html';
+                            window.location.href = window.location.origin + '/Aerolinea-Web-Segura/public/indexCliente.html';
                         }
                         else if(data.tipo_usuario === 'administrador'){
-                            window.location.href = 'http://localhost/Aerolinea-Web-Segura/public/indexAdmi.html';
+                            window.location.href = window.location.origin + '/Aerolinea-Web-Segura/public/indexAdmi.html';;
                         }
                        
                     } else if (data.estado === 'contraseña_incorrecta') {
@@ -96,7 +96,7 @@ function registrarUsuario() {
             .then(data => {
                 if (data.estado === "registro_exitoso") {
                     localStorage.setItem('tipo_usuario', 'cliente'); // Guarda el tipo de usuario en el localStorage
-                    window.location.href= 'http://localhost/Aerolinea-Web-Segura/public/indexCliente.html';
+                    window.location.href = window.location.origin + '/Aerolinea-Web-Segura/public/indexCliente.html';
                 } else if (data.estado === "error_registro") {
                     Swal.fire('Error', 'Ya existe un usuario con ese correo electrónico', 'error');
                 }
@@ -323,7 +323,7 @@ function newContra(){
                         text: 'Contraseña actualizada correctamente',
                         icon: 'success'
                     }).then(() => {
-                        window.location.href = 'http://localhost/Aerolinea-Web-Segura/public/registro.html';
+                        window.location.href = window.location.origin + '/Aerolinea-Web-Segura/public/registro.html';
                     });
                 } else if(data && data.estado === "error_actualizacion") {
                     Swal.fire('Error', 'Hubo un problema al actualizar la contraseña', 'error');

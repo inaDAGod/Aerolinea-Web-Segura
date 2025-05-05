@@ -42,7 +42,7 @@ function verificarPermisos() {
         "Generar boleto": { href: "generarBoleto.html", texto: "Generar Boleto" },
         "ABM catalogo millas": { href: "catalogoMillasAdmi.html", texto: "Catálogo Premios Millas" },
         "Borrar opiniones": { href: "opinionesAdmin.html", texto: "Opiniones" },
-        "ABM empleados": { href: "registroAdmi.html", texto: "Registrar Administrador" },
+        "ABM empleados": { href: "registroAdmi.html", texto: "ABM empleados" },
         "Ver Dashboard": { href: "dashboard.html", texto: "Dashboard" },
         "ABM Roles": { href: "roles.html", texto: "Roles" },
         "Auditoria de usuarios": { href: "admin_usuarios.html", texto: "Auditoría de Usuarios" },
@@ -66,6 +66,7 @@ function verificarPermisos() {
         "agregarRole.html" :  "ABM Roles",
         "agregarVuelo.html" :  "Agregar vuelos",
         "editarRole.html" :  "ABM Roles",
+        "EditDeleteUsers.html": "ABM empleados",
     };
 
     if (!rol) {

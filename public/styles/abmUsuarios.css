@@ -1,3 +1,27 @@
+/* Estilo para el header */
+header.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    height: 60px; /* o el valor que prefieras */
+    background-color: rgba(255, 255, 255, 0.9); /* opcional si quieres que se vea claro */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 10;
+}
+
+/* Estilo para los íconos dentro del header */
+.header img {
+    height: 40px;
+    width: auto;
+}
+
+/* Ajuste del contenedor principal */
+.users-container {
+    margin-top: -20px; /* Margen negativo para subir el contenedor */
+}
+
 /* Fondo general */
 body {
     font-family: 'Segoe UI', sans-serif;
@@ -8,7 +32,7 @@ body {
 }
 
 /* Contenedor del ABM */
-.login-container {
+.users-container {
     background-color: rgba(255, 255, 255, 0.95);
     border-radius: 20px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
@@ -95,7 +119,7 @@ table td, table th {
 
 /* Responsive */
 @media (max-width: 768px) {
-    .login-container {
+    .users-container {
         padding: 20px;
     }
 
@@ -108,3 +132,17 @@ table td, table th {
         margin-bottom: 10px;
     }
 }
+
+.swal2-input, #swal-rol {
+    font-size: 1em;
+    padding: 0.75em;
+    height: 2.5em;
+    width: 80%;
+    box-sizing: border-box;
+    border: 1px solid #ccc; /* gris claro */
+    color: #363636;
+    border-radius: 4px;  
+    margin-top: 10px;
+  }
+  
+  

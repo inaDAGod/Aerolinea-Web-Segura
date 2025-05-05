@@ -19,7 +19,7 @@ if (session_status() == PHP_SESSION_NONE) {
     // Consulta SQL para obtener la contraseña y el tipo de usuario del usuario
     $sql = "SELECT contraseña, tipo_usuario, nombres_usuario, apellidos_usuario, millas, rol,
         password_last_date, EXTRACT(DAY FROM (NOW() - password_last_date)) as dias_desde_cambio 
-        FROM usuarios WHERE correo_usuario = '$username'";
+        FROM usuarios WHERE correo_usuario = '$username' AND activo = 1";
     $resultado = pg_query($conexion, $sql);
     
     if ($resultado) {
