@@ -52,7 +52,7 @@ function registrarAdministrador() {
             if (data.estado === "registro_exitoso") {
                 Swal.fire('Éxito', 'Administrador registrado exitosamente', 'success')
                     .then(() => {
-                        window.location.href = window.location.origin + '/public/index.html';
+                        window.location.href = window.location.origin + '/Aerolinea-Web-Segura/public/index.html';
                     });
             } else if (data.estado === "error_registro") {
                 Swal.fire('Error', 'Ya existe un usuario con ese correo electrónico', 'error');
