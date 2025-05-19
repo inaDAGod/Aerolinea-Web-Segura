@@ -9,6 +9,8 @@ function verificarPermisos() {
     console.log('tipo_usuario:', tipo_usuario);
 
     const paginaActual = window.location.pathname.split("/").pop();
+    //console.log('pagina', paginaActual);
+    
 
     const paginasPublicas = [
         "index.html",
@@ -79,7 +81,11 @@ function verificarPermisos() {
     } else if (tipo_usuario === "cliente") {
         // Logueado como cliente
         if (!paginasClienteAccesibles.includes(paginaActual)) {
-            mostrar404();
+           if (!paginasPublicas.includes(paginaActual)) {
+                mostrar404();
+            } else {
+                construirMenu('cliente');
+            }
         } else {
             construirMenu('cliente');
         }
@@ -184,7 +190,7 @@ function construirMenu(tipo_usuario, accesos = {}, mapaAccesos = {}) {
 }
 
 function mostrar404() {
-    window.location.href = "/404";
+   window.location.href = "/404";
 }
 
 function cerrarSesion() {
