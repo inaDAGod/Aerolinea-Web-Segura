@@ -34,6 +34,8 @@ function verificarPermisos() {
     const paginasClienteAccesibles = [
         ...paginasClienteNavbar,
         "reservar.html",
+        "reservar2.html",
+        "reservafinal.html",
         // agrega aquí todas las páginas internas a las que puede entrar el cliente logueado
     ];
 
