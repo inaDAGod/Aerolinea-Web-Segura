@@ -1,6 +1,18 @@
 <?php
 include_once(__DIR__ . '/config/cors.php');
 session_start();
+$recaptchaSecret = '6Lf0XkArAAAAAOK55adNqDIylRQd--Fc--DqQ8p-';
+$recaptchaToken = $_POST['token'];
+
+$recaptchaUrl = 'https://www.google.com/recaptcha/api/siteverify';
+$response = file_get_contents($recaptchaUrl . '?secret=' . $recaptchaSecret . '&response=' . $recaptchaToken);
+$responseKeys = json_decode($response, true);
+
+// Validamos que sea una petición humana y confiable
+if(!$responseKeys["success"] || $responseKeys["score"] < 0.5) {
+    echo json_encode(['error' => 'Fallo en la verificación reCAPTCHA']);
+    exit;
+}
 
 // Retrieve the creservanum from the session and subtract 1
 $creservanum = isset($_SESSION['creservanum']) ? $_SESSION['creservanum'] : 0;
