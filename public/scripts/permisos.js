@@ -104,10 +104,18 @@ function verificarPermisos() {
             if (accesos[permisoNecesario]) {
                 construirMenu('administrador', accesos, mapaAccesos);
             } else {
-                mostrar404();
+                if (!paginasPublicas.includes(paginaActual)) {
+                    mostrar404();
+                } else {
+                   construirMenu('administrador', accesos, mapaAccesos);
+                }
             }
         } else {
-           mostrar404();
+            if (!paginasPublicas.includes(paginaActual)) {
+                mostrar404();
+            } else {
+                construirMenu('administrador', accesos, mapaAccesos);
+            }
         }
     } else {
         mostrar404();
