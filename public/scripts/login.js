@@ -171,7 +171,10 @@ function esContraseniaCompleja(contrasenia) {
     if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(contrasenia)) {
         return { valido: false, mensaje: 'La contraseña debe contener al menos un carácter especial' };
     }
-    
+    //nombre
+    if (contieneDatosPersonales(contrasenia, correo)) {
+                    Swal.fire('Error', "La contraseña no debe contener tu nombre de usuario", 'error');
+                }
     return { valido: true, mensaje: 'Contraseña válida' };
 }
 function verificarCampos(){
@@ -197,6 +200,8 @@ function verificarCampos(){
                 if(!resultado.valido){
                     //Swal.fire('Error', resultado.mensaje, 'error');
                     Swal.fire('Error', "Ingrese contraseña segura", 'error');
+                }else if (contieneDatosPersonales(contrasenia, correo)) {
+                    Swal.fire('Error', "La contraseña no debe contener tu nombre de usuario", 'error');
                 }
                 else{
                     mandarCorreoVerificacion();
@@ -288,6 +293,10 @@ function newContra(){
                 Swal.fire('Error', "Modifica a una contraseña segura", 'error');
                 return;
             }
+            if (contieneDatosPersonales(contra1, correo, nombres, apellidos)) {
+                Swal.fire('Error', "La contraseña no debe contener tu nombre, apellido o correo", 'error');
+                return;
+            }
             
             var hash = CryptoJS.MD5(contra1);
             
@@ -363,4 +372,16 @@ function audi(correo){
                 console.error('Error en la solicitud:', error);
                 alert('Estás seguro que no tienes una cuenta?');
             });
+}
+//Verificar que el nombre y apellido no sean usados como parte de la contraseña
+function contieneDatosPersonales(contrasenia, username, nombres, apellidos) {
+    const partes = [];
+
+    if (username) partes.push(...username.toLowerCase().split(/[\s@._-]+/));
+    if (nombres) partes.push(...nombres.toLowerCase().split(/\s+/));
+    if (apellidos) partes.push(...apellidos.toLowerCase().split(/\s+/));
+
+    contrasenia = contrasenia.toLowerCase();
+
+    return partes.some(parte => parte.length >= 3 && contrasenia.includes(parte));
 }
