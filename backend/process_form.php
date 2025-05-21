@@ -15,7 +15,17 @@ $creservanum = isset($_SESSION['creservanum']) ? $_SESSION['creservanum'] : 0;
 
 // Procesar datos del formulario si se ha enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Resto del código...
+    // Validar reCAPTCHA
+    $recaptcha_secret = '6LcwZUArAAAAAD7qeDteDRtptvprpwi7YA1COdUS';
+    $response = isset($_POST['g-recaptcha-response']) ? $_POST['g-recaptcha-response'] : '';
+
+    $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$recaptcha_secret}&response={$response}");
+    $captcha_success = json_decode($verify);
+
+    if (!$captcha_success->success) {
+        echo "Verificación CAPTCHA fallida.";
+        exit;
+    }
 
     // Obtener datos del formulario
     $ci_persona = isset($_POST['ci_persona']) ? $_POST['ci_persona'] : null;

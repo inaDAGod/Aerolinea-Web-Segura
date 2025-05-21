@@ -9,6 +9,16 @@ $(document).ready(function () {
 
     $('#reservationForm').submit(function (event) {
         event.preventDefault();
+        // Validar si el captcha fue resuelto
+        var response = grecaptcha.getResponse();
+        if (response.length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Verificación necesaria',
+                text: 'Por favor, verifica que no eres un robot.'
+            });
+            return;
+        }
         $.ajax({
             url: 'http://localhost/Aerolinea-Web-Segura/backend/process_form.php',
             type: 'POST',
@@ -36,6 +46,7 @@ $(document).ready(function () {
                         text: 'Tu reserva ha sido registrada exitosamente.',
                         icon: 'success'
                     }).then(function () {
+                        grecaptcha.reset(); // Reiniciar el captcha para otro intento
                         loadSeatsTable();
                         $('#reservationForm')[0].reset();
                     });
@@ -171,4 +182,5 @@ $(document).ready(function() {
         }
     });
 });
+
 
