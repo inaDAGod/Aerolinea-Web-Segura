@@ -1,5 +1,6 @@
 <?php
 include_once(__DIR__ . '/config/cors.php');
+session_start();
 header('Content-Type: application/json');
 $conexion = pg_connect("host=localhost dbname=aerolinea user=postgres password=admin");
 
@@ -10,6 +11,7 @@ if (!$conexion) {
 
 $carnet = $_POST['carnet'] ?? '';
 $numeroVuelo = $_POST['numeroVuelo'] ?? '';
+$correo_usuario = isset($_SESSION['correo_usuario']) ? $_SESSION['correo_usuario'] : '';
 
 if (!$carnet || !$numeroVuelo) {
     echo json_encode(['error' => 'Faltan datos necesarios']);
@@ -42,12 +44,28 @@ if ($result) {
             'origen' => $row['origen'],
             'destino' => $row['destino']
         ];
+         if (!empty($correo_usuario)) {
+            $mensaje = "Check-in correcto";
+            $logQuery = "INSERT INTO log_app (correo_usuario, mensaje) VALUES ($1, $2)";
+            pg_prepare($conexion, "insert_log_success", $logQuery);
+            pg_execute($conexion, "insert_log_success", array($correo_usuario, $mensaje));
+        }
+
         echo json_encode($response);
     } else {
+        // Registrar intento fallido de check-in
+        if (!empty($correo_usuario)) {
+            $mensaje = "Check-in fallido: No se encontró el boleto";
+            $logQuery = "INSERT INTO log_app (correo_usuario, mensaje) VALUES ($1, $2)";
+            pg_prepare($conexion, "insert_log_fail", $logQuery);
+            pg_execute($conexion, "insert_log_fail", array($correo_usuario, $mensaje));
+        }
+
         echo json_encode(['encontrado' => false, 'message' => 'No se encontró un boleto con esos datos.']);
     }
 } else {
     echo json_encode(['error' => 'Error al preparar la consulta: ' . pg_last_error($conexion)]);
 }
+
 pg_close($conexion);
 ?>
