@@ -10,7 +10,9 @@ function verificarPermisos() {
 
     const paginaActual = window.location.pathname.split("/").pop();
     //console.log('pagina', paginaActual);
-    
+    if (!paginaActual) {
+        paginaActual = "index.html";
+    }
 
     const paginasPublicas = [
         "index.html",
