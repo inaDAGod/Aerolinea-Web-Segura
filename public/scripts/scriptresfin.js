@@ -1,7 +1,7 @@
 
 
     // Fetch and display reservas info
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/get_reserva.php')
+    fetch('/backend/get_reserva.php')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -42,7 +42,7 @@
             document.getElementById('recaptchaToken').value = token;
 
             // Ahora sí enviamos el formulario con el token incluido
-            fetch('http://localhost/Aerolinea-Web-Segura/backend/confirmar_reserva.php', {
+            fetch('/backend/confirmar_reserva.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -78,7 +78,7 @@
 
     // Delete reservation
     document.getElementById('eliminar-reserva-btn').addEventListener('click', function() {
-        fetch('http://localhost/Aerolinea-Web-Segura/backend/eliminar_reserva2.php', {
+        fetch('/backend/eliminar_reserva2.php', {
             method: 'POST'
         })
         .then(response => response.json())

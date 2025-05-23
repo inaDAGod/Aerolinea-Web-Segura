@@ -1,7 +1,7 @@
     
 $(document).ready(function () {
     function loadSeatsTable() {
-        $('#seatSelectionContainer').load('http://localhost/Aerolinea-Web-Segura/backend/load_seats.php');
+        $('#seatSelectionContainer').load('/backend/load_seats.php');
     }
 
     // Cargar la tabla de asientos al cargar la página
@@ -20,7 +20,7 @@ $(document).ready(function () {
             return;
         }
         $.ajax({
-            url: 'http://localhost/Aerolinea-Web-Segura/backend/process_form.php',
+            url: '/backend/process_form.php',
             type: 'POST',
             data: $(this).serialize(),
             success: function (response) {
@@ -80,7 +80,7 @@ function loadEchoes() {
         }
     };
 
-    xhr.open('GET', 'http://localhost/Aerolinea-Web-Segura/backend/process_form.php', true);
+    xhr.open('GET', '/backend/process_form.php', true);
     xhr.send();
 }
 
@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 document.getElementById('eliminar-reserva-btn').addEventListener('click', function() {
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/eliminar_reserva.php', {
+    fetch('/backend/eliminar_reserva.php', {
     method: 'POST'
     })
     .then(response => response.json())
@@ -171,7 +171,7 @@ document.getElementById('eliminar-reserva-btn').addEventListener('click', functi
 $(document).ready(function() {
     // Realizar una petición AJAX para obtener el tipo de persona
     $.ajax({
-        url: 'http://localhost/Aerolinea-Web-Segura/backend/process_form.php', // Ruta al archivo PHP
+        url: '/backend/process_form.php', // Ruta al archivo PHP
         type: 'GET',
         success: function(response) {
             // Actualizar el contenido del span con el tipo de persona

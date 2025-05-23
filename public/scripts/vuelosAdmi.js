@@ -19,7 +19,7 @@ function fetchVuelos() {
         return; 
     }
 
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/fetch_vuelos.php')
+    fetch('/backend/fetch_vuelos.php')
         .then(response => response.json())
         .then(data => {
             let filteredData = data;

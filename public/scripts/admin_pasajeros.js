@@ -14,7 +14,7 @@ $(document).ready(function() {
 
         // Realizar una solicitud AJAX para buscar el pasajero por documento, nombre y apellido
         $.ajax({
-            url: 'http://localhost/Aerolinea-Web-Segura/backend/listar_pasajeros.php',
+            url: '/backend/listar_pasajeros.php',
             type: 'POST',
             data: { documento: documento, nombre: nombre, apellido: apellido }, // Nuevo: enviar nombre y apellido
             dataType: 'json',
@@ -36,7 +36,7 @@ $(document).ready(function() {
     // Función para cargar todos los pasajeros
     function loadAllPassengers() {
         $.ajax({
-            url: 'http://localhost/Aerolinea-Web-Segura/backend/listar_pasajeros.php',
+            url: '/backend/listar_pasajeros.php',
             type: 'POST',
             dataType: 'json',
             success: function(response) {
@@ -94,7 +94,7 @@ $(document).ready(function() {
     
     function updateCheckInStatus(documento, newStatus) {
         $.ajax({
-            url: 'http://localhost/Aerolinea-Web-Segura/backend/estado_checkin.php',
+            url: '/backend/estado_checkin.php',
             type: 'POST',
             data: { documento: documento, estado: newStatus },
             dataType: 'json',

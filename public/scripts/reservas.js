@@ -64,7 +64,7 @@ document.getElementById('resumenVuelo').innerHTML = tabla;
         ninos: ninos
     };
 
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/test_session.php', {
+    fetch('/backend/test_session.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

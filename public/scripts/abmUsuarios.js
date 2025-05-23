@@ -43,7 +43,7 @@ function editarUsuario(correo) {
         `,
         didOpen: () => {
           // Cargar roles una vez que el modal esté abierto
-          fetch('http://localhost/Aerolinea-Web-Segura/backend/fetch_roles.php')
+          fetch('/backend/fetch_roles.php')
             .then(response => response.json())
             .then(roles => {
               const selectRol = document.getElementById('swal-rol');

@@ -1,5 +1,5 @@
 function fetchRoles() {
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/fetch_roles.php')
+    fetch('/backend/fetch_roles.php')
       .then(response => response.json())
       .then(data => {
         renderRoles(data);
@@ -75,7 +75,7 @@ function fetchRoles() {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch('http://localhost/Aerolinea-Web-Segura/backend/deleteRole.php', {
+            fetch('/backend/deleteRole.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ rol: rol })

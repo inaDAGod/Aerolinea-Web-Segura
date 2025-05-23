@@ -7,7 +7,7 @@ $(document).ready(function() {
             return;
         }
         $.ajax({
-            url: 'http://localhost/Aerolinea-Web-Segura/backend/verificarReserva.php',
+            url: '/backend/verificarReserva.php',
             type: 'POST',
             dataType: 'json',
             data: { carnet: carnet, numeroVuelo: numeroVuelo },
@@ -55,7 +55,7 @@ $(document).ready(function() {
 
     // Llamada AJAX para verificar la existencia del boleto
     $.ajax({
-        url: 'http://localhost/Aerolinea-Web-Segura/backend/verificarBoleto.php', // Asegúrate de que la ruta es correcta
+        url: '/backend/verificarBoleto.php', // Asegúrate de que la ruta es correcta
         type: 'POST',
         dataType: 'json',
         data: { carnet: carnet, cvuelo: numeroVuelo },
@@ -88,7 +88,7 @@ $(document).ready(function() {
         if (email && carnet && numeroVuelo && fechaVuelo && horaVuelo && origen && destino) {
             // Primero crea el check-in
             $.ajax({
-                url: 'http://localhost/Aerolinea-Web-Segura/backend/generarCheckin.php',
+                url: '/backend/generarCheckin.php',
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -100,7 +100,7 @@ $(document).ready(function() {
                     if (responseCheckin.success) {
                         // Si el check-in se crea exitosamente, procede a crear el boleto
                         $.ajax({
-                            url: 'http://localhost/Aerolinea-Web-Segura/backend/generarBoleto.php',
+                            url: '/backend/generarBoleto.php',
                             type: 'POST',
                             dataType: 'json',
                             data: {

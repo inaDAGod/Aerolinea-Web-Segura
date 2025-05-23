@@ -3,7 +3,7 @@ $(document).ready(function() {
 
     function cargarLogs() {
         $.ajax({
-            url: 'http://localhost/Aerolinea-Web-Segura/backend/listar_log_app.php',
+            url: '/backend/listar_log_app.php',
             method: 'POST',
             success: function(response) {
                 if (Array.isArray(response) && response.length > 0) {

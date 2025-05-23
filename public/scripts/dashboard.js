@@ -1,5 +1,5 @@
 // Obtiene los datos de PHP para la cantidad de vuelos por ciudad
-fetch('http://localhost/Aerolinea-Web-Segura/backend/get_data.php?vuelosPorCiudad=true')
+fetch('/backend/get_data.php?vuelosPorCiudad=true')
   .then(response => {
     if (!response.ok) {
       throw new Error('Error al obtener los datos del servidor');
@@ -40,7 +40,7 @@ fetch('http://localhost/Aerolinea-Web-Segura/backend/get_data.php?vuelosPorCiuda
   });
 
 // Obtiene los datos de PHP para las personas con más millas acumuladas
-fetch('http://localhost/Aerolinea-Web-Segura/backend/get_data.php?personasConMasMillas=true')
+fetch('/backend/get_data.php?personasConMasMillas=true')
   .then(response => {
     if (!response.ok) {
       throw new Error('Error al obtener los datos del servidor');
@@ -81,7 +81,7 @@ fetch('http://localhost/Aerolinea-Web-Segura/backend/get_data.php?personasConMas
   });
 
 // Obtiene los datos de PHP para la cantidad de reservas por estado
-fetch('http://localhost/Aerolinea-Web-Segura/backend/get_data.php?reservasPorEstado=true')
+fetch('/backend/get_data.php?reservasPorEstado=true')
   .then(response => {
     if (!response.ok) {
       throw new Error('Error al obtener los datos del servidor');
@@ -122,7 +122,7 @@ fetch('http://localhost/Aerolinea-Web-Segura/backend/get_data.php?reservasPorEst
   });
 
 // Obtiene los datos de PHP para la distribución de personas por sexo
-fetch('http://localhost/Aerolinea-Web-Segura/backend/get_data.php?distribucionPorSexo=true')
+fetch('/backend/get_data.php?distribucionPorSexo=true')
   .then(response => {
     if (!response.ok) {
       throw new Error('Error al obtener los datos del servidor');

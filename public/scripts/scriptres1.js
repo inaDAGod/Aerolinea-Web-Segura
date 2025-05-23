@@ -1,6 +1,6 @@
 
     document.getElementById('eliminar-reserva-btn').addEventListener('click', function() {
-        fetch('http://localhost/Aerolinea-Web-Segura/backend/eliminar_reserva.php', {
+        fetch('/backend/eliminar_reserva.php', {
             method: 'POST'
         })
         .then(response => response.json())

@@ -1,5 +1,5 @@
 // Fetch user statistics from PHP script
-fetch('http://localhost/Aerolinea-Web-Segura/backend/user_statistics.php')
+fetch('/backend/user_statistics.php')
     .then(response => response.json())
     .then(data => {
         // Update HTML with user statistics
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function loadUserInfo() {
     // Lógica para cargar los detalles del usuario utilizando AJAX
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/user_info.php')
+    fetch('/backend/user_info.php')
         .then(response => response.json())
         .then(data => {
             document.getElementById('user-name').textContent = data.nombres_usuario;
@@ -56,7 +56,7 @@ function loadUserInfo() {
 
 function loadStatistics() {
     // Fetch user statistics
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/user_statistics.php')
+    fetch('/backend/user_statistics.php')
     .then(response => response.json())
     .then(data => {
         // Update HTML with user statistics
@@ -75,7 +75,7 @@ function loadStatistics() {
 
 function loadWeekFlights() {
     // Lógica para cargar los vuelos de la semana utilizando AJAX
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/week_flights.php')
+    fetch('/backend/week_flights.php')
         .then(response => response.text())
         .then(data => {
             document.getElementById('week-flights-content').innerHTML = data;
@@ -87,7 +87,7 @@ function loadWeekFlights() {
 
 function loadUserReservations() {
     // Lógica para cargar las reservas del usuario utilizando AJAX
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/reservations.php')
+    fetch('/backend/reservations.php')
         .then(response => response.text())
         .then(data => {
             document.getElementById('user-reservations-content').innerHTML = data;
@@ -99,7 +99,7 @@ function loadUserReservations() {
 
 function loadPastUserFlights() {
     // Lógica para cargar los vuelos pasados del usuario utilizando AJAX
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/past_flights.php')
+    fetch('/backend/past_flights.php')
         .then(response => response.text())
         .then(data => {
             document.getElementById('past-user-flights-content').innerHTML = data;
@@ -185,7 +185,7 @@ function initPasswordChangeModal() {
             
             try {
                 // 1. Verificar contraseña actual
-                const verifyResponse = await fetch('http://localhost/Aerolinea-Web-Segura/backend/login.php', {
+                const verifyResponse = await fetch('/backend/login.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -202,7 +202,7 @@ function initPasswordChangeModal() {
                 }
 
                 // 2. Verificar historial de contraseñas
-                const historyResponse = await fetch('http://localhost/Aerolinea-Web-Segura/backend/checkPasswordHistory.php', {
+                const historyResponse = await fetch('/backend/checkPasswordHistory.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -219,7 +219,7 @@ function initPasswordChangeModal() {
                 }
 
                 // 3. Actualizar contraseña
-                const updateResponse = await fetch('http://localhost/Aerolinea-Web-Segura/backend/updatePassword.php', {
+                const updateResponse = await fetch('/backend/updatePassword.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

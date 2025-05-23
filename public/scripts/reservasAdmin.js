@@ -11,7 +11,7 @@ $(document).ready(function() {
         }
   
         $.ajax({
-            url: 'http://localhost/Aerolinea-Web-Segura/backend/reservasAdmin.php',
+            url: '/backend/reservasAdmin.php',
             type: 'POST',
             data: { documento: documento, nombre: nombre, apellido: apellido }, // Nuevo: enviar nombre y apellido
             dataType: 'json',
@@ -32,7 +32,7 @@ $(document).ready(function() {
 
     function loadAllPassengers() {
         $.ajax({
-            url: 'http://localhost/Aerolinea-Web-Segura/backend/reservasAdmin.php',
+            url: '/backend/reservasAdmin.php',
             type: 'POST',
             dataType: 'json',
             success: function(response) {
@@ -91,7 +91,7 @@ $(document).ready(function() {
 
     function updateReservaStatus(documento, nuevoEstado) {
         $.ajax({
-            url: 'http://localhost/Aerolinea-Web-Segura/backend/estado_reserva.php',
+            url: '/backend/estado_reserva.php',
             type: 'POST',
             data: { documento: documento, estado: nuevoEstado },
             dataType: 'json',

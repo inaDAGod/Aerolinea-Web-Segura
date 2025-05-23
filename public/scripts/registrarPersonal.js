@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function cargarRoles() {
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/fetch_roles.php')
+    fetch('/backend/fetch_roles.php')
         .then(response => response.json())
         .then(data => {
             const selectRol = document.getElementById('selectRol');

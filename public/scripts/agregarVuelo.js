@@ -8,7 +8,7 @@ $(function() {
 
 $(document).ready(function() {
     $.ajax({
-        url: 'http://localhost/Aerolinea-Web-Segura/backend/agregarVuelo.php',
+        url: '/backend/agregarVuelo.php',
         type: 'GET',
         dataType: 'json',
         success: function(ciudades) {
@@ -70,7 +70,7 @@ if (fechaVueloDate <= fechaActual) {
         };
 
         $.ajax({
-            url: 'http://localhost/Aerolinea-Web-Segura/backend/agregarVuelo.php',
+            url: '/backend/agregarVuelo.php',
             type: 'POST',
             data: JSON.stringify(datos),
             contentType: 'application/json',

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  fetch('http://localhost/Aerolinea-Web-Segura/backend/getPermisos.php')
+  fetch('/backend/getPermisos.php')
     .then(response => response.json())
     .then(accesos => {
       const container = document.getElementById('permissionsContainer');
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
       accesosSeleccionados[checkbox.value] = checkbox.checked;
     });
 
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/addRole.php', {
+    fetch('/backend/addRole.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ rol, accesos: accesosSeleccionados })

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const rol = urlParams.get('rol');
 
   // Fetch de permisos y del rol a editar
-  fetch('http://localhost/Aerolinea-Web-Segura/backend/getPermisos.php')
+  fetch('/backend/getPermisos.php')
     .then(response => response.json())
     .then(permisos => {
       const permisosContainer = document.getElementById('permisosContainer');
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       // Fetch del rol para editar
-      fetch(`http://localhost/Aerolinea-Web-Segura/backend/getRoles.php?rol=${rol}`)
+      fetch(`/backend/getRoles.php?rol=${rol}`)
         .then(response => response.json())
         .then(data => {
           const roleData = data[0]; // Suponiendo que el rol existe y es un arreglo de un solo objeto
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Enviar los cambios al backend
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/updateRole.php', {
+    fetch('/backend/updateRole.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ rol: rol, rolNuevo: rolNuevo, accesos: accesosSeleccionados })

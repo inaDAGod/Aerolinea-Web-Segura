@@ -16,7 +16,7 @@ function fetchAwards() {
     const destacado = document.querySelector('input[name="destacadosOption"]:checked')?.value || '';
     const tipo = document.getElementById('tipo').value;
 
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/fetch_awards.php')
+    fetch('/backend/fetch_awards.php')
         .then(response => response.json())
         .then(data => {
             const filteredData = data.filter(award => {
@@ -208,7 +208,7 @@ async function editAward(award) {
         formData.append('producto_destacado', destacadoEditado);
         formData.append('foto', nuevaFoto);
 
-        fetch('http://localhost/Aerolinea-Web-Segura/backend/editarPremio.php', {
+        fetch('/backend/editarPremio.php', {
             method: 'POST',
             body: formData
         })
@@ -236,7 +236,7 @@ async function fetchFileFromServer(filePath) {
     return file;
 }
 function borrarPremio(premio) {
-    fetch('http://localhost/Aerolinea-Web-Segura/backend/borrarPremio.php', {
+    fetch('/backend/borrarPremio.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
