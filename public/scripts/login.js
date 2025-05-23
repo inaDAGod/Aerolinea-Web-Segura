@@ -1,32 +1,47 @@
 let intentos = 0;
 
+// Modifica la función loginEncript()
+
 function loginEncript() {
     let correo = document.getElementById("username").value;
     let contrasenia = document.getElementById("password").value;
     var hash = CryptoJS.MD5(contrasenia);
+    
     if (correo && contrasenia) {
-        if (intentos < 4) {
+        if (intentos < 3) { // Cambiado a 3 intentos
             fetch("http://localhost/Aerolinea-Web-Segura/backend/login.php", {
-                    method: "POST",
-                    body: JSON.stringify({ username: correo, password: hash.toString() }),
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error en la solicitud de inicio de sesión');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.estado === 'contraseña_correcta') {
-                        audi(correo);
+                method: "POST",
+                body: JSON.stringify({ username: correo, password: hash.toString() }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la solicitud de inicio de sesión');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.estado === 'contraseña_correcta') {
+                    // Registro de login exitoso
+                    registrarEventoSeguridad(
+                        'LOGIN_EXITOSO',
+                        'Inicio de sesión exitoso',
+                        correo,
+                        'INFO'
+                    );
+                    
+                    audi(correo);
+                    localStorage.setItem('rol', data.rol);
+                    localStorage.setItem('accesos', JSON.stringify(data.accesos));
+                    localStorage.setItem('tipo_usuario', data.tipo_usuario);
 
-                        // 🌟 Aquí guardas en localStorage:
-                    localStorage.setItem('rol', data.rol); // Guardas el rol
-                    localStorage.setItem('accesos', JSON.stringify(data.accesos)); // Guardas los accesos (convertido en string)
-                    localStorage.setItem('tipo_usuario', data.tipo_usuario); // Guardas el tipo de usuario
-                    console.log(data.tipo_usuario);
-                        // Verificar si la contraseña ha expirado
                     if(data.password_expired) {
+                        registrarEventoSeguridad(
+                            'CONTRASENA_EXPIRADA',
+                            'Usuario inició sesión pero contraseña está expirada',
+                            correo,
+                            'ADVERTENCIA'
+                        );
+                        
                         Swal.fire({
                             title: 'Contraseña expirada',
                             text: 'Tu contraseña tiene más de 60 días sin cambio. Por seguridad, debes actualizarla.',
@@ -39,42 +54,71 @@ function loginEncript() {
                         });
                         return;
                     }
-                        //cambiarDirecto deberia ir a Index y el navvar seria los que cambia 
-                        if(data.tipo_usuario === 'cliente'){
-                            window.location.href = window.location.origin + '/Aerolinea-Web-Segura/public/indexCliente.html';
-                        }
-                        else if(data.tipo_usuario === 'administrador'){
-                            window.location.href = window.location.origin + '/Aerolinea-Web-Segura/public/indexAdmi.html';;
-                        }
-                       
-                    } else if (data.estado === 'contraseña_incorrecta') {
-                        if (intentos === 3) {
-                            Swal.fire('Error', 'Realizo muchos intentos. Por favor, inténtelo de nuevo más tarde.', 'error');
-                            setTimeout(() => {
-                                intentos = 0; 
-                            }, 300000); //5 minutos
-                        } else {
-                            Swal.fire('Error', 'La contraseña ingresada es incorrecta.', 'error');
-                        }
-                        intentos++;
-                    } else if (data.estado === 'usuario_no_encontrado') {
-                        Swal.fire('Error', 'No se encontró ningún usuario con ese correo electrónico', 'error');
-                    } else {
-                        Swal.fire('Error', 'Ups algo salió mal. Inténtelo de nuevo más tarde.', 'error');
+
+                    if(data.tipo_usuario === 'cliente'){
+                        window.location.href = window.location.origin + '/Aerolinea-Web-Segura/public/indexCliente.html';
                     }
-                })
-                .catch(error => {
-                    console.error('Error durante la solicitud de inicio de sesión:', error);
-                    Swal.fire('Error', 'Ocurrió un error durante la solicitud de inicio de sesión. Inténtelo de nuevo más tarde.', 'error');
-                });
+                    else if(data.tipo_usuario === 'administrador'){
+                        window.location.href = window.location.origin + '/Aerolinea-Web-Segura/public/indexAdmi.html';
+                    }
+                } else if (data.estado === 'contraseña_incorrecta') {
+                    intentos++;
+                    
+                    // Registro de contraseña incorrecta
+                    registrarEventoSeguridad(
+                        'LOGIN_FALLIDO',
+                        'Contraseña incorrecta ingresada',
+                        correo,
+                        'ADVERTENCIA',
+                        { intento_numero: intentos }
+                    );
+
+                    if (intentos >= 3) {
+                        manejarBloqueoIntento(correo);
+                    } else {
+                        Swal.fire('Error', `La contraseña ingresada es incorrecta. Intentos restantes: ${3 - intentos}`, 'error');
+                    }
+                } else if (data.estado === 'usuario_no_encontrado') {
+                    // Registro de usuario no encontrado
+                    registrarEventoSeguridad(
+                        'USUARIO_INEXISTENTE',
+                        'Intento de inicio de sesión con usuario inexistente',
+                        correo,
+                        'ADVERTENCIA'
+                    );
+                    
+                    Swal.fire('Error', 'No se encontró ningún usuario con ese correo electrónico', 'error');
+                } else {
+                    registrarEventoSeguridad(
+                        'ERROR_LOGIN_DESCONOCIDO',
+                        'Error desconocido durante el inicio de sesión',
+                        correo,
+                        'ALTA',
+                        { respuesta_servidor: data }
+                    );
+                    
+                    Swal.fire('Error', 'Ups algo salió mal. Inténtelo de nuevo más tarde.', 'error');
+                }
+            })
+            .catch(error => {
+                registrarEventoSeguridad(
+                    'ERROR_CONEXION_LOGIN',
+                    'Error de conexión durante inicio de sesión',
+                    correo,
+                    'ALTA',
+                    { error: error.message }
+                );
+                
+                console.error('Error durante la solicitud de inicio de sesión:', error);
+                Swal.fire('Error', 'Ocurrió un error durante la solicitud de inicio de sesión. Inténtelo de nuevo más tarde.', 'error');
+            });
         } else {
-            Swal.fire('Error', 'Realizo muchos intentos. Por favor, inténtelo de nuevo más tarde.', 'error');
+            manejarBloqueoIntento(correo);
         }
     } else {
         Swal.fire('Error', 'Llena los campos', 'error');
     }
 }
-
 
 
 function registrarUsuario() {
