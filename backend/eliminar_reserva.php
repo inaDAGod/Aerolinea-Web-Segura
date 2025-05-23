@@ -8,8 +8,9 @@ function eliminarReservas() {
         echo json_encode(["error" => "No se encontró el número de reserva en la sesión o es inválido."]);
         return;
     }
-
+    
     $creservanum = $_SESSION['creservanum'];
+    $correo_usuario = isset($_SESSION['correo_usuario']) ? $_SESSION['correo_usuario'] : '';
 
     // Parámetros de conexión
     $host = 'localhost';
@@ -36,10 +37,16 @@ function eliminarReservas() {
         $stmtDeleteReservas = $conn->prepare($sqlDeleteReservas);
         $stmtDeleteReservas->bindParam(':creserva', $creservanum, PDO::PARAM_INT);
         $stmtDeleteReservas->execute();
-
         // Confirmar la transacción
         $conn->commit();
-
+        // Insertar en log_app
+        $sqlLog = "INSERT INTO log_app (correo_usuario, mensaje) VALUES (:correo, :mensaje)";
+        $stmtLog = $conn->prepare($sqlLog);
+        $stmtLog->bindParam(':correo', $correo_usuario);
+        $mensaje = "Reserva Eliminada"; 
+        $stmtLog->bindParam(':mensaje', $mensaje);
+        $stmtLog->execute();
+        
         echo json_encode(["message" => "Reserva y registros relacionados eliminados exitosamente."]);
     } catch (Exception $e) {
         // En caso de error, revertir la transacción

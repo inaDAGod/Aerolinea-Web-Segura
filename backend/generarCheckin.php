@@ -1,5 +1,6 @@
 <?php
 include_once(__DIR__ . '/config/cors.php');
+session_start(); 
 header('Content-Type: application/json');
 $conexion = pg_connect("host=localhost dbname=aerolinea user=postgres password=admin");
 
@@ -10,6 +11,7 @@ if (!$conexion) {
 
 $carnet = $_POST['carnet'] ?? '';
 $fechaVuelo = $_POST['fechaVuelo'] ?? '';
+$correo_usuario = isset($_SESSION['correo_usuario']) ? $_SESSION['correo_usuario'] : '';
 
 // Obtener el correo del usuario basado en el carnet y el creserva
 $queryReserva = "SELECT r.correo_usuario FROM reservas r
@@ -29,8 +31,21 @@ if ($resultReserva && pg_num_rows($resultReserva) > 0) {
 
     if ($resultCheckIn && pg_num_rows($resultCheckIn) > 0) {
         $ccheckIn = pg_fetch_result($resultCheckIn, 0, 'ccheck_in');
+        if (!empty($correo_usuario)) {
+            $mensaje = "se generó el check-in correctamente";
+            $logQuery = "INSERT INTO log_app (correo_usuario, mensaje) VALUES ($1, $2)";
+            pg_prepare($conexion, "insert_log_success", $logQuery);
+            pg_execute($conexion, "insert_log_success", array($correo_usuario, $mensaje));
+        }
         echo json_encode(['success' => true, 'ccheck_in' => $ccheckIn]);
     } else {
+        // Registrar intento fallido de check-in
+        if (!empty($correo_usuario)) {
+            $mensaje = "No se generó el check-in correctamente";
+            $logQuery = "INSERT INTO log_app (correo_usuario, mensaje) VALUES ($1, $2)";
+            pg_prepare($conexion, "insert_log_fail", $logQuery);
+            pg_execute($conexion, "insert_log_fail", array($correo_usuario, $mensaje));
+        }
         echo json_encode(['success' => false, 'message' => 'Error al insertar en check_in']);
     }
 } else {

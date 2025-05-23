@@ -50,7 +50,9 @@ function verificarPermisos() {
         "Ver Dashboard": { href: "dashboard.html", texto: "Dashboard" },
         "ABM Roles": { href: "roles.html", texto: "Roles" },
         "Auditoria de usuarios": { href: "admin_usuarios.html", texto: "Auditoría de Usuarios" },
-        "Cerrar Sesion": { href: "index.html", texto: "Cerrar Sesión" }
+        "Ver logs de aplicacion": { href: "auditoria_logs.html", texto: "Logs de Aplicación" },
+        "Cerrar Sesion": { href: "index.html", texto: "Cerrar Sesion" },
+        
     };
 
     const mapaPaginasPermisos = {
@@ -64,6 +66,7 @@ function verificarPermisos() {
         "dashboard.html": "Ver Dashboard",
         "roles.html": "ABM Roles",
         "admin_usuarios.html": "Auditoria de usuarios",
+        "auditoria_logs.html": "Ver logs de aplicacion",
         "admin_pasajeros.html": "Ver pasajeros",
         "reservasAdmin.html": "Ver Reservas",
         "addProducto.html" :  "ABM catalogo millas",
@@ -71,6 +74,7 @@ function verificarPermisos() {
         "agregarVuelo.html" :  "Agregar vuelos",
         "editarRole.html" :  "ABM Roles",
         "EditDeleteUsers.html": "ABM empleados",
+        
     };
 
     if (!rol) {
@@ -153,7 +157,7 @@ function construirMenu(tipo_usuario, accesos = {}, mapaAccesos = {}) {
             { href: "catalogoMillasCliente.html", texto: "Catálogo Millas" },
             { href: "opinionesCliente.html", texto: "Opiniones" },
             { href: "perfil.html", texto: "Perfil" },
-            { href: "#", texto: "Cerrar Sesión", onClick: cerrarSesion }
+            { href: "#", texto: "Cerrar Sesion", onClick: cerrarSesion }
         ];
 
         paginasClienteMenu.forEach(pagina => {
