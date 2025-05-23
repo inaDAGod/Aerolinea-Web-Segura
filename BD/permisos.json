@@ -2,7 +2,6 @@
     "ABM empleados",
     "ABM Roles",
     "Auditoria de usuarios",
-    "Auditoria de Applicaciones",
     "ABM catalogo millas",
     "Ver Dashboard",
     "Ver pasajeros",
@@ -10,6 +9,8 @@
     "Modificar estado reservas",
     "Modificar estado checkin",
     "Ver Reservas",
-    "Generar boleto"
+    "Generar boleto",
+    "Borrar opiniones",
+    "Ver logs de aplicacion"
   ]
   

@@ -50,7 +50,13 @@ try {
     $stmtUpdate = $conn->prepare($sqlUpdate);
     $stmtUpdate->bindParam(':creserva', $creservanum, PDO::PARAM_INT);
     $stmtUpdate->execute();
-
+    // Insertar en log_app
+    $sqlLog = "INSERT INTO log_app (correo_usuario, mensaje) VALUES (:correo, :mensaje)";
+    $stmtLog = $conn->prepare($sqlLog);
+    $stmtLog->bindParam(':correo', $correo_usuario);
+    $mensaje = "Confirmación de reserva"; 
+    $stmtLog->bindParam(':mensaje', $mensaje);
+    $stmtLog->execute();
     // Fetch reservas_personas data for the updated creserva
     $sqlSelectReservasPersonas = "SELECT * FROM reservas_personas WHERE creserva = :creserva";
     $stmtSelectReservasPersonas = $conn->prepare($sqlSelectReservasPersonas);
