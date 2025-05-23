@@ -130,15 +130,6 @@ async function obtenerLogsSeguridad(filtros = {}) {
 }
 
 async function obtenerLogsConMensaje(filtros = {}) {
-    const loading = Swal.fire({
-        title: 'Cargando logs',
-        html: 'Por favor espere...',
-        allowOutsideClick: false,
-        didOpen: () => {
-            Swal.showLoading();
-        }
-    });
-
     try {
         const data = await obtenerLogsSeguridad(filtros);
         
@@ -156,31 +147,32 @@ async function obtenerLogsConMensaje(filtros = {}) {
     }
 }
 
-// Variables globales
 let datosActuales = {};
 let filtrosActuales = {};
 
-// Inicialización
 $(document).ready(function() {
     cargarDatos();
-    
-    $('#filtrosForm').submit(function(e) {
-        e.preventDefault();
-        const formData = $(this).serializeArray();
-        filtrosActuales = {};
-        
-        formData.forEach(item => {
-            if (item.value) filtrosActuales[item.name] = item.value;
-        });
-        
+
+    $('#btnFiltrar').click(function() {
+        filtrosActuales = {
+            tipo_evento: $('#tipo_evento').val(),
+            severidad: $('#severidad').val()
+        };
         cargarDatos(filtrosActuales);
+    });
+
+    $('#btnReset').click(function() {
+        $('#tipo_evento').val('');
+        $('#severidad').val('');
+        filtrosActuales = {};
+        cargarDatos();
     });
 });
 
 async function cargarDatos(filtros = {}) {
     try {
-        const data = await obtenerLogsConMensaje(filtros);
-        
+        const data = await obtenerLogsSeguridad(filtros); // usa la misma función en todo lado
+
         if (data.estado === 'exito') {
             datosActuales = data;
             renderizarTabla(data.datos);
@@ -192,54 +184,57 @@ async function cargarDatos(filtros = {}) {
 }
 
 function renderizarTabla(logs) {
-    const $tbody = $('#cuerpoTabla');
+    const $tbody = $('#tablaLogsBody');
     $tbody.empty();
-    
+
+    if(logs.length === 0) {
+        $tbody.append('<tr><td colspan="6" class="text-center">No se encontraron registros</td></tr>');
+        return;
+    }
+
     logs.forEach(log => {
+        const [fecha, hora] = log.fecha_hora.split(' ');
+
         $tbody.append(`
-            <tr class="severidad-${log.severidad.toLowerCase()}">
-                <td>${log.id_log}</td>
-                <td>${log.fecha_hora}</td>
+            <tr class="severidad-${log.severidad}">
+                <td>
+                    <div class="fecha">${fecha}</div>
+                    <div class="hora text-muted">${hora || ''}</div>
+                </td>
                 <td>${log.tipo_evento}</td>
                 <td>${log.descripcion}</td>
                 <td>${log.correo_usuario || 'N/A'}</td>
-                <td><span class="badge bg-${getColorSeveridad(log.severidad)}">${log.severidad}</span></td>
+                <td><span class="badge-${log.severidad}">${log.severidad}</span></td>
+                <td>${log.ip_origen || 'N/A'}</td>
+                <td>${log.user_agent || 'N/A'}</td>
             </tr>
         `);
     });
-    
-    // Inicializar DataTable (si lo usas)
+
+    if($.fn.DataTable.isDataTable('#tablaLogs')) {
+        $('#tablaLogs').DataTable().destroy();
+    }
     $('#tablaLogs').DataTable({
         responsive: true,
-        destroy: true // Para reinicializar
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
+        }
     });
-}
-
-function getColorSeveridad(severidad) {
-    const colores = {
-        'INFO': 'info',
-        'ADVERTENCIA': 'warning',
-        'ALTA': 'danger',
-        'CRITICA': 'dark'
-    };
-    return colores[severidad] || 'secondary';
 }
 
 function renderizarPaginacion(data) {
     const $paginacion = $('#paginacion');
     $paginacion.empty();
-    
+
     const totalPaginas = data.total_paginas;
     const paginaActual = data.pagina_actual;
-    
-    // Botón Anterior
+
     $paginacion.append(`
         <li class="page-item ${paginaActual === 1 ? 'disabled' : ''}">
             <a class="page-link" href="#" data-pagina="${paginaActual - 1}">Anterior</a>
         </li>
     `);
-    
-    // Números de página
+
     for (let i = 1; i <= totalPaginas; i++) {
         $paginacion.append(`
             <li class="page-item ${i === paginaActual ? 'active' : ''}">
@@ -247,15 +242,13 @@ function renderizarPaginacion(data) {
             </li>
         `);
     }
-    
-    // Botón Siguiente
+
     $paginacion.append(`
         <li class="page-item ${paginaActual === totalPaginas ? 'disabled' : ''}">
             <a class="page-link" href="#" data-pagina="${paginaActual + 1}">Siguiente</a>
         </li>
     `);
-    
-    // Eventos de paginación
+
     $('.page-link').click(function(e) {
         e.preventDefault();
         const pagina = $(this).data('pagina');

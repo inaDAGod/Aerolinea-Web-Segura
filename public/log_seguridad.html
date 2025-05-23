@@ -6,7 +6,7 @@
     <title>Auditoría de Seguridad</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="styles/admin_pasajeros.css">
+    <link rel="stylesheet" href="styles/log_seg.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
     <link rel="stylesheet" href="styles/styleIndex.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -98,6 +98,7 @@
                     <th>Usuario</th>
                     <th>Severidad</th>
                     <th>IP Origen</th>
+                    <th>User Agent</th> 
                 </tr>
             </thead>
             <tbody id="tablaLogsBody">
@@ -168,6 +169,7 @@ function renderizarLogs(logs) {
                     </span>
                 </td>
                 <td>${log.ip_origen || 'N/A'}</td>
+                <td>${log.user_agent || 'N/A'}</td>
             </tr>
         `);
     });
@@ -237,6 +239,7 @@ $(document).ready(function() {
                 severidad: $('#filtroSeveridad').val(),
                 usuario: $('#filtroUsuario').val(),
                 ip_origen: $('#filtroIP').val(),
+                user_agent: $('#filtroUserAgent').val(),
                 pagina: pagina
             };
             cargarLogs(filtros);
