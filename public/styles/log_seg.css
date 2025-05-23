@@ -1,0 +1,85 @@
+/* Añade esto a tu archivo CSS */
+
+/* Estilos para la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Esto fuerza el ancho de las columnas */
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+    word-wrap: break-word; /* Para manejar contenido largo */
+}
+
+/* Anchuras específicas para cada columna */
+th:nth-child(1), td:nth-child(1) { width: 11%; } /* Fecha/Hora */
+th:nth-child(2), td:nth-child(2) { width: 13%; } /* Tipo de Evento */
+th:nth-child(3), td:nth-child(3) { width: 14%; } /* Descripción */
+th:nth-child(4), td:nth-child(4) { width: 18%; } /* Usuario (correo) - más ancho */
+th:nth-child(5), td:nth-child(5) { width: 10%; } /* Severidad */
+th:nth-child(6), td:nth-child(6) { width: 10%; } /* IP Origen */
+th:nth-child(7), td:nth-child(7) { width: 19%; } /* User Agent */
+
+/* Estilos para responsive */
+@media screen and (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        margin: 0 0 1rem 0;
+    }
+
+    tr:nth-child(odd) {
+        background: #f2f2f2;
+    }
+
+    td {
+        border: none;
+        position: relative;
+        padding-left: 50%;
+        width: 100% !important; /* Ancho completo en móviles */
+    }
+
+    td:before {
+        position: absolute;
+        top: 0;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        content: attr(data-label);
+    }
+}
+
+/* Estilos específicos para contenido */
+.fecha {
+    font-weight: 500;
+}
+
+.hora {
+    font-size: 0.8em;
+}
+
+/* Estilos para los badges de severidad */
+.badge-severidad {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.badge-ALTA { background-color: #dc3545; color: white; }
+.badge-CRITICA { background-color: #721c24; color: white; }
+.badge-ADVERTENCIA { background-color: #ffc107; color: #000; }
+.badge-INFO { background-color: #28a745; color: white; }

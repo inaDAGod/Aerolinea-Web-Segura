@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoría de Seguridad</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="styles/log_seg.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+    <link rel="stylesheet" href="styles/styleIndex.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Open+Sans:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <style>
+        .severidad-ALTA { background-color: #ffcccc; }
+        .severidad-CRITICA { background-color: #ff9999; font-weight: bold; }
+        .severidad-ADVERTENCIA { background-color: #fff3cd; }
+        .severidad-INFO { background-color: #d4edda; }
+        .badge-severidad {
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
+        }
+        .badge-ALTA { background-color: #dc3545; }
+        .badge-CRITICA { background-color: #721c24; }
+        .badge-ADVERTENCIA { background-color: #ffc107; color: #000; }
+        .badge-INFO { background-color: #28a745; }
+    </style>
+</head>
+<body>
+
+<div style="background-color: #8FBCEA"></div>
+<img src="assets/logoavion.png" alt="Logo" style="width:7%;height:7%;margin-left:10px;margin-top: 10px; margin-bottom: 20px;">
+
+<header class="header" id="inicio">
+    <img src="assets/indexAssets/bx-menu-alt-right.svg" alt="" class="hamburger">
+    <nav class="menu-navegacion" id="menu">
+        <!-- Aquí se carga el menú si usas JS dinámico -->
+    </nav>    
+    <div class="contenedor head">
+        <h1 class="titulo">Auditoría de logs de seguridad</h1>
+    </div>
+</header>
+
+<div class="container mt-4">
+    <h2 style="text-align: center; font-weight: bold;">Historial de Eventos de Seguridad</h2>
+    
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="filtroTipo">Tipo de Evento</label>
+                    <select id="filtroTipo" class="form-control">
+                        <option value="">Todos</option>
+                        <option value="LOGIN_FALLIDO">Login fallido</option>
+                        <option value="LOGIN_EXITOSO">Login exitoso</option>
+                        <option value="USUARIO_BLOQUEADO">Usuario bloqueado</option>
+                        <!-- Agrega más opciones según tus tipos de eventos -->
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="filtroSeveridad">Severidad</label>
+                    <select id="filtroSeveridad" class="form-control">
+                        <option value="">Todas</option>
+                        <option value="INFO">Info</option>
+                        <option value="ADVERTENCIA">Advertencia</option>
+                        <option value="ALTA">Alta</option>
+                        <option value="CRITICA">Crítica</option>
+                    </select>
+                </div>
+                <!--
+                <div class="col-md-3">
+                    <label for="filtroUsuario">Usuario</label>
+                    <input type="text" id="filtroUsuario" class="form-control" placeholder="Filtrar por usuario">
+                </div>
+                <div class="col-md-3">
+                    <label for="filtroIP">IP Origen</label>
+                    <input type="text" id="filtroIP" class="form-control" placeholder="Filtrar por IP">
+                </div>
+                -->
+            </div>
+            <button id="btnFiltrar" class="btn btn-primary mt-3">Filtrar</button>
+            <button id="btnReset" class="btn btn-secondary mt-3">Reiniciar</button>
+        </div>
+    </div>
+    
+    <!-- Tabla -->
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Fecha/Hora</th>
+                    <th>Tipo de Evento</th>
+                    <th>Descripción</th>
+                    <th>Usuario</th>
+                    <th>Severidad</th>
+                    <th>IP Origen</th>
+                    <th>User Agent</th> 
+                </tr>
+            </thead>
+            <tbody id="tablaLogsBody">
+                <!-- Se llenará dinámicamente con JS -->
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Paginación -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center" id="paginacion">
+            <!-- Se generará dinámicamente -->
+        </ul>
+    </nav>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="scripts/log_seguridad.js"></script>
+<script>
+// Función para cargar los logs
+async function cargarLogs(filtros = {}) {
+    try {
+        const data = await obtenerLogsSeguridad(filtros);
+        
+        if(data.estado === 'exito') {
+            renderizarLogs(data.datos);
+            renderizarPaginacion(data);
+        } else {
+            Swal.fire('Error', data.mensaje || 'Error al cargar logs', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire('Error', 'No se pudieron cargar los logs', 'error');
+    }
+}
+
+// Función para renderizar los logs en la tabla
+function renderizarLogs(logs) {
+    const $tbody = $('#tablaLogsBody');
+    $tbody.empty();
+    
+    if(logs.length === 0) {
+        $tbody.append('<tr><td colspan="6" class="text-center">No se encontraron registros</td></tr>');
+        return;
+    }
+    
+    logs.forEach(log => {
+        // Formatear fecha y hora separadas
+        const fechaHora = log.fecha_hora.split(' ');
+        const fecha = fechaHora[0];
+        const hora = fechaHora[1] || '';
+        
+        $tbody.append(`
+            <tr class="severidad-${log.severidad}">
+                <td>
+                    <div class="fecha">${fecha}</div>
+                    <div class="hora text-muted">${hora}</div>
+                </td>
+                <td>${log.tipo_evento}</td>
+                <td>${log.descripcion}</td>
+                <td>${log.correo_usuario || 'N/A'}</td>
+                <td>
+                    <span class="badge-severidad badge-${log.severidad}">
+                        ${log.severidad}
+                    </span>
+                </td>
+                <td>${log.ip_origen || 'N/A'}</td>
+                <td>${log.user_agent || 'N/A'}</td>
+            </tr>
+        `);
+    });
+}
+
+// Función para renderizar la paginación
+function renderizarPaginacion(data) {
+    const $paginacion = $('#paginacion');
+    $paginacion.empty();
+    
+    if(data.total_paginas <= 1) return;
+    
+    // Botón Anterior
+    $paginacion.append(`
+        <li class="page-item ${data.pagina_actual === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-pagina="${data.pagina_actual - 1}">Anterior</a>
+        </li>
+    `);
+    
+    // Números de página
+    for(let i = 1; i <= data.total_paginas; i++) {
+        $paginacion.append(`
+            <li class="page-item ${i === data.pagina_actual ? 'active' : ''}">
+                <a class="page-link" href="#" data-pagina="${i}">${i}</a>
+            </li>
+        `);
+    }
+    
+    // Botón Siguiente
+    $paginacion.append(`
+        <li class="page-item ${data.pagina_actual === data.total_paginas ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-pagina="${data.pagina_actual + 1}">Siguiente</a>
+        </li>
+    `);
+}
+
+// Eventos
+$(document).ready(function() {
+    // Cargar logs iniciales
+    cargarLogs();
+    
+    // Filtrar
+    $('#btnFiltrar').click(function() {
+        const filtros = {
+            tipo_evento: $('#filtroTipo').val(),
+            severidad: $('#filtroSeveridad').val(),
+            usuario: $('#filtroUsuario').val(),
+            ip_origen: $('#filtroIP').val()
+        };
+        
+        cargarLogs(filtros);
+    });
+    
+    // Reiniciar filtros
+    $('#btnReset').click(function() {
+        $('#filtroTipo, #filtroSeveridad, #filtroUsuario, #filtroIP').val('');
+        cargarLogs();
+    });
+    
+    // Paginación
+    $('#paginacion').on('click', '.page-link', function(e) {
+        e.preventDefault();
+        const pagina = $(this).data('pagina');
+        if(pagina) {
+            const filtros = {
+                tipo_evento: $('#filtroTipo').val(),
+                severidad: $('#filtroSeveridad').val(),
+                usuario: $('#filtroUsuario').val(),
+                ip_origen: $('#filtroIP').val(),
+                user_agent: $('#filtroUserAgent').val(),
+                pagina: pagina
+            };
+            cargarLogs(filtros);
+        }
+    });
+});
+</script>
+</body>
+</html>

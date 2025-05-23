@@ -66,3 +66,35 @@ function registrarAdministrador() {
         Swal.fire('Error', 'Por favor, llene todos los campos', 'error');
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    cargarRoles();
+    
+    // Agregar event listeners a los campos de nombre y apellido
+    document.getElementById('nombre').addEventListener('input', generarEmail);
+    document.getElementById('apellido').addEventListener('input', generarEmail);
+});
+
+function generarEmail() {
+    const nombres = document.getElementById('nombre').value.trim();
+    const apellidos = document.getElementById('apellido').value.trim();
+    
+    if (nombres && apellidos) {
+        // Obtener la primera letra del primer nombre
+        const primeraLetraNombre = nombres.charAt(0).toLowerCase();
+        
+        // Obtener el primer apellido completo y la primera letra del segundo apellido (si existe)
+        const partesApellido = apellidos.split(' ');
+        let parteApellido = partesApellido[0].toLowerCase();
+        
+        if (partesApellido.length > 1) {
+            parteApellido += partesApellido[1].charAt(0).toLowerCase();
+        }
+        
+        // Construir el email
+        const email = `${primeraLetraNombre}.${parteApellido}.flybo@gmail.com`;
+        document.getElementById('email').value = email;
+    } else {
+        document.getElementById('email').value = '';
+    }
+}
