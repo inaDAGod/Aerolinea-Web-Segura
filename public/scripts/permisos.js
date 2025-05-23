@@ -50,7 +50,8 @@ function verificarPermisos() {
         "Ver Dashboard": { href: "dashboard.html", texto: "Dashboard" },
         "ABM Roles": { href: "roles.html", texto: "Roles" },
         "Auditoria de usuarios": { href: "admin_usuarios.html", texto: "Auditoría de Usuarios" },
-        "Cerrar Sesion": { href: "index.html", texto: "Cerrar Sesión" }
+        "Cerrar Sesion": { href: "index.html", texto: "Cerrar Sesión" },
+        "Ver logs de aplicación": { href: "auditoria_logs.html", texto: "Logs de Aplicación" },
     };
 
     const mapaPaginasPermisos = {
@@ -71,6 +72,7 @@ function verificarPermisos() {
         "agregarVuelo.html" :  "Agregar vuelos",
         "editarRole.html" :  "ABM Roles",
         "EditDeleteUsers.html": "ABM empleados",
+        "auditoria_logs.html": "Ver logs de aplicación",
     };
 
     if (!rol) {
