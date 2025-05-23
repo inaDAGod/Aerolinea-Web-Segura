@@ -1,5 +1,6 @@
 <?php
 include_once(__DIR__ . '/config/cors.php');
+session_start();
 header('Content-Type: application/json');
 $conexion = pg_connect("dbname=aerolinea user=postgres password=admin");
 if (!$conexion) {
@@ -59,6 +60,13 @@ if ($method == 'GET') {
         }
         
         echo json_encode(['success' => true]);
+        // Log de acción
+        if (isset($_SESSION['correo_usuario'])) {
+            $correo_usuario = $_SESSION['correo_usuario'];
+            $mensaje = "Nuevo vuelo creado";
+            $sqlLog = "INSERT INTO log_app (correo_usuario, mensaje) VALUES ($1, $2)";
+            pg_query_params($conexion, $sqlLog, [$correo_usuario, $mensaje]);
+        }
     } else {
         echo json_encode(['success' => false, 'error' => 'Error al insertar el vuelo']);
     }

@@ -1,5 +1,6 @@
 <?php
 include_once(__DIR__ . '/config/cors.php');
+session_start(); 
 header('Content-Type: application/json');
 $conexion = pg_connect("host=localhost dbname=aerolinea user=postgres password=admin");
 
@@ -18,6 +19,7 @@ if (!$carnet || !$numeroVuelo) {
 
 $carnet = pg_escape_string($conexion, trim($carnet));
 $numeroVuelo = intval($numeroVuelo);
+$correo_usuario = isset($_SESSION['correo_usuario']) ? $_SESSION['correo_usuario'] : '';
 
 $query = "SELECT rp.*, p.nombres, p.apellidos, v.fecha_vuelo, v.origen, v.destino 
           FROM reservas_personas rp
@@ -40,8 +42,21 @@ if ($result) {
             'origen' => $row['origen'],
             'destino' => $row['destino']
         ];
+        if (!empty($correo_usuario)) {
+            $mensaje = "se encontró una reserva pagada";
+            $logQuery = "INSERT INTO log_app (correo_usuario, mensaje) VALUES ($1, $2)";
+            pg_prepare($conexion, "insert_log_success", $logQuery);
+            pg_execute($conexion, "insert_log_success", array($correo_usuario, $mensaje));
+        }
         echo json_encode($response);
     } else {
+         // Registrar intento fallido de check-in
+        if (!empty($correo_usuario)) {
+            $mensaje = "Verificación fallida: No se encontró la reserva pagada";
+            $logQuery = "INSERT INTO log_app (correo_usuario, mensaje) VALUES ($1, $2)";
+            pg_prepare($conexion, "insert_log_fail", $logQuery);
+            pg_execute($conexion, "insert_log_fail", array($correo_usuario, $mensaje));
+        }
         echo json_encode(['encontrado' => false, 'message' => 'No se encontró una reserva pagada con esos datos.']);
     }
 } else {

@@ -1,5 +1,6 @@
 <?php
 include_once(__DIR__ . '/config/cors.php');
+session_start(); 
 $dbname = "aerolinea";
 $user = "postgres";
 $password = "admin";
@@ -22,7 +23,18 @@ $result = pg_query_params($conn, $sql, array($rolNuevo, $accesos, $rol));
 if (!$result) {
     die("Error en la consulta: " . pg_last_error());
 }
+// Registrar log si hay sesión activa
+if (isset($_SESSION['correo_usuario'])) {
+    $correo_usuario = $_SESSION['correo_usuario'];
+    $mensaje = "Edición de roles realizada con éxito.";
 
+    $sqlLog = "INSERT INTO log_app (correo_usuario, mensaje) VALUES ($1, $2)";
+    $resultLog = pg_query_params($conn, $sqlLog, [$correo_usuario, $mensaje]);
+
+    if (!$resultLog) {
+        error_log("Error al insertar log de consulta de roles: " . pg_last_error($conn));
+    }
+}
 pg_close($conn);
 
 echo "Rol actualizado con éxito.";

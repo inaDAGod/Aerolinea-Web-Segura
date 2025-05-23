@@ -1,5 +1,6 @@
 <?php
 include_once(__DIR__ . '/config/cors.php');
+session_start();
 $conexion = pg_connect("dbname=aerolinea user=postgres password=admin");
 
 if (!$conexion) {
@@ -17,6 +18,19 @@ $sql = "INSERT INTO roles (rol, accesos) VALUES ('$rol', '$accesos')";
 $resultado = @pg_query($conexion, $sql); // el @ oculta warnings
 
 if ($resultado) {
+  // Insertar log solo si hay sesión activa
+    if (isset($_SESSION['correo_usuario'])) {
+        $correo_usuario = $_SESSION['correo_usuario'];
+        $mensaje = "Nuevo rol creado: $rol";
+
+        // Usamos consulta preparada para seguridad
+        $sqlLog = "INSERT INTO log_app (correo_usuario, mensaje) VALUES ($1, $2)";
+        $resultLog = pg_query_params($conexion, $sqlLog, [$correo_usuario, $mensaje]);
+
+        if (!$resultLog) {
+            error_log("No se pudo insertar el log del nuevo rol: " . pg_last_error($conexion));
+        }
+    }
   echo json_encode(["status" => "success", "message" => "Rol agregado exitosamente."]);
 } else {
   // Aquí verificamos si el error es por clave duplicada
