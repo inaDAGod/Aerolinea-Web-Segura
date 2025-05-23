@@ -77,7 +77,7 @@ if (fechaVueloDate <= fechaActual) {
             dataType: 'json',
             success: function(response) {
                 if(response.success) {
-                    Swal.fire('¡Agregado!', 'Vuelo agregado correctamente.', 'success').then(() => location.reload());
+                    Swal.fire('¡Agregado!', 'Vuelo agregado correctamente.', 'success');
                 } else {
                     Swal.fire('Error al agregar vuelo', response.error, 'error');
                 }

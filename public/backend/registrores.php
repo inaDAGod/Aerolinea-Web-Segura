@@ -12,7 +12,6 @@ if (!isset($_SESSION['reservation_counter'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Process data from registro.php and store in database
     // Redirect to the index page after all registrations are complete
-    header("Location: index.php");
     exit;
 }
 
