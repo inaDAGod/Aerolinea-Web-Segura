@@ -8,7 +8,7 @@ function verificarPermisos() {
     console.log('accesos:', accesos);
     console.log('tipo_usuario:', tipo_usuario);
 
-    const paginaActual = window.location.pathname.split("/").pop();
+    var paginaActual = window.location.pathname.split("/").pop();
     //console.log('pagina', paginaActual);
     if (!paginaActual) {
         paginaActual = "index.html";
