@@ -14,6 +14,7 @@ function eliminarReservas() {
 
     // Obtener el número de reserva actualizado
     $creservanum = $_SESSION['creservanum'];
+    $correo_usuario = isset($_SESSION['correo_usuario']) ? $_SESSION['correo_usuario'] : '';
 
     // Parámetros de conexión
     $host = 'localhost';
@@ -34,7 +35,7 @@ function eliminarReservas() {
         $stmtDeleteReservasPersonas = $conn->prepare($sqlDeleteReservasPersonas);
         $stmtDeleteReservasPersonas->bindParam(':creserva', $creservanum, PDO::PARAM_INT);
         $stmtDeleteReservasPersonas->execute();
-
+        
         // Verificar que se eliminaron filas en reservas_personas
         if ($stmtDeleteReservasPersonas->rowCount() == 0) {
             throw new Exception("No se encontraron registros en reservas_personas con creserva = $creservanum.");
@@ -50,9 +51,16 @@ function eliminarReservas() {
         if ($stmtDeleteReservas->rowCount() == 0) {
             throw new Exception("No se encontró un registro en reservas con creserva = $creservanum.");
         }
-
+        
         // Confirmar la transacción
         $conn->commit();
+        // Insertar en log_app
+        $sqlLog = "INSERT INTO log_app (correo_usuario, mensaje) VALUES (:correo, :mensaje)";
+        $stmtLog = $conn->prepare($sqlLog);
+        $stmtLog->bindParam(':correo', $correo_usuario);
+        $mensaje = "Reserva Eliminada"; 
+        $stmtLog->bindParam(':mensaje', $mensaje);
+        $stmtLog->execute();
 
         // Preparar el mensaje de notificación
         $notificationMessage = "Reserva y registros relacionados eliminados exitosamente.";

@@ -137,16 +137,28 @@ function mandarCorreoVerificacion() {
 
 function verificar(){
     let codIngresado = document.getElementById("codVeri").value;
+    //para evitar nombre
+    let nombres = document.getElementById("nombre").value;
+    let apellidos = document.getElementById("apellido").value;
+    let correo = document.getElementById("email").value;
+    let contrasenia = document.getElementById("contra").value;
     console.log(typeof codIngresado);
     console.log(typeof codigo);
     if(codIngresado == codigo){
+        //registrarUsuario();
+        const resultado = esContraseniaCompleja(contrasenia, correo, nombres, apellidos);
+        if(!resultado.valido){
+            Swal.fire('Error', resultado.mensaje, 'error');
+            return;
+        }
+
         registrarUsuario();
     }
     else{
         Swal.fire('Error', 'Revisa el codigo no coincide con el que se mando a tu correo', 'error');
     }
 }
-function esContraseniaCompleja(contrasenia) {
+function esContraseniaCompleja(contrasenia, username, nombres = '', apellidos = '') {
     // Verificar longitud mínima
     if (contrasenia.length < 10) {
         return { valido: false, mensaje: 'La contraseña debe tener al menos 10 caracteres' };
@@ -171,7 +183,10 @@ function esContraseniaCompleja(contrasenia) {
     if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(contrasenia)) {
         return { valido: false, mensaje: 'La contraseña debe contener al menos un carácter especial' };
     }
-    
+    //nombre
+    if (contieneDatosPersonales(contrasenia, username, nombres, apellidos)) {
+        return { valido: false, mensaje: 'La contraseña no debe contener tu nombre, apellido o correo' };
+    }
     return { valido: true, mensaje: 'Contraseña válida' };
 }
 function verificarCampos(){
@@ -193,10 +208,12 @@ function verificarCampos(){
         })
         .then(data => {
             if (data.estado === "cuenta_nueva") {
-                const resultado = esContraseniaCompleja(contrasenia);
+                const resultado = esContraseniaCompleja(contrasenia, correo, nombres, apellidos);
+;
                 if(!resultado.valido){
                     //Swal.fire('Error', resultado.mensaje, 'error');
                     Swal.fire('Error', "Ingrese contraseña segura", 'error');
+                    return;
                 }
                 else{
                     mandarCorreoVerificacion();
@@ -231,6 +248,9 @@ function mandarCorreoRestauracion() {
             if (data.estado === "cuenta_inexistente") {
                 alert('No hay una cuenta registrada a ese correo');
             } else if (data.estado === "cuenta_existente") {
+                localStorage.setItem('correoRestaurar', correoDestinatario);
+                localStorage.setItem('nombres', data.nombres);
+                localStorage.setItem('apellidos', data.apellidos);
                 toggleFormRes3();
                 let correoEnviado = document.getElementById("correoEnviado2");
                 correoEnviado.textContent = correoDestinatario;
@@ -279,11 +299,13 @@ function newContra(){
     let contra1 = document.getElementById("passwordRes").value;
     let contra2 = document.getElementById("passwordRes2").value;
     let correo = document.getElementById("correoRestaurar").value;
+    let nombres = localStorage.getItem('nombres');
+    let apellidos = localStorage.getItem('apellidos');
     
     if(contra1 && contra2){
         if(contra1 == contra2){
             // Verificar complejidad
-            const resultado = esContraseniaCompleja(contra1);
+            const resultado = esContraseniaCompleja(contra1, correo, nombres, apellidos);
             if(!resultado.valido) {
                 Swal.fire('Error', "Modifica a una contraseña segura", 'error');
                 return;
@@ -363,4 +385,38 @@ function audi(correo){
                 console.error('Error en la solicitud:', error);
                 alert('Estás seguro que no tienes una cuenta?');
             });
+}
+//Verificar que el nombre y apellido no sean usados como parte de la contraseña
+function contieneDatosPersonales(contrasenia, username, nombres = '', apellidos = '') {
+    const normalizar = texto =>
+        texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, '') // Elimina tildes
+            .replace(/[^a-z]/g, '');         // Solo letras
+
+    const partes = [];
+
+    // Extraer parte del correo antes del @ y limpiarla
+    if (username) {
+        const nombreUsuario = username.split('@')[0];
+        partes.push(normalizar(nombreUsuario));
+    }
+
+    // Primero dividir nombres y apellidos en palabras
+    if (nombres) {
+        nombres.split(/\s+/).forEach(p => partes.push(normalizar(p)));
+    }
+
+    if (apellidos) {
+        apellidos.split(/\s+/).forEach(p => partes.push(normalizar(p)));
+    }
+
+    // Normalizar la contraseña
+    const contraNormal = normalizar(contrasenia);
+
+    // Verificar si alguna parte relevante aparece en la contraseña
+    return partes.some(parte =>
+        parte.length >= 3 && contraNormal.includes(parte)
+    );
 }

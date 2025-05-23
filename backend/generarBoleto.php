@@ -1,5 +1,6 @@
 <?php
 include_once(__DIR__ . '/config/cors.php');
+session_start(); 
 header('Content-Type: application/json');
 $conexion = pg_connect("host=localhost dbname=aerolinea user=postgres password=admin");
 
@@ -10,6 +11,7 @@ if (!$conexion) {
 
 $carnet = $_POST['carnet'] ?? '';
 $cvuelo = $_POST['cvuelo'] ?? '';
+$correo_usuario = isset($_SESSION['correo_usuario']) ? $_SESSION['correo_usuario'] : '';
 
 // Recuperar el último ccheck_in creado
 $queryLatestCheckIn = "SELECT MAX(ccheck_in) as last_check_in FROM check_in";
@@ -47,14 +49,41 @@ if ($resultLatestCheckIn && pg_num_rows($resultLatestCheckIn) > 0) {
             $resultInsertBoleto = pg_execute($conexion, "insert_boleto", array($carnet, $ccheckIn, $cvuelo, $casiento, $total));
             if ($resultInsertBoleto && pg_num_rows($resultInsertBoleto) > 0) {
                 $cboleto = pg_fetch_result($resultInsertBoleto, 0, 'cboleto');
+                if (!empty($correo_usuario)) {
+                    $mensaje = "se generó el boleto correctamente";
+                    $logQuery = "INSERT INTO log_app (correo_usuario, mensaje) VALUES ($1, $2)";
+                    pg_prepare($conexion, "insert_log_success", $logQuery);
+                    pg_execute($conexion, "insert_log_success", array($correo_usuario, $mensaje));
+                }
                 echo json_encode(['success' => true, 'cboleto' => $cboleto]);
             } else {
+                 // Registrar intento fallido de check-in
+                if (!empty($correo_usuario)) {
+                    $mensaje = "No se generó el boleto correctamente";
+                    $logQuery = "INSERT INTO log_app (correo_usuario, mensaje) VALUES ($1, $2)";
+                    pg_prepare($conexion, "insert_log_fail", $logQuery);
+                    pg_execute($conexion, "insert_log_fail", array($correo_usuario, $mensaje));
+                }
                 echo json_encode(['success' => false, 'message' => 'Error al insertar el boleto. Compruebe los datos de inserción y las restricciones de la tabla.']);
             }
         } else {
+             // Registrar intento fallido de check-in
+            if (!empty($correo_usuario)) {
+                $mensaje = "Error al obtener tipo de asiento y costo.";
+                $logQuery = "INSERT INTO log_app (correo_usuario, mensaje) VALUES ($1, $2)";
+                pg_prepare($conexion, "insert_log_fail", $logQuery);
+                pg_execute($conexion, "insert_log_fail", array($correo_usuario, $mensaje));
+            }
             echo json_encode(['success' => false, 'message' => 'Error al obtener tipo de asiento y costo. Asegúrese de que los datos de casiento y cvuelo son correctos.']);
         }
     } else {
+        // Registrar intento fallido de check-in
+            if (!empty($correo_usuario)) {
+                $mensaje = "No se pudo obtener el asiento.";
+                $logQuery = "INSERT INTO log_app (correo_usuario, mensaje) VALUES ($1, $2)";
+                pg_prepare($conexion, "insert_log_fail", $logQuery);
+                pg_execute($conexion, "insert_log_fail", array($correo_usuario, $mensaje));
+            }
         echo json_encode(['success' => false, 'message' => 'No se pudo obtener el asiento. Verifique que el casiento exista para el cvuelo y ci_persona dados.']);
     }
 } else {
