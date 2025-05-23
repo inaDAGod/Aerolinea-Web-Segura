@@ -9,7 +9,7 @@ function verificarPermisos() {
     console.log('tipo_usuario:', tipo_usuario);
 
     const paginaActual = window.location.pathname.split("/").pop();
-    //console.log('pagina', paginaActual);
+
     
 
     const paginasPublicas = [
@@ -30,13 +30,13 @@ function verificarPermisos() {
         "perfil.html"
     ];
 
-    // <<< NUEVO >>> Páginas a las que cliente tiene permiso si está logueado
+  
     const paginasClienteAccesibles = [
         ...paginasClienteNavbar,
         "reservar.html",
         "reservar2.html",
         "reservafinal.html",
-        // agrega aquí todas las páginas internas a las que puede entrar el cliente logueado
+  
     ];
 
     const mapaAccesos = {
@@ -45,7 +45,7 @@ function verificarPermisos() {
         "Modificar estado checkin": { href: "verificarCheckinAdmi.html", texto: "Check-In" },
         "Generar boleto": { href: "generarBoleto.html", texto: "Generar Boleto" },
         "ABM catalogo millas": { href: "catalogoMillasAdmi.html", texto: "Catálogo Premios Millas" },
-        "Borrar opiniones": { href: "opinionesAdmin.html", texto: "Opiniones" },
+        "Borrar opiniones": { href: "opinionesgjahl.html", texto: "Opiniones" },
         "ABM empleados": { href: "registroAdmi.html", texto: "ABM empleados" },
         "Ver Dashboard": { href: "dashboard.html", texto: "Dashboard" },
         "ABM Roles": { href: "roles.html", texto: "Roles" },
@@ -78,14 +78,14 @@ function verificarPermisos() {
     };
 
     if (!rol) {
-        // No logueado
+    
         if (!paginasPublicas.includes(paginaActual)) {
             mostrar404();
         } else {
             construirMenu('publico');
         }
     } else if (tipo_usuario === "cliente") {
-        // Logueado como cliente
+     
         if (!paginasClienteAccesibles.includes(paginaActual)) {
            if (!paginasPublicas.includes(paginaActual)) {
                 mostrar404();
@@ -96,7 +96,7 @@ function verificarPermisos() {
             construirMenu('cliente');
         }
     } else if (tipo_usuario === "administrador") {
-        // Logueado como admin
+      
         if (paginaActual === "indexAdmi.html" || paginaActual === "index.html") {
             construirMenu('administrador', accesos, mapaAccesos);
             return;
