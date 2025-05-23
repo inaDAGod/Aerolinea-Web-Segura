@@ -1,4 +1,4 @@
-const URL_API = "http://localhost/Aerolinea-Web-Segura/backend/users_management/";
+const URL_API = "/backend/users_management/";
 
 document.addEventListener("DOMContentLoaded", () => {
   cargarUsuarios();

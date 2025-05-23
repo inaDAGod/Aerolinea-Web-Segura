@@ -1,7 +1,7 @@
 function audi(){
     let correo = 'ayana.siegle@ucb.edu.bo';
     const ahora = new Date().toString();
-    fetch("http://localhost/Aerolinea-Web-Segura/backend/audi.php", {
+    fetch(/backend/audi.php", {
                 method: "POST",
                 body: JSON.stringify({ correo: correo, fecha:ahora}),
             })

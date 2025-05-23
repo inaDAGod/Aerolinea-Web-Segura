@@ -1,5 +1,5 @@
 function programaMillas(correoUsuario){
-    fetch("http://localhost/Aerolinea-Web-Segura/backend/programaMillas.php", {
+    fetch(/backend/programaMillas.php", {
         method: "POST",
         body: JSON.stringify({ correo: correoUsuario }),
     })

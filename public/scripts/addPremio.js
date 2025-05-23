@@ -20,7 +20,7 @@ function guardarProducto() {
         formData.append('tipoProducto', tipoProducto.value);
         formData.append('foto', nombre_archivo.files[0]); // Agregar el archivo al FormData
 
-        fetch("http://localhost/Aerolinea-Web-Segura/backend/addPremio.php", {
+        fetch(/backend/addPremio.php", {
                 method: "POST",
                 body: formData, // Enviar el FormData en lugar de JSON.stringify()
             })

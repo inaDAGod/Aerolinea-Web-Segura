@@ -6,7 +6,7 @@ function loginEncript() {
     var hash = CryptoJS.MD5(contrasenia);
     if (correo && contrasenia) {
         if (intentos < 4) {
-            fetch("http://localhost/Aerolinea-Web-Segura/backend/login.php", {
+            fetch(/backend/login.php", {
                     method: "POST",
                     body: JSON.stringify({ username: correo, password: hash.toString() }),
                 })
@@ -83,7 +83,7 @@ function registrarUsuario() {
     let correo = document.getElementById("email").value;
     let contrasenia = document.getElementById("contra").value;
             var hash = CryptoJS.MD5(contrasenia);
-            fetch("http://localhost/Aerolinea-Web-Segura/backend/registro.php", {
+            fetch(/backend/registro.php", {
                 method: "POST",
                 body: JSON.stringify({ nombres: nombres, apellidos: apellidos, username: correo, password: hash.toString() }),
             })
@@ -196,7 +196,7 @@ function verificarCampos(){
     let contrasenia = document.getElementById("contra").value;
 
     if(nombres && apellidos && correo && contrasenia){
-        fetch("http://localhost/Aerolinea-Web-Segura/backend/verificarExistencia.php", {
+        fetch(/backend/verificarExistencia.php", {
             method: "POST",
             body: JSON.stringify({username: correo }),
         })
@@ -234,7 +234,7 @@ function verificarCampos(){
 function mandarCorreoRestauracion() {
     let correoDestinatario = document.getElementById("correoRestaurar").value;
     if(correoDestinatario){
-        fetch("http://localhost/Aerolinea-Web-Segura/backend/verificarCuenta.php", {
+        fetch(/backend/verificarCuenta.php", {
             method: "POST",
             body: JSON.stringify({username: correoDestinatario }),
         })
@@ -314,7 +314,7 @@ function newContra(){
             var hash = CryptoJS.MD5(contra1);
             
             // Primero verificar el historial
-            fetch("http://localhost/Aerolinea-Web-Segura/backend/checkPasswordHistory.php", {
+            fetch(/backend/checkPasswordHistory.php", {
                 method: "POST",
                 body: JSON.stringify({username: correo, password: hash.toString()}),
             })
@@ -328,7 +328,7 @@ function newContra(){
                     });
                 } else {
                     // Si pasa la validación, proceder con el cambio
-                    return fetch("http://localhost/Aerolinea-Web-Segura/backend/updatePassword.php", {
+                    return fetch(/backend/updatePassword.php", {
                         method: "POST",
                         body: JSON.stringify({username: correo, newPassword: hash.toString()}),
                     });
@@ -365,7 +365,7 @@ function newContra(){
 
 function audi(correo){
     const ahora = new Date().toString();
-    fetch("http://localhost/Aerolinea-Web-Segura/backend/audi.php", {
+    fetch(/backend/audi.php", {
                 method: "POST",
                 body: JSON.stringify({ correo: correo, fecha:ahora}),
             })
