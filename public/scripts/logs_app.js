@@ -27,20 +27,26 @@ $(document).ready(function() {
                 <tr>
                     <td>${item.correo_usuario}</td>
                     <td>${item.mensaje}</td>
-                    <td>${formatearFecha(item.fecha)}</td>
+                    <td>${formatearFecha(item.fecha_hora)}</td>
                 </tr>`;
             tbody.append(row);
         });
     }
 
-    function formatearFecha(fechaISO) {
-        const fecha = new Date(fechaISO);
-        return fecha.toLocaleString('es-BO', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    }
+    function formatearFecha(fechaTexto) {
+    // Recortar a "YYYY-MM-DDTHH:MM:SS"
+    const fechaISO = fechaTexto.split('.')[0].replace(' ', 'T');
+    const fecha = new Date(fechaISO);
+
+    if (isNaN(fecha)) return 'Fecha inválida';
+
+    return fecha.toLocaleString('es-BO', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
 });
