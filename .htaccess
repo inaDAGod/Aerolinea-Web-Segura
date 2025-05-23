@@ -1,4 +1,4 @@
-# Desactivar listado de directorios
+# Desactivar listado de directorios 
 Options -Indexes
 
 # Redirigir a la carpeta pública si se accede directamente a la raíz
@@ -12,3 +12,9 @@ php_value error_log "logs/php_error.log"
 # Páginas de error personalizadas (ajusta si tienes estas páginas)
 ErrorDocument 404 /public/404.html
 ErrorDocument 500 /public/500.html
+
+# Security headers
+Header set Content-Security-Policy "default-src 'self'; script-src 'self' https://trusted.cdn.com; object-src 'none'; base-uri 'self';"
+Header always append X-Frame-Options SAMEORIGIN
+Header set X-Content-Type-Options "nosniff"
+Header unset Server
