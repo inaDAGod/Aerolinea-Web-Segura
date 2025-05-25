@@ -190,7 +190,7 @@ function initPasswordChangeModal() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         username: userEmail,
-                        password: CryptoJS.MD5(currentPassword).toString()
+                        password: currentPassword
                     })
                 });
                 
@@ -207,7 +207,7 @@ function initPasswordChangeModal() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         username: userEmail,
-                        password: CryptoJS.MD5(newPassword).toString()
+                        password: newPassword
                     })
                 });
                 
@@ -224,8 +224,8 @@ function initPasswordChangeModal() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         username: userEmail,
-                        currentPassword: CryptoJS.MD5(currentPassword).toString(),
-                        newPassword: CryptoJS.MD5(newPassword).toString()
+                        currentPassword: currentPassword,
+                        newPassword: newPassword
                     })
                 });
                 

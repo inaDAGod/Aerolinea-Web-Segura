@@ -1,4 +1,5 @@
 <?php
+// http://localhost/Aerolinea-Web-Segura/backend/users_management/crearUsuario.php
 require_once(__DIR__ . '/../config/db_connection.php');
 require_once(__DIR__ . '/../config/cors.php');
 require_once(__DIR__ . '/helpers/generate_user_id.php');

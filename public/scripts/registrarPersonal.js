@@ -27,7 +27,6 @@ function registrarAdministrador() {
     console.log("registrarAdministrador", nombres, apellidos, correo, contrasenia, rol);
 
     if (nombres && apellidos && correo && contrasenia && rol) {
-        var hash = CryptoJS.MD5(contrasenia).toString();
 
         fetch("http://localhost/Aerolinea-Web-Segura/backend/users_management/crearUsuarioEmpleado.php", {
             method: "POST",
@@ -38,7 +37,7 @@ function registrarAdministrador() {
                 nombres: nombres, 
                 apellidos: apellidos, 
                 username: correo, 
-                contraseña: hash,  
+                contraseña: contrasenia,  
                 rol: rol 
             }),
         })

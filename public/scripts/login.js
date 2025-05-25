@@ -5,13 +5,12 @@ let intentos = 0;
 function loginEncript() {
     let correo = document.getElementById("username").value;
     let contrasenia = document.getElementById("password").value;
-    var hash = CryptoJS.MD5(contrasenia);
     
     if (correo && contrasenia) {
         if (intentos < 3) { // Cambiado a 3 intentos
             fetch("http://localhost/Aerolinea-Web-Segura/backend/login.php", {
                 method: "POST",
-                body: JSON.stringify({ username: correo, password: hash.toString() }),
+                body: JSON.stringify({ username: correo, password: contrasenia }),
             })
             .then(response => {
                 if (!response.ok) {
@@ -120,16 +119,14 @@ function loginEncript() {
     }
 }
 
-
 function registrarUsuario() {
     let nombres = document.getElementById("nombre").value;
     let apellidos = document.getElementById("apellido").value;
     let correo = document.getElementById("email").value;
     let contrasenia = document.getElementById("contra").value;
-            var hash = CryptoJS.MD5(contrasenia);
             fetch("http://localhost/Aerolinea-Web-Segura/backend/registro.php", {
                 method: "POST",
-                body: JSON.stringify({ nombres: nombres, apellidos: apellidos, username: correo, password: hash.toString() }),
+                body: JSON.stringify({ nombres: nombres, apellidos: apellidos, username: correo, password: contrasenia, tipo_usuario: 'cliente' }),
             })
             .then(response => {
                 if (response.ok) {
@@ -354,13 +351,10 @@ function newContra(){
                 Swal.fire('Error', "Modifica a una contraseña segura", 'error');
                 return;
             }
-            
-            var hash = CryptoJS.MD5(contra1);
-            
             // Primero verificar el historial
             fetch("http://localhost/Aerolinea-Web-Segura/backend/checkPasswordHistory.php", {
                 method: "POST",
-                body: JSON.stringify({username: correo, password: hash.toString()}),
+                body: JSON.stringify({username: correo, password: contra1}),
             })
             .then(response => response.json())
             .then(data => {
