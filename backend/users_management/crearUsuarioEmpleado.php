@@ -1,5 +1,5 @@
 <?php
-// http://localhost/Aerolinea-Web-Segura/backend/users_management/crearUsuario.php
+// http://localhost/Aerolinea-Web-Segura/backend/users_management/crearUsuarioEmpleado.php
 require_once(__DIR__ . '/../config/db_connection.php');
 require_once(__DIR__ . '/../config/cors.php');
 require_once(__DIR__ . '/helpers/generate_user_id.php');
@@ -18,6 +18,7 @@ $nombres = $data->nombres ?? '';
 $apellidos = $data->apellidos ?? '';
 $username = $data->username ?? '';
 $contraseña = $data->contraseña ?? '';
+$contraseña_hashed = password_hash($contraseña, PASSWORD_BCRYPT);
 $rol = $data->rol ?? '';
 
 $tipo_usuario = 'administrador';
@@ -51,7 +52,7 @@ try {
     $stmt->execute([
         ':user_id' => $user_id,
         ':correo' => $username,
-        ':clave' => $contraseña,
+        ':clave' => $contraseña_hashed,
         ':nombres' => $nombres,
         ':apellidos' => $apellidos,
         ':tipo' => $tipo_usuario,

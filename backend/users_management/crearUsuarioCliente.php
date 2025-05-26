@@ -1,5 +1,5 @@
 <?php
-// http://localhost/Aerolinea-Web-Segura/backend/users_management/crearUsuarioCLiente.php
+// http://localhost/Aerolinea-Web-Segura/backend/users_management/crearUsuarioCliente.php
 require_once(__DIR__ . '/../config/db_connection.php');
 require_once(__DIR__ . '/../config/cors.php');
 require_once(__DIR__ . '/helpers/generate_user_id.php');
@@ -18,8 +18,8 @@ $nombres = $data->nombres ?? '';
 $apellidos = $data->apellidos ?? '';
 $username = $data->username ?? '';
 $contraseña = $data->contraseña ?? '';
-$rol = $data->rol ?? '';
-
+$contraseña_hashed = password_hash($contraseña, PASSWORD_BCRYPT);
+$rol = 'cliente';
 $tipo_usuario = 'cliente';
 $millas = 0;
 $activo = 1;
@@ -51,7 +51,7 @@ try {
     $stmt->execute([
         ':user_id' => $user_id,
         ':correo' => $username,
-        ':clave' => $contraseña,
+        ':clave' => $contraseña_hashed,
         ':nombres' => $nombres,
         ':apellidos' => $apellidos,
         ':tipo' => $tipo_usuario,
