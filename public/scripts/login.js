@@ -117,6 +117,7 @@ function loginEncript() {
     } else {
         Swal.fire('Error', 'Llena los campos', 'error');
     }
+    return false;
 }
 
 function registrarUsuario() {
@@ -124,28 +125,37 @@ function registrarUsuario() {
     let apellidos = document.getElementById("apellido").value;
     let correo = document.getElementById("email").value;
     let contrasenia = document.getElementById("contra").value;
-            fetch("http://localhost/Aerolinea-Web-Segura/backend/registro.php", {
-                method: "POST",
-                body: JSON.stringify({ nombres: nombres, apellidos: apellidos, username: correo, password: contrasenia, tipo_usuario: 'cliente' }),
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Error en la solicitud');
-            })
-            .then(data => {
-                if (data.estado === "registro_exitoso") {
-                    localStorage.setItem('tipo_usuario', 'cliente'); // Guarda el tipo de usuario en el localStorage
-                    window.location.href = window.location.origin + '/Aerolinea-Web-Segura/public/indexCliente.html';
-                } else if (data.estado === "error_registro") {
-                    Swal.fire('Error', 'Ya existe un usuario con ese correo electrónico', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error en la solicitud:', error);
-                Swal.fire('Error', 'Estás seguro que no tienes una cuenta?', 'error');
-            });
+    
+    fetch("http://localhost/Aerolinea-Web-Segura/backend/users_management/crearUsuarioCLiente.php", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+            nombres: nombres, 
+            apellidos: apellidos, 
+            username: correo, 
+            contraseña: contrasenia,  // <- este nombre debe coincidir
+            rol: 'cliente'            // <- este campo es obligatorio en el backend
+        }),
+    })
+    .then(response => {
+        if (response.ok) return response.json();
+        throw new Error('Error en la solicitud');
+    })
+    .then(data => {
+        if (data.estado === "registro_exitoso") {
+            localStorage.setItem('tipo_usuario', 'cliente');
+            window.location.href = window.location.origin + '/Aerolinea-Web-Segura/public/indexCliente.html';
+        } else if (data.estado === "error_registro") {
+            Swal.fire('Error', 'Ya existe un usuario con ese correo electrónico', 'error');
+            console.log(data.detalle); // para ver el motivo
+        }
+    })
+    .catch(error => {
+        console.error('Error en la solicitud:', error);
+        Swal.fire('Error', 'Estás seguro que no tienes una cuenta?', 'error');
+    });
 }
 
 function generarCodigoVerificacion() {
@@ -230,6 +240,7 @@ function esContraseniaCompleja(contrasenia, username, nombres = '', apellidos = 
     }
     return { valido: true, mensaje: 'Contraseña válida' };
 }
+
 function verificarCampos(){
     let nombres = document.getElementById("nombre").value;
     let apellidos = document.getElementById("apellido").value;
@@ -271,7 +282,9 @@ function verificarCampos(){
     else{
         Swal.fire('Error', 'Completa todos los campos', 'error');
     }
+    return false;
 }
+
 function mandarCorreoRestauracion() {
     let correoDestinatario = document.getElementById("correoRestaurar").value;
     if(correoDestinatario){

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,56 +7,51 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="styles/styleD.css">
   <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-  <script src="scripts/login.js"></script>
-  <script src="scripts/registro.js"></script>
-  <script src="scripts/log_seguridad.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
-    <link rel="stylesheet" href="styles/styleIndex.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="styles/styleIndex.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    
 </head>
 <body>
-
   <img src="assets\logoavion.png" alt="Menu Icon" style="width:7%;height:7%;margin-left:10px;">
-    </div>
-
-    <header class="header" id="inicio">
-        <img src="assets/indexAssets/bx-menu-alt-right.svg" alt="" class="hamburger">
-        <nav class="menu-navegacion" id="menu">
-          <!-- Aquí se carga el menú -->
-      </nav>  
-    </header>
+  <header class="header" id="inicio">
+    <img src="assets/indexAssets/bx-menu-alt-right.svg" alt="" class="hamburger">
+    <nav class="menu-navegacion" id="menu">
+      <!-- Aquí se carga el menú -->
+    </nav>  
+  </header>
 
   <div class="login-container" id="registro" style="display: none;">
     <h2>Registrarse</h2>
-    <div class="input-container">
-      <input type="text" id="nombre" placeholder="NOMBRES">
-      <br>
-      <input type="text" id="apellido" placeholder="APELLIDOS">
-      <br>
-      <input type="text" id="email" placeholder="CORREO">
-      <br>
-      <input type="password" id="contra" placeholder="CONTRASEÑA">
-      <br>
-      <button class="boton" onclick="verificarCampos()">Registrarse</button><br>
-    </div>
+
+    <form onsubmit="return verificarCampos()">
+      <div class="input-container">
+        <input type="text" id="nombre" placeholder="NOMBRES" required><br>
+        <input type="text" id="apellido" placeholder="APELLIDOS" required><br>
+        <input type="email" id="email" placeholder="CORREO" required><br>
+        <input type="password" id="contra" placeholder="CONTRASEÑA" required><br>
+        <button type="submit" class="boton">Registrarse</button><br>
+      </div>
+    </form>
+
     <a class="linka" onclick="toggleForm()">¿Ya tienes una cuenta? Inicia sesión</a>
   </div>
 
-
-
   <div class="login-container" id="inicio-sesion">
     <h2>Iniciar sesión</h2>
-        <input type="text" id="username" name="username" placeholder="CORREO"><br>
-        <input type="password" id="password" name="password" placeholder="CONTRASEÑA"><br><br>
-        <button class="boton" onclick="loginEncript()">Login</button><br>
-        <a class="linka" onclick="toggleFormRes()">¿Te olvidaste tu contraseña?</a><br><br>
+
+    <form onsubmit="return loginEncript()">
+      <input type="email" id="username" name="username" placeholder="CORREO" required><br>
+      <input type="password" id="password" name="password" placeholder="CONTRASEÑA" required><br><br>
+      <button type="submit" class="boton">Login</button><br>
+    </form>
+
+    <a class="linka" onclick="toggleFormRes()">¿Te olvidaste tu contraseña?</a><br><br>
     <a class="linka" onclick="toggleForm()">¿No tienes una cuenta? Regístrate</a>
   </div>
-
 
 
   <div  class="login-container" id="verificacion" style="display: none;">
@@ -68,16 +62,12 @@
     <button class="boton" onclick="verificar()">Verificar</button><br>
   </div>
 
-
-
   <div class="login-container" id="restauracion" style="display: none;">
     <h2>Restauración</h2>
     <p>Se enviara un codigo a tu correo para que puedas restaurar tu contraseña</p>
     <input type="text" id="correoRestaurar"  placeholder="CORREO"><br><br>
     <button class="boton" onclick="mandarCorreoRestauracion()">Enviar</button><br>
   </div>
-
-
 
   <div class="login-container" id="restaurarContra"  style="display: none;">
     <h2>Restauración</h2>
@@ -88,8 +78,6 @@
     <button class="boton" onclick="newContra()">Confirmar</button><br>
   </div>
 
-
-
   <div class="login-container" id="restauracion2" style="display: none;">
     <h2>Restauración</h2>
     <p>Se envio al siguiente correo el codigo de restauracion</p>
@@ -97,6 +85,9 @@
     <input type="text" id="codRestauraciom" placeholder="CODIGO"><br><br>
     <button class="boton" onclick="verificar2()" >Verificar </button><br>
   </div>
+  <script src="scripts/login.js"></script>
+  <script src="scripts/registro.js"></script>
+  <script src="scripts/log_seguridad.js"></script>
   <script src="scripts/script.js"></script>
   <script src="scripts/permisos.js"></script>
 </body>
