@@ -13,21 +13,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Open+Sans:wght@300;400;700;800&display=swap" rel="stylesheet">
-    <style>
-        .severidad-ALTA { background-color: #ffcccc; }
-        .severidad-CRITICA { background-color: #ff9999; font-weight: bold; }
-        .severidad-ADVERTENCIA { background-color: #fff3cd; }
-        .severidad-INFO { background-color: #d4edda; }
-        .badge-severidad {
-            padding: 5px 10px;
-            border-radius: 5px;
-            color: white;
-        }
-        .badge-ALTA { background-color: #dc3545; }
-        .badge-CRITICA { background-color: #721c24; }
-        .badge-ADVERTENCIA { background-color: #ffc107; color: #000; }
-        .badge-INFO { background-color: #28a745; }
-    </style>
 </head>
 <body>
 
@@ -53,13 +38,13 @@
             <div class="row">
                 <div class="col-md-3">
                     <label for="filtroTipo">Tipo de Evento</label>
+                    <!--
                     <select id="filtroTipo" class="form-control">
                         <option value="">Todos</option>
                         <option value="LOGIN_FALLIDO">Login fallido</option>
                         <option value="LOGIN_EXITOSO">Login exitoso</option>
                         <option value="USUARIO_BLOQUEADO">Usuario bloqueado</option>
-                        <!-- Agrega más opciones según tus tipos de eventos -->
-                    </select>
+                    </select> -->
                 </div>
                 <div class="col-md-3">
                     <label for="filtroSeveridad">Severidad</label>
@@ -68,7 +53,7 @@
                         <option value="INFO">Info</option>
                         <option value="ADVERTENCIA">Advertencia</option>
                         <option value="ALTA">Alta</option>
-                        <option value="CRITICA">Crítica</option>
+                        <!-- <option value="CRITICA">Crítica</option> -->
                     </select>
                 </div>
                 <!--
@@ -117,135 +102,16 @@
 
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="scripts/log_seguridad.js"></script>
-<script>
-// Función para cargar los logs
-async function cargarLogs(filtros = {}) {
-    try {
-        const data = await obtenerLogsSeguridad(filtros);
-        
-        if(data.estado === 'exito') {
-            renderizarLogs(data.datos);
-            renderizarPaginacion(data);
-        } else {
-            Swal.fire('Error', data.mensaje || 'Error al cargar logs', 'error');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        Swal.fire('Error', 'No se pudieron cargar los logs', 'error');
-    }
-}
 
-// Función para renderizar los logs en la tabla
-function renderizarLogs(logs) {
-    const $tbody = $('#tablaLogsBody');
-    $tbody.empty();
-    
-    if(logs.length === 0) {
-        $tbody.append('<tr><td colspan="6" class="text-center">No se encontraron registros</td></tr>');
-        return;
-    }
-    
-    logs.forEach(log => {
-        // Formatear fecha y hora separadas
-        const fechaHora = log.fecha_hora.split(' ');
-        const fecha = fechaHora[0];
-        const hora = fechaHora[1] || '';
-        
-        $tbody.append(`
-            <tr class="severidad-${log.severidad}">
-                <td>
-                    <div class="fecha">${fecha}</div>
-                    <div class="hora text-muted">${hora}</div>
-                </td>
-                <td>${log.tipo_evento}</td>
-                <td>${log.descripcion}</td>
-                <td>${log.correo_usuario || 'N/A'}</td>
-                <td>
-                    <span class="badge-severidad badge-${log.severidad}">
-                        ${log.severidad}
-                    </span>
-                </td>
-                <td>${log.ip_origen || 'N/A'}</td>
-                <td>${log.user_agent || 'N/A'}</td>
-            </tr>
-        `);
-    });
-}
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script src="scripts/script.js"></script>
 
-// Función para renderizar la paginación
-function renderizarPaginacion(data) {
-    const $paginacion = $('#paginacion');
-    $paginacion.empty();
-    
-    if(data.total_paginas <= 1) return;
-    
-    // Botón Anterior
-    $paginacion.append(`
-        <li class="page-item ${data.pagina_actual === 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" data-pagina="${data.pagina_actual - 1}">Anterior</a>
-        </li>
-    `);
-    
-    // Números de página
-    for(let i = 1; i <= data.total_paginas; i++) {
-        $paginacion.append(`
-            <li class="page-item ${i === data.pagina_actual ? 'active' : ''}">
-                <a class="page-link" href="#" data-pagina="${i}">${i}</a>
-            </li>
-        `);
-    }
-    
-    // Botón Siguiente
-    $paginacion.append(`
-        <li class="page-item ${data.pagina_actual === data.total_paginas ? 'disabled' : ''}">
-            <a class="page-link" href="#" data-pagina="${data.pagina_actual + 1}">Siguiente</a>
-        </li>
-    `);
-}
-
-// Eventos
-$(document).ready(function() {
-    // Cargar logs iniciales
-    cargarLogs();
-    
-    // Filtrar
-    $('#btnFiltrar').click(function() {
-        const filtros = {
-            tipo_evento: $('#filtroTipo').val(),
-            severidad: $('#filtroSeveridad').val(),
-            usuario: $('#filtroUsuario').val(),
-            ip_origen: $('#filtroIP').val()
-        };
-        
-        cargarLogs(filtros);
-    });
-    
-    // Reiniciar filtros
-    $('#btnReset').click(function() {
-        $('#filtroTipo, #filtroSeveridad, #filtroUsuario, #filtroIP').val('');
-        cargarLogs();
-    });
-    
-    // Paginación
-    $('#paginacion').on('click', '.page-link', function(e) {
-        e.preventDefault();
-        const pagina = $(this).data('pagina');
-        if(pagina) {
-            const filtros = {
-                tipo_evento: $('#filtroTipo').val(),
-                severidad: $('#filtroSeveridad').val(),
-                usuario: $('#filtroUsuario').val(),
-                ip_origen: $('#filtroIP').val(),
-                user_agent: $('#filtroUserAgent').val(),
-                pagina: pagina
-            };
-            cargarLogs(filtros);
-        }
-    });
-});
-</script>
 </body>
 </html>

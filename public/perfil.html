@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
     <link rel="stylesheet" href="styles/styleIndex.css">
     <link rel="stylesheet" href="styles/perfil.css">
+    <link rel="stylesheet" href="styles/styleD.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,9 +88,19 @@
             <span class="close">&times;</span>
             <h2>Cambiar Contraseña</h2>
             <form id="passwordForm" class="password-form">
-                <input type="password" id="currentPassword" placeholder="Contraseña actual" required>
-                <input type="password" id="newPassword" placeholder="Nueva contraseña" required>
-                <input type="password" id="confirmPassword" placeholder="Confirmar nueva contraseña" required>
+                <div class="input-password">
+                    <input type="password" id="currentPassword" placeholder="Contraseña actual" required>
+                    <i class='bx bx-hide toggle-password' id="toggleContra1" onclick="togglePassword('currentPassword', 'toggleContra1')"></i>
+                </div>
+                <div class="input-password">
+                    <input type="password" id="newPassword" placeholder="Nueva contraseña" required>
+                    <i class='bx bx-hide toggle-password' id="toggleContra2" onclick="togglePassword('newPassword', 'toggleContra2')"></i>
+                </div>
+                <div class="input-password">
+                    <input type="password" id="confirmPassword" placeholder="Confirmar nueva contraseña" required>
+                    <i class='bx bx-hide toggle-password' id="toggleContra3" onclick="togglePassword('confirmPassword', 'toggleContra3')"></i>
+                </div>
+
                 <div id="passwordRequirements" style="font-size: 12px; margin-bottom: 10px; color: #666;">
                     La contraseña debe tener al menos 10 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales.
                 </div>
@@ -103,8 +114,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <script src="scripts/scripts/scriptperfil.js" defer></script>
     <script src="scripts/script.js"></script>
+    <script src="scripts/login.js"></script>
+    <script src="scripts/registro.js"></script>
     <script src="scripts/permisos.js"></script>
     <script src="scripts/perfil.js"></script>
 </body>

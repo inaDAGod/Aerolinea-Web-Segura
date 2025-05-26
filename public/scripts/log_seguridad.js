@@ -1,14 +1,4 @@
-
 // scripts/log_seguridad.js
-
-/**
- * Registra un evento de seguridad en el sistema
- * @param {string} tipoEvento - Tipo de evento (LOGIN_FALLIDO, USUARIO_INEXISTENTE, etc.)
- * @param {string} descripcion - Descripción detallada del evento
- * @param {string|null} correoUsuario - Correo del usuario relacionado (opcional)
- * @param {string} severidad - Nivel de severidad (INFO, ADVERTENCIA, ALTA, CRITICA)
- * @param {object} detallesAdicionales - Objeto con detalles adicionales
- */
 async function registrarEventoSeguridad(tipoEvento, descripcion, correoUsuario = null, severidad = 'ADVERTENCIA', detallesAdicionales = {}) {
     try {
         // Obtener información del cliente
@@ -50,9 +40,7 @@ async function registrarEventoSeguridad(tipoEvento, descripcion, correoUsuario =
     }
 }
 
-/**
- * Intenta obtener la IP pública del usuario
- */
+// obtener la IP pública del usuario
 async function obtenerIP() {
     try {
         const response = await fetch('https://api.ipify.org?format=json');
@@ -63,16 +51,8 @@ async function obtenerIP() {
     }
 }
 
-/**
- * Bloquear cuenta después de múltiples intentos fallidos
- */
-function manejarBloqueoIntento(correo) {
-    // Puedes implementar lógica adicional aquí, como:
-    // - Enviar notificación al administrador
-    // - Mostrar tiempo restante para nuevo intento
-    // - Bloquear la cuenta en el backend
-    // - pero como ya está eso en login mejor lo dejo así nomás
-    
+// guardar el intento de inicio de sesión y que se ha bloqueado la cuenta temporalmente
+function manejarBloqueoIntento(correo) {    
     registrarEventoSeguridad(
         'CUENTA_BLOQUEADA_TEMPORAL', 
         `Cuenta bloqueada temporalmente por múltiples intentos fallidos`, 
@@ -89,11 +69,7 @@ function manejarBloqueoIntento(correo) {
     });
 }
 
-/**
- * Obtiene los logs de seguridad desde el backend
- * @param {Object} filtros - Objeto con parámetros de filtrado (opcional)
- * @returns {Promise<Array>} - Lista de logs
- */
+
 async function obtenerLogsSeguridad(filtros = {}) {
     try {
         // Construir query string desde los filtros
@@ -125,14 +101,14 @@ async function obtenerLogsSeguridad(filtros = {}) {
         
     } catch (error) {
         console.error('Error en obtenerLogsSeguridad:', error);
-        throw error; // Puedes manejar esto según tu flujo de aplicación
+        throw error;
     }
 }
 
+//para que aparezca el mensaje de error en caso de que falle la carga de los logs
 async function obtenerLogsConMensaje(filtros = {}) {
     try {
         const data = await obtenerLogsSeguridad(filtros);
-        
         await Swal.close();
         
         return data;
@@ -187,16 +163,19 @@ function renderizarTabla(logs) {
     const $tbody = $('#tablaLogsBody');
     $tbody.empty();
 
-    if(logs.length === 0) {
-        $tbody.append('<tr><td colspan="6" class="text-center">No se encontraron registros</td></tr>');
+    if (logs.length === 0) {
+        $tbody.append('<tr><td colspan="7" class="text-center">No se encontraron registros</td></tr>');
         return;
     }
 
     logs.forEach(log => {
         const [fecha, hora] = log.fecha_hora.split(' ');
 
+        // Normaliza severidad: quita espacios y pone en mayúsculas
+        const severidad = log.severidad.trim().toUpperCase();
+
         $tbody.append(`
-            <tr class="severidad-${log.severidad}">
+            <tr class="severidad-${severidad}">
                 <td>
                     <div class="fecha">${fecha}</div>
                     <div class="hora text-muted">${hora || ''}</div>
@@ -204,16 +183,17 @@ function renderizarTabla(logs) {
                 <td>${log.tipo_evento}</td>
                 <td>${log.descripcion}</td>
                 <td>${log.correo_usuario || 'N/A'}</td>
-                <td><span class="badge-${log.severidad}">${log.severidad}</span></td>
+                <td><span class="badge-${severidad}">${log.severidad}</span></td>
                 <td>${log.ip_origen || 'N/A'}</td>
                 <td>${log.user_agent || 'N/A'}</td>
             </tr>
         `);
     });
 
-    if($.fn.DataTable.isDataTable('#tablaLogs')) {
+    if ($.fn.DataTable.isDataTable('#tablaLogs')) {
         $('#tablaLogs').DataTable().destroy();
     }
+
     $('#tablaLogs').DataTable({
         responsive: true,
         language: {
@@ -257,3 +237,128 @@ function renderizarPaginacion(data) {
         }
     });
 }
+
+function renderizarPaginacion(data) {
+    const $paginacion = $('#paginacion');
+    $paginacion.empty();
+    
+    if(data.total_paginas <= 1) return;
+    
+    // Botón Anterior
+    $paginacion.append(`
+        <li class="page-item ${data.pagina_actual === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-pagina="${data.pagina_actual - 1}">Anterior</a>
+        </li>
+    `);
+    
+    // Números de página
+    for(let i = 1; i <= data.total_paginas; i++) {
+        $paginacion.append(`
+            <li class="page-item ${i === data.pagina_actual ? 'active' : ''}">
+                <a class="page-link" href="#" data-pagina="${i}">${i}</a>
+            </li>
+        `);
+    }
+    
+    // Botón Siguiente
+    $paginacion.append(`
+        <li class="page-item ${data.pagina_actual === data.total_paginas ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-pagina="${data.pagina_actual + 1}">Siguiente</a>
+        </li>
+    `);
+}
+
+// Función para cargar los logs
+async function cargarLogs(filtros = {}) {
+    try {
+        const data = await obtenerLogsSeguridad(filtros);
+        
+        if(data.estado === 'exito') {
+            renderizarLogs(data.datos);
+            renderizarPaginacion(data);
+        } else {
+            Swal.fire('Error', data.mensaje || 'Error al cargar logs', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire('Error', 'No se pudieron cargar los logs', 'error');
+    }
+}
+
+// Función para renderizar los logs en la tabla
+function renderizarLogs(logs) {
+    const $tbody = $('#tablaLogsBody');
+    $tbody.empty();
+    
+    if(logs.length === 0) {
+        $tbody.append('<tr><td colspan="6" class="text-center">No se encontraron registros</td></tr>');
+        return;
+    }
+    
+    logs.forEach(log => {
+        // Formatear fecha y hora separadas
+        const fechaHora = log.fecha_hora.split(' ');
+        const fecha = fechaHora[0];
+        const hora = fechaHora[1] || '';
+        
+        $tbody.append(`
+            <tr class="severidad-${log.severidad}">
+                <td>
+                    <div class="fecha">${fecha}</div>
+                    <div class="hora text-muted">${hora}</div>
+                </td>
+                <td>${log.tipo_evento}</td>
+                <td>${log.descripcion}</td>
+                <td>${log.correo_usuario || 'N/A'}</td>
+                <td>
+                    <span class="badge-severidad badge-${log.severidad}">
+                        ${log.severidad}
+                    </span>
+                </td>
+                <td>${log.ip_origen || 'N/A'}</td>
+                <td>${log.user_agent || 'N/A'}</td>
+            </tr>
+        `);
+    });
+}
+
+// Eventos del log_seguridad.html
+$(document).ready(function() {
+    // Cargar logs iniciales
+    cargarLogs();
+    
+    // Filtrar
+    $('#btnFiltrar').click(function() {
+        const filtros = {
+            tipo_evento: $('#filtroTipo').val(),
+            severidad: $('#filtroSeveridad').val(),
+            usuario: $('#filtroUsuario').val(),
+            ip_origen: $('#filtroIP').val()
+        };
+        
+        cargarLogs(filtros);
+    });
+    
+    // Reiniciar filtros
+    $('#btnReset').click(function() {
+        $('#filtroTipo, #filtroSeveridad, #filtroUsuario, #filtroIP').val('');
+        cargarLogs();
+    });
+    
+    // Paginación
+    $('#paginacion').on('click', '.page-link', function(e) {
+        e.preventDefault();
+        const pagina = $(this).data('pagina');
+        if(pagina) {
+            const filtros = {
+                tipo_evento: $('#filtroTipo').val(),
+                severidad: $('#filtroSeveridad').val(),
+                usuario: $('#filtroUsuario').val(),
+                ip_origen: $('#filtroIP').val(),
+                user_agent: $('#filtroUserAgent').val(),
+                pagina: pagina
+            };
+            cargarLogs(filtros);
+        }
+    });
+});

@@ -147,9 +147,21 @@ function registrarUsuario() {
         if (data.estado === "registro_exitoso") {
             localStorage.setItem('tipo_usuario', 'cliente');
             window.location.href = window.location.origin + '/Aerolinea-Web-Segura/public/indexCliente.html';
+            registrarEventoSeguridad(
+                'NUEVO_CLIENTE',
+                'Creación de nuevo cliente exitoso',
+                correo,
+                'INFO'
+            );
         } else if (data.estado === "error_registro") {
             Swal.fire('Error', 'Ya existe un usuario con ese correo electrónico', 'error');
             console.log(data.detalle); // para ver el motivo
+            registrarEventoSeguridad(
+                'ERROR_REGISTRO',
+                'Error al registrar nuevo cliente',
+                correo,
+                'INFO'
+            );
         }
     })
     .catch(error => {
@@ -301,8 +313,20 @@ function mandarCorreoRestauracion() {
         })
         .then(data => {
             if (data.estado === "cuenta_inexistente") {
+                registrarEventoSeguridad(
+                    'RESTAURACION_CUENTA_INEXISTENTE',
+                    'Se intentó restaurar una contraseña con un correo inexistente',
+                    correoDestinatario,
+                    'ADVERTENCIA'
+                );
                 alert('No hay una cuenta registrada a ese correo');
             } else if (data.estado === "cuenta_existente") {
+                registrarEventoSeguridad(
+                    'RESTAURACION_SOLICITADA',
+                    'Se solicitó un código de recuperación de contraseña',
+                    correoDestinatario,
+                    'INFO'
+                );
                 localStorage.setItem('correoRestaurar', correoDestinatario);
                 localStorage.setItem('nombres', data.nombres);
                 localStorage.setItem('apellidos', data.apellidos);
@@ -326,6 +350,13 @@ function mandarCorreoRestauracion() {
             }
         })
         .catch(error => {
+            registrarEventoSeguridad(
+                'ERROR_RESTAURACION',
+                'Error durante la solicitud de restauración de contraseña',
+                correoDestinatario,
+                'ALTA',
+                { error: error.message }
+            );
             console.error('Error en la solicitud:', error);
             Swal.fire('Error', 'No hay una cuenta registrada a ese correo', 'error');
         });

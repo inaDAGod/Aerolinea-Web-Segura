@@ -1,5 +1,7 @@
 <?php
 include_once(__DIR__ . '/config/cors.php');
+header('Content-Type: application/json');
+
 session_start();
 
 $json = file_get_contents('php://input');
