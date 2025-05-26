@@ -41,3 +41,18 @@ function toggleFormRes3(){
   resForm.style.display = 'none';
  
 }
+
+function togglePassword(inputId, iconId) {
+  const input = document.getElementById(inputId);
+  const icon = document.getElementById(iconId);
+
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.remove('bx-hide');
+    icon.classList.add('bx-show');
+  } else {
+    input.type = 'password';
+    icon.classList.remove('bx-show');
+    icon.classList.add('bx-hide');
+  }
+}

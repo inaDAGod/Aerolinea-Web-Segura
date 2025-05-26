@@ -52,3 +52,22 @@ h2 {
     
     color: #8FBCEA;
 }
+
+.input-password {
+  position: relative;
+}
+
+.input-password input {
+  width: 100%;
+  padding-right: 35px; /* espacio para el icono */
+}
+
+.input-password .toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #333;
+}

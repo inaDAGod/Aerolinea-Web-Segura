@@ -32,7 +32,11 @@
         <input type="text" id="nombre" placeholder="NOMBRES" required><br>
         <input type="text" id="apellido" placeholder="APELLIDOS" required><br>
         <input type="email" id="email" placeholder="CORREO" required><br>
-        <input type="password" id="contra" placeholder="CONTRASEÑA" required><br>
+        <div class="input-password">
+          <input type="password" id="contra" placeholder="CONTRASEÑA" required>
+          <i class='bx bx-hide toggle-password' id="toggleContra" onclick="togglePassword('contra', 'toggleContra')"></i>
+        </div>
+        <br>
         <button type="submit" class="boton">Registrarse</button><br>
       </div>
     </form>
@@ -45,7 +49,11 @@
 
     <form onsubmit="return loginEncript()">
       <input type="email" id="username" name="username" placeholder="CORREO" required><br>
-      <input type="password" id="password" name="password" placeholder="CONTRASEÑA" required><br><br>
+
+      <div class="input-password">
+        <input type="password" id="password" name="password" placeholder="CONTRASEÑA" required>
+        <i class='bx bx-hide toggle-password' id="toggleContra" onclick="togglePassword('password', 'toggleContra')"></i>
+      </div>
       <button type="submit" class="boton">Login</button><br>
     </form>
 
@@ -76,8 +84,14 @@
     <h2>Restauración</h2>
     <p>Ingresa tu nueva contraseña del correo</p>
     <p id="correoCambiar"></p>
-    <input type="password" id="passwordRes" name="password" placeholder="CONTRASEÑA">
-    <input type="password" id="passwordRes2" name="password" placeholder=" VERIFICA CONTRASEÑA"><br><br>
+    <div class="input-password">
+      <input type="password" id="passwordRes" name="password" placeholder="CONTRASEÑA">
+      <i class='bx bx-hide toggle-password' id="toggleContra" onclick="togglePassword('passwordRes', 'toggleContra')"></i>
+    </div>
+    <div class="input-password">
+      <input type="password" id="passwordRes2" name="password" placeholder=" VERIFICA CONTRASEÑA">
+      <i class='bx bx-hide toggle-password' id="toggleContra" onclick="togglePassword('passwordRes2', 'toggleContra')"></i>
+    </div>
     <button class="boton" onclick="newContra()">Confirmar</button><br>
   </div>
 
