@@ -35,8 +35,8 @@ if (session_status() == PHP_SESSION_NONE) {
             $rol = $fila['rol'];
             $dias_desde_cambio = $fila['dias_desde_cambio'];
             
-            // Verificar si la contraseña coincide
-            if ($password === $contraseñaBD) {
+            // Verificar si la contraseña coincide usando password_verify
+            if (password_verify($password, $contraseñaBD)) {
                 // Aquí hacemos una segunda consulta: traer accesos del rol
                 $sqlAccesos = "SELECT accesos FROM roles WHERE rol = '$rol'";
                 $resultadoAccesos = pg_query($conexion, $sqlAccesos);

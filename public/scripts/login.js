@@ -184,6 +184,7 @@ function mandarCorreoVerificacion() {
         }, function(error) {
             console.error("Error al enviar correo:", error);
         });
+    return false;
 }
 
 function verificar(){
@@ -332,6 +333,7 @@ function mandarCorreoRestauracion() {
     else{
         Swal.fire('Error', 'Llena el correo', 'error');
     }
+    return false;
 }
 
 function verificar2(){
@@ -347,7 +349,6 @@ function verificar2(){
         Swal.fire('Error', 'Revisa el codigo no coincide con el que se mando a tu correo', 'error');
     }
 }
-
 
 function newContra(){
     let contra1 = document.getElementById("passwordRes").value;

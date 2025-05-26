@@ -49,7 +49,7 @@ function registrarAdministrador() {
         })
         .then(data => {
             if (data.estado === "registro_exitoso") {
-                Swal.fire('Éxito', 'Administrador registrado exitosamente', 'success')
+                Swal.fire('Éxito', 'Usuario registrado exitosamente', 'success')
                     .then(() => {
                         window.location.href = window.location.origin + '/Aerolinea-Web-Segura/public/index.html';
                     });

@@ -64,9 +64,12 @@
 
   <div class="login-container" id="restauracion" style="display: none;">
     <h2>Restauración</h2>
-    <p>Se enviara un codigo a tu correo para que puedas restaurar tu contraseña</p>
-    <input type="text" id="correoRestaurar"  placeholder="CORREO"><br><br>
-    <button class="boton" onclick="mandarCorreoRestauracion()">Enviar</button><br>
+    <p>Se enviará un código a tu correo para que puedas restaurar tu contraseña</p>
+
+    <form onsubmit="return mandarCorreoRestauracion()">
+      <input type="email" id="correoRestaurar" placeholder="CORREO" required><br><br>
+      <button type="submit" class="boton">Enviar</button><br>
+    </form>
   </div>
 
   <div class="login-container" id="restaurarContra"  style="display: none;">
