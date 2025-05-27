@@ -386,3 +386,37 @@ CREATE SEQUENCE vuelos_seq
 
 -- End of file.
 
+
+ALTER TABLE usuarios 
+ADD user_id varchar(20)
+
+
+CREATE TABLE log_app (
+    id SERIAL PRIMARY KEY,
+    correo_usuario VARCHAR(100) NOT NULL,
+    mensaje CHAR(255),
+    fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+
+CREATE TABLE log_seguridad (
+    id_log SERIAL PRIMARY KEY,
+    fecha_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    tipo_evento VARCHAR(50) NOT NULL,
+    descripcion TEXT NOT NULL,
+    correo_usuario VARCHAR(100),
+    ip_origen VARCHAR(45),
+    user_agent TEXT,
+    detalles_adicionales JSONB,
+    severidad VARCHAR(20));
+
+
+-- Sequence: ubicaciones_seq
+CREATE SEQUENCE historial_passwords_seq
+    INCREMENT BY 1
+    START WITH 1
+    NO MINVALUE
+    NO MAXVALUE
+    NO CYCLE;
+
+ALTER TABLE historial_passwords
+ALTER COLUMN cpassword SET DEFAULT nextval('historial_passwords_seq');
+

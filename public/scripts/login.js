@@ -381,48 +381,37 @@ function verificar2(){
     }
 }
 
-function newContra(){
+function newContra() {
     let contra1 = document.getElementById("passwordRes").value;
     let contra2 = document.getElementById("passwordRes2").value;
     let correo = document.getElementById("correoRestaurar").value;
     let nombres = localStorage.getItem('nombres');
     let apellidos = localStorage.getItem('apellidos');
-    
-    if(contra1 && contra2){
-        if(contra1 == contra2){
-            // Verificar complejidad
+
+    if (contra1 && contra2) {
+        if (contra1 === contra2) {
             const resultado = esContraseniaCompleja(contra1, correo, nombres, apellidos);
-            if(!resultado.valido) {
+            if (!resultado.valido) {
                 Swal.fire('Error', "Modifica a una contraseña segura", 'error');
                 return;
             }
-            // Primero verificar el historial
-            fetch("http://localhost/Aerolinea-Web-Segura/backend/checkPasswordHistory.php", {
+
+            console.log("Listo para enviar nueva contraseña al backend");
+            fetch("http://localhost/Aerolinea-Web-Segura/backend/restorePassword.php", {
                 method: "POST",
-                body: JSON.stringify({username: correo, password: contra1}),
+                body: JSON.stringify({ username: correo, newPassword: contra1 }),
             })
             .then(response => response.json())
             .then(data => {
-                if(data.estado === 'password_recently_used') {
-                    Swal.fire({
-                        title: 'Contraseña reciente',
-                        text: 'No puedes usar una contraseña que ya utilizaste en los últimos 3 meses.',
-                        icon: 'error'
-                    });
-                } else {
-                    // Si pasa la validación, proceder con el cambio
-                    return fetch("http://localhost/Aerolinea-Web-Segura/backend/updatePassword.php", {
-                        method: "POST",
-                        body: JSON.stringify({username: correo, newPassword: hash.toString()}),
-                    });
-                }
-            })
-            .then(response => {
-                if(response && response.ok) return response.json();
-                return null;
-            })
-            .then(data => {
-                if(data && data.estado === "contraseña_cambiada") {
+                console.log("Respuesta del backend:", data);
+
+                if (data.estado === "contraseña_cambiada") {
+                    registrarEventoSeguridad(
+                        'RESTAURACION_EXITOSA',
+                        'Contraseña actualizada tras proceso de restauración',
+                        correo,
+                        'INFO'
+                    );
                     Swal.fire({
                         title: 'Éxito',
                         text: 'Contraseña actualizada correctamente',
@@ -430,12 +419,26 @@ function newContra(){
                     }).then(() => {
                         window.location.href = window.location.origin + '/Aerolinea-Web-Segura/public/registro.html';
                     });
-                } else if(data && data.estado === "error_actualizacion") {
-                    Swal.fire('Error', 'Hubo un problema al actualizar la contraseña', 'error');
+                } else {
+                    registrarEventoSeguridad(
+                        'ERROR_RESTAURACION',
+                        'Fallo al actualizar contraseña en restauración',
+                        correo,
+                        'ALTA',
+                        { detalle: data.mensaje || 'Sin mensaje' }
+                    );
+                    Swal.fire('Error', data.mensaje || 'Error desconocido al actualizar contraseña', 'error');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
+                registrarEventoSeguridad(
+                    'ERROR_RESTAURACION',
+                    'Error inesperado en el proceso de restauración',
+                    correo,
+                    'ALTA',
+                    { error: error.message }
+                );
                 Swal.fire('Error', 'Ocurrió un error inesperado', 'error');
             });
         } else {

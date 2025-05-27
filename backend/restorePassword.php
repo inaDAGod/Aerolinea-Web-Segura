@@ -14,7 +14,6 @@ if (!$data || !isset($data->username) || !isset($data->newPassword)) {
 
 $username = $data->username;
 $newPassword = $data->newPassword;
-$currentPassword = isset($data->currentPassword) ? $data->currentPassword : null;
 
 $conexion = pg_connect("dbname=aerolinea user=postgres password=admin");
 if (!$conexion) {
@@ -22,33 +21,7 @@ if (!$conexion) {
     exit;
 }
 
-// Validar contraseña actual si se proporciona
-if ($currentPassword !== null) {
-    $sql_check_current = "SELECT contraseña FROM usuarios WHERE correo_usuario = $1";
-    $result_check_current = pg_query_params($conexion, $sql_check_current, [$username]);
-
-    if (pg_num_rows($result_check_current) === 0) {
-        echo json_encode(['estado' => 'error', 'mensaje' => 'Usuario no encontrado']);
-        pg_close($conexion);
-        exit;
-    }
-
-    $row = pg_fetch_assoc($result_check_current);
-    $hash_actual = $row['contraseña'];
-
-    if (!password_verify($currentPassword, $hash_actual)) {
-        echo json_encode(['estado' => 'error', 'mensaje' => 'La contraseña actual es incorrecta']);
-        pg_close($conexion);
-        exit;
-    }
-
-    // Guardar hash actual en historial
-    $sql_save_current = "INSERT INTO historial_passwords (password, fecha_uso, correo_usuario) 
-                         VALUES ($1, NOW(), $2)";
-    pg_query_params($conexion, $sql_save_current, [$hash_actual, $username]);
-}
-
-// Verificar que la nueva no haya sido usada
+// Verificar que la nueva no haya sido usada recientemente
 $sql_check_history = "SELECT password FROM historial_passwords 
                       WHERE correo_usuario = $1 
                       AND fecha_uso >= (NOW() - INTERVAL '3 months')";

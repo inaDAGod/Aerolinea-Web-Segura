@@ -228,8 +228,6 @@ function initPasswordChangeModal() {
                         newPassword: newPassword
                     })
                 });
-
-                
                 
                 const updateData = await updateResponse.json();
                 
