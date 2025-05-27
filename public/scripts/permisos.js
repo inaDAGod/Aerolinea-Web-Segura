@@ -74,6 +74,7 @@ function verificarPermisos() {
         "agregarVuelo.html" :  "Agregar vuelos",
         "editarRole.html" :  "ABM Roles",
         "EditDeleteUsers.html": "ABM empleados",
+        "perfil.html": "Perfil",
         
     };
 
@@ -97,7 +98,7 @@ function verificarPermisos() {
         }
     } else if (tipo_usuario === "administrador") {
         // Logueado como admin
-        if (paginaActual === "indexAdmi.html" || paginaActual === "index.html") {
+        if (paginaActual === "indexAdmi.html" || paginaActual === "index.html"  || paginaActual === "perfil.html") {
             construirMenu('administrador', accesos, mapaAccesos);
             return;
         }
