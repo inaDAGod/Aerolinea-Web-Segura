@@ -386,6 +386,9 @@ CREATE SEQUENCE vuelos_seq
 
 -- End of file.
 
+--Crear bd con backup.sql
+-- luego hacer correr estas columnas siguientes
+
 
 ALTER TABLE usuarios 
 ADD user_id varchar(20)

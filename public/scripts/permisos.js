@@ -49,7 +49,7 @@ function verificarPermisos() {
         "ABM empleados": { href: "registroAdmi.html", texto: "ABM empleados" },
         "Ver Dashboard": { href: "dashboard.html", texto: "Dashboard" },
         "ABM Roles": { href: "roles.html", texto: "Roles" },
-        "Auditoria de usuarios": { href: "admin_usuarios.html", texto: "Auditoría de Usuarios" },
+        "Auditoria de usuarios": { href: "log_seguridad.html", texto: "Auditoría de Usuarios" },
         "Ver logs de aplicacion": { href: "auditoria_logs.html", texto: "Logs de Aplicación" },
         "Cerrar Sesion": { href: "index.html", texto: "Cerrar Sesion" },
         
@@ -65,7 +65,7 @@ function verificarPermisos() {
         "registroAdmi.html": "ABM empleados",
         "dashboard.html": "Ver Dashboard",
         "roles.html": "ABM Roles",
-        "admin_usuarios.html": "Auditoria de usuarios",
+        "log_seguridad.html": "Auditoria de usuarios",
         "auditoria_logs.html": "Ver logs de aplicacion",
         "admin_pasajeros.html": "Ver pasajeros",
         "reservasAdmin.html": "Ver Reservas",

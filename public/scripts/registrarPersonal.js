@@ -1,6 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
-    cargarRoles();
-});
 
 function cargarRoles() {
     fetch('http://localhost/Aerolinea-Web-Segura/backend/fetch_roles.php')

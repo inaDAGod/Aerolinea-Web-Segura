@@ -1,6 +1,7 @@
 [
     "ABM empleados",
     "ABM Roles",
+    "Ver logs de aplicacion",
     "Auditoria de usuarios",
     "ABM catalogo millas",
     "Ver Dashboard",
@@ -10,7 +11,7 @@
     "Modificar estado checkin",
     "Ver Reservas",
     "Generar boleto",
-    "Borrar opiniones",
-    "Ver logs de aplicacion"
+    "Borrar opiniones"
+    
   ]
   
