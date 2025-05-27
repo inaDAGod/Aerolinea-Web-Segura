@@ -10,6 +10,14 @@ function cargarUsuarios() {
     .then(data => {
       const tabla = document.getElementById("tablaUsuarios");
       tabla.innerHTML = "";
+
+      // Ordenar por el número después de la U en user_id
+      data.sort((a, b) => {
+        const numA = parseInt(a.user_id.replace('U', ''), 10);
+        const numB = parseInt(b.user_id.replace('U', ''), 10);
+        return numA - numB; // de menor a mayor
+      });
+
       data.forEach(user => {
         const fila = `
           <tr>
@@ -39,56 +47,69 @@ function editarUsuario(correo) {
           <input id="swal-nombre" class="swal2-input" placeholder="Nombres" value="${data.nombres_usuario}">
           <input id="swal-apellido" class="swal2-input" placeholder="Apellidos" value="${data.apellidos_usuario}">
           <input id="swal-correo" class="swal2-input" placeholder="Correo" value="${data.correo_usuario}">
-          <select id="swal-rol" class="swal2-input"></select>
+          ${data.rol !== 'cliente' ? '<select id="swal-rol" class="swal2-input"></select>' : ''}
         `,
         didOpen: () => {
-          // Cargar roles una vez que el modal esté abierto
-          fetch('http://localhost/Aerolinea-Web-Segura/backend/fetch_roles.php')
-            .then(response => response.json())
-            .then(roles => {
-              const selectRol = document.getElementById('swal-rol');
-              roles.forEach(rol => {
-                const option = document.createElement('option');
-                option.value = rol.rol;
-                option.textContent = rol.rol;
-                if (rol.rol === data.rol) {
-                  option.selected = true;
+          // Solo cargar roles si el rol no es cliente
+          if (data.rol !== 'cliente') {
+            fetch('http://localhost/Aerolinea-Web-Segura/backend/fetch_roles.php')
+              .then(response => response.json())
+              .then(roles => {
+                const selectRol = document.getElementById('swal-rol');
+                if (selectRol) {
+                  roles.forEach(rol => {
+                    const option = document.createElement('option');
+                    option.value = rol.rol;
+                    option.textContent = rol.rol;
+                    if (rol.rol === data.rol) {
+                      option.selected = true;
+                    }
+                    selectRol.appendChild(option);
+                  });
                 }
-                selectRol.appendChild(option);
-              });
-            })
-            .catch(error => console.error('Error al cargar roles:', error));
+              })
+              .catch(error => console.error('Error al cargar roles:', error));
+          }
         },
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: "Guardar cambios",
-        preConfirm: () => {
+        preConfirm: async () => {
           const updateData = {
             correo_usuario: correo,
             nuevo_correo: document.getElementById("swal-correo").value,
             nombres_usuario: document.getElementById("swal-nombre").value,
             apellidos_usuario: document.getElementById("swal-apellido").value,
-            rol: document.getElementById("swal-rol").value,
+            rol: data.rol !== 'cliente'
+              ? document.getElementById("swal-rol").value
+              : data.rol,
             tipo_usuario: data.tipo_usuario,
             millas: data.millas,
             activo: data.activo,
             password_last_date: data.password_last_date
           };
 
-          return fetch(`${URL_API}editarUsuario.php`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updateData)
-          })
-            .then(res => res.json())
-            .catch(err => {
-              Swal.showValidationMessage("Error al actualizar el usuario");
-              console.error(err);
+          try {
+            const res = await fetch(`${URL_API}editarUsuario.php`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(updateData)
             });
+            return await res.json();
+          } catch (err) {
+            Swal.showValidationMessage("Error al actualizar el usuario");
+            console.error(err);
+          }
         }
       }).then(result => {
         if (result.isConfirmed) {
           Swal.fire("¡Actualizado!", "Usuario modificado correctamente", "success");
+          registrarEventoSeguridad(
+            'EDICION_USUARIO',
+            `Se modificó el usuario ${correo}`,
+            correo,
+            'INFO'
+          );
           cargarUsuarios();
         }
       });
@@ -107,7 +128,13 @@ function eliminarUsuario(correo) {
       fetch(`${URL_API}eliminarUsuarioLogico.php?correo_usuario=${correo}`)
         .then(res => res.json())
         .then(resp => {
-          Swal.fire("Hecho", resp.mensaje || "Usuario eliminado", "success");
+          Swal.fire("Hecho", resp.mensaje || "Usuario desactivado", "success");
+          registrarEventoSeguridad(
+            'DESACTIVACION_USUARIO',
+            `Se desactivó el usuario ${correo}`,
+            correo,
+            'ADVERTENCIA'
+          );
           cargarUsuarios();
         });
     }

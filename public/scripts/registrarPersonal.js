@@ -15,12 +15,13 @@ function cargarRoles() {
         .catch(error => console.error('Error al cargar roles:', error));
 }
 
-function registrarAdministrador() {
+async function registrarAdministrador() {
     let nombres = document.getElementById("nombre").value.trim();
     let apellidos = document.getElementById("apellido").value.trim();
     let correo = document.getElementById("email").value.trim();
     let contrasenia = document.getElementById("contra").value.trim();
     let rol = document.getElementById("selectRol").value;
+
     console.log("registrarAdministrador", nombres, apellidos, correo, contrasenia, rol);
 
     if (nombres && apellidos && correo && contrasenia && rol) {
@@ -44,19 +45,29 @@ function registrarAdministrador() {
             }
             throw new Error('Error en la solicitud');
         })
-        .then(data => {
+        .then(async data => {
+
             if (data.estado === "registro_exitoso") {
+                registrarEventoSeguridad(
+                    'CREACIÓN_DE_USUARIO',
+                    'Se creo un usuario exitosamente',
+                    correo,
+                    'INFO'
+                );
+
                 Swal.fire('Éxito', 'Usuario registrado exitosamente', 'success')
                     .then(() => {
                         window.location.href = window.location.origin + '/Aerolinea-Web-Segura/public/index.html';
                     });
             } else if (data.estado === "error_registro") {
+
                 Swal.fire('Error', 'Ya existe un usuario con ese correo electrónico', 'error');
             }
         })
-        .catch(error => {
+        .catch(async error => {
             console.error('Error en la solicitud:', error);
-            Swal.fire('Error', 'Hubo un problema al registrar. ¿Ya tienes una cuenta?', 'error');
+
+            Swal.fire('Error', 'Ya existe un usuario con ese correo electrónico. Intenta agregar más datos en los campos de nombre y apellido para generar un correo único.', 'error');
         });
     } else {
         Swal.fire('Error', 'Por favor, llene todos los campos', 'error');
@@ -76,19 +87,16 @@ function generarEmail() {
     const apellidos = document.getElementById('apellido').value.trim();
     
     if (nombres && apellidos) {
-        // Obtener la primera letra del primer nombre
-        const primeraLetraNombre = nombres.charAt(0).toLowerCase();
-        
-        // Obtener el primer apellido completo y la primera letra del segundo apellido (si existe)
+        const partesNombre = nombres.split(' ');
+        const primeraLetraPrimerNombre = partesNombre[0].charAt(0).toLowerCase();
+        const segundoNombre = partesNombre[1] ? partesNombre[1].toLowerCase() : '';
+
         const partesApellido = apellidos.split(' ');
-        let parteApellido = partesApellido[0].toLowerCase();
-        
-        if (partesApellido.length > 1) {
-            parteApellido += partesApellido[1].charAt(0).toLowerCase();
-        }
-        
+        let primerApellido = partesApellido[0].toLowerCase();
+        let inicialSegundoApellido = partesApellido[1] ? partesApellido[1].charAt(0).toLowerCase() : '';
+
         // Construir el email
-        const email = `${primeraLetraNombre}.${parteApellido}.flybo@gmail.com`;
+        const email = `${primeraLetraPrimerNombre}${segundoNombre}.${primerApellido}${inicialSegundoApellido}.flybo@gmail.com`;
         document.getElementById('email').value = email;
     } else {
         document.getElementById('email').value = '';
